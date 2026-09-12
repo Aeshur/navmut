@@ -1,0 +1,31 @@
+[package]
+name = "navmut"
+version = "1.0.0"
+description = "A tool for traversing FFXIV 1.23b and recording NPC/mob positions."
+license = "AGPL-3.0-or-later"
+edition = "2021"
+
+[lib]
+# The library name must differ from the binary name on Windows.
+name = "navmut_lib"
+crate-type = ["staticlib", "cdylib", "rlib"]
+
+[build-dependencies]
+tauri-build = { version = "2", features = [] }
+
+[dependencies]
+tauri = { version = "2", features = [] }
+tauri-plugin-dialog = "2"
+navmut-core = { path = "../crates/navmut-core" }
+navmut-platform = { path = "../crates/navmut-platform" }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+time = { workspace = true }
+base64 = "0.22"
+uuid = { workspace = true }
+image = { workspace = true, features = ["jpeg", "gif", "webp"] }
+
+[target.'cfg(windows)'.dependencies]
+windows = { workspace = true }
+webview2-com = "0.38.2"
+windows-core = "0.61.2"

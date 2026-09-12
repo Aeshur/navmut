@@ -1,0 +1,2783 @@
+{
+  "maps": [
+    {
+      "profile_id": "profile-29e7368b41e51dd7",
+      "name": "Lower La Noscea - map01001",
+      "zone": 128,
+      "map_image": "maps/map01001.png",
+      "map_bounds": [
+        -2528,
+        -3008,
+        2080,
+        1600
+      ],
+      "coordinate_space": "world",
+      "region": 101,
+      "availability_note": "Warp available: zone 128",
+      "observations": "observations.jsonl"
+    },
+    {
+      "profile_id": "profile-90bfceb3d63b6d2a",
+      "name": "Cassiopeia Hollow - map01056",
+      "zone": 132,
+      "map_image": "maps/map01056.png",
+      "map_bounds": [
+        640,
+        -1408,
+        1920,
+        -384
+      ],
+      "coordinate_space": "world",
+      "region": 101,
+      "availability_note": "Warp available: zone 132",
+      "observations": "observations.jsonl"
+    },
+    {
+      "profile_id": "profile-916f13c342159f90",
+      "name": "Central Shroud - map01201",
+      "zone": 150,
+      "map_image": "maps/map01201.png",
+      "map_bounds": [
+        -3104,
+        -3808,
+        3040,
+        2336
+      ],
+      "coordinate_space": "world",
+      "region": 103,
+      "availability_note": "Warp available: zone 150",
+      "observations": "observations.jsonl"
+    },
+    {
+      "profile_id": "profile-b808009734582181",
+      "name": "Central Shroud - map01201",
+      "zone": 162,
+      "map_image": "maps/map01201.png",
+      "map_bounds": [
+        -3104,
+        -3808,
+        3040,
+        2336
+      ],
+      "coordinate_space": "world",
+      "region": 103,
+      "availability_note": "Warp available: zone 162",
+      "observations": "observations.jsonl"
+    },
+    {
+      "profile_id": "profile-442b8535398a710d",
+      "name": "Central Shroud - map01201",
+      "zone": 164,
+      "map_image": "maps/map01201.png",
+      "map_bounds": [
+        -3104,
+        -3808,
+        3040,
+        2336
+      ],
+      "coordinate_space": "world",
+      "region": 103,
+      "availability_note": "Warp available: zone 164",
+      "observations": "observations.jsonl"
+    },
+    {
+      "profile_id": "profile-d1cf7c222e4a6a03",
+      "name": "Central Shroud - map01201",
+      "zone": 165,
+      "map_image": "maps/map01201.png",
+      "map_bounds": [
+        -3104,
+        -3808,
+        3040,
+        2336
+      ],
+      "coordinate_space": "world",
+      "region": 103,
+      "availability_note": "Warp available: zone 165",
+      "observations": "observations.jsonl"
+    },
+    {
+      "profile_id": "profile-8478f76c6dbcc6a5",
+      "name": "Central Shroud - map01201",
+      "zone": 166,
+      "map_image": "maps/map01201.png",
+      "map_bounds": [
+        -3104,
+        -3808,
+        3040,
+        2336
+      ],
+      "coordinate_space": "world",
+      "region": 103,
+      "availability_note": "Warp available: zone 166",
+      "observations": "observations.jsonl"
+    },
+    {
+      "profile_id": "profile-2214737e9a407771",
+      "name": "Central Shroud - map01201",
+      "zone": 167,
+      "map_image": "maps/map01201.png",
+      "map_bounds": [
+        -3104,
+        -3808,
+        3040,
+        2336
+      ],
+      "coordinate_space": "world",
+      "region": 103,
+      "availability_note": "Warp available: zone 167",
+      "observations": "observations.jsonl"
+    },
+    {
+      "profile_id": "profile-42d31da0d3c829c4",
+      "name": "Central Shroud - map01201",
+      "zone": 168,
+      "map_image": "maps/map01201.png",
+      "map_bounds": [
+        -3104,
+        -3808,
+        3040,
+        2336
+      ],
+      "coordinate_space": "world",
+      "region": 103,
+      "availability_note": "Warp available: zone 168",
+      "observations": "observations.jsonl"
+    },
+    {
+      "profile_id": "profile-23c7c3b3ecee2203",
+      "name": "Central Thanalan - map01101",
+      "zone": 170,
+      "map_image": "maps/map01101.png",
+      "map_bounds": [
+        -2687,
+        -3072,
+        2945,
+        2560
+      ],
+      "coordinate_space": "world",
+      "region": 104,
+      "availability_note": "Warp available: zone 170",
+      "observations": "observations.jsonl"
+    },
+    {
+      "profile_id": "profile-0ce5b980f42a7f90",
+      "name": "Coerthas Central Highlands - map01301",
+      "zone": 143,
+      "map_image": "maps/map01301.png",
+      "map_bounds": [
+        -3712,
+        -2144,
+        2944,
+        2976
+      ],
+      "coordinate_space": "world",
+      "region": 102,
+      "availability_note": "Warp available: zone 143",
+      "observations": "observations.jsonl"
+    },
+    {
+      "profile_id": "profile-ca83706a7c822c18",
+      "name": "Coerthas Central Lowlands - map01301",
+      "zone": 147,
+      "map_image": "maps/map01301.png",
+      "map_bounds": [
+        -3712,
+        -2144,
+        2944,
+        2976
+      ],
+      "coordinate_space": "world",
+      "region": 102,
+      "availability_note": "Warp available: zone 147",
+      "observations": "observations.jsonl"
+    },
+    {
+      "profile_id": "profile-45db7ad33411fb5c",
+      "name": "Coerthas Eastern Highlands - map01301",
+      "zone": 144,
+      "map_image": "maps/map01301.png",
+      "map_bounds": [
+        -3712,
+        -2144,
+        2944,
+        2976
+      ],
+      "coordinate_space": "world",
+      "region": 102,
+      "availability_note": "Warp available: zone 144",
+      "observations": "observations.jsonl"
+    },
+    {
+      "profile_id": "profile-949084993719d96f",
+      "name": "Coerthas Eastern Lowlands - map01301",
+      "zone": 145,
+      "map_image": "maps/map01301.png",
+      "map_bounds": [
+        -3712,
+        -2144,
+        2944,
+        2976
+      ],
+      "coordinate_space": "world",
+      "region": 102,
+      "availability_note": "Warp available: zone 145",
+      "observations": "observations.jsonl"
+    },
+    {
+      "profile_id": "profile-10275c3a5be7db5a",
+      "name": "Coerthas Western Highlands - map01301",
+      "zone": 148,
+      "map_image": "maps/map01301.png",
+      "map_bounds": [
+        -3712,
+        -2144,
+        2944,
+        2976
+      ],
+      "coordinate_space": "world",
+      "region": 102,
+      "availability_note": "Warp available: zone 148",
+      "observations": "observations.jsonl"
+    },
+    {
+      "profile_id": "profile-db595e18f84174dc",
+      "name": "Copperbell Mines - map01131",
+      "zone": 178,
+      "map_image": "maps/map01131.png",
+      "map_bounds": [
+        -1056,
+        -544,
+        224,
+        480
+      ],
+      "coordinate_space": "world",
+      "region": 104,
+      "availability_note": "Warp available: zone 178",
+      "observations": "observations.jsonl"
+    },
+    {
+      "profile_id": "profile-668ff9deb641ad4a",
+      "name": "Copperbell Mines - map01136",
+      "zone": 178,
+      "map_image": "maps/map01136.png",
+      "map_bounds": [
+        -1056,
+        -544,
+        224,
+        480
+      ],
+      "coordinate_space": "world",
+      "region": 104,
+      "availability_note": "Warp available: zone 178",
+      "observations": "observations.jsonl"
+    },
+    {
+      "profile_id": "profile-b0f7c502d3581885",
+      "name": "Cutter's Cry - map01161",
+      "zone": 246,
+      "map_image": "maps/map01161.png",
+      "map_bounds": [
+        -1792,
+        -2144,
+        -512,
+        -1120
+      ],
+      "coordinate_space": "world",
+      "region": 104,
+      "availability_note": "Warp available: zone 246",
+      "observations": "observations.jsonl"
+    },
+    {
+      "profile_id": "profile-5e1dd683c29e795f",
+      "name": "Cutter's Cry - map01161",
+      "zone": 254,
+      "map_image": "maps/map01161.png",
+      "map_bounds": [
+        -1792,
+        -2144,
+        -512,
+        -1120
+      ],
+      "coordinate_space": "world",
+      "region": 104,
+      "availability_note": "Warp available: zone 254",
+      "observations": "observations.jsonl"
+    },
+    {
+      "profile_id": "profile-9e0951b2f63e28ca",
+      "name": "Cutter's Cry - map01161",
+      "zone": 255,
+      "map_image": "maps/map01161.png",
+      "map_bounds": [
+        -1792,
+        -2144,
+        -512,
+        -1120
+      ],
+      "coordinate_space": "world",
+      "region": 104,
+      "availability_note": "Warp available: zone 255",
+      "observations": "observations.jsonl"
+    },
+    {
+      "profile_id": "profile-d4c9fc43d12f26a8",
+      "name": "Cutter's Cry - map01163",
+      "zone": 246,
+      "map_image": "maps/map01163.png",
+      "map_bounds": [
+        -1824,
+        -2112,
+        -544,
+        -1088
+      ],
+      "coordinate_space": "world",
+      "region": 104,
+      "availability_note": "Warp available: zone 246",
+      "observations": "observations.jsonl"
+    },
+    {
+      "profile_id": "profile-087622d239bb24dd",
+      "name": "Cutter's Cry - map01163",
+      "zone": 254,
+      "map_image": "maps/map01163.png",
+      "map_bounds": [
+        -1824,
+        -2112,
+        -544,
+        -1088
+      ],
+      "coordinate_space": "world",
+      "region": 104,
+      "availability_note": "Warp available: zone 254",
+      "observations": "observations.jsonl"
+    },
+    {
+      "profile_id": "profile-99724ff23e52a027",
+      "name": "Cutter's Cry - map01163",
+      "zone": 255,
+      "map_image": "maps/map01163.png",
+      "map_bounds": [
+        -1824,
+        -2112,
+        -544,
+        -1088
+      ],
+      "coordinate_space": "world",
+      "region": 104,
+      "availability_note": "Warp available: zone 255",
+      "observations": "observations.jsonl"
+    },
+    {
+      "profile_id": "profile-59655a688e706b08",
+      "name": "Cutter's Cry - map01165",
+      "zone": 246,
+      "map_image": "maps/map01165.png",
+      "map_bounds": [
+        -1952,
+        -2272,
+        -672,
+        -1248
+      ],
+      "coordinate_space": "world",
+      "region": 104,
+      "availability_note": "Warp available: zone 246",
+      "observations": "observations.jsonl"
+    },
+    {
+      "profile_id": "profile-3c7aea6a74924bf8",
+      "name": "Cutter's Cry - map01165",
+      "zone": 254,
+      "map_image": "maps/map01165.png",
+      "map_bounds": [
+        -1952,
+        -2272,
+        -672,
+        -1248
+      ],
+      "coordinate_space": "world",
+      "region": 104,
+      "availability_note": "Warp available: zone 254",
+      "observations": "observations.jsonl"
+    },
+    {
+      "profile_id": "profile-5d4bb97fefb01c2b",
+      "name": "Cutter's Cry - map01165",
+      "zone": 255,
+      "map_image": "maps/map01165.png",
+      "map_bounds": [
+        -1952,
+        -2272,
+        -672,
+        -1248
+      ],
+      "coordinate_space": "world",
+      "region": 104,
+      "availability_note": "Warp available: zone 255",
+      "observations": "observations.jsonl"
+    },
+    {
+      "profile_id": "profile-37495acd0d1865df",
+      "name": "Cutter's Cry - map01167",
+      "zone": 246,
+      "map_image": "maps/map01167.png",
+      "map_bounds": [
+        -2080,
+        -2368,
+        -800,
+        -1344
+      ],
+      "coordinate_space": "world",
+      "region": 104,
+      "availability_note": "Warp available: zone 246",
+      "observations": "observations.jsonl"
+    },
+    {
+      "profile_id": "profile-0a370187bd630843",
+      "name": "Cutter's Cry - map01167",
+      "zone": 254,
+      "map_image": "maps/map01167.png",
+      "map_bounds": [
+        -2080,
+        -2368,
+        -800,
+        -1344
+      ],
+      "coordinate_space": "world",
+      "region": 104,
+      "availability_note": "Warp available: zone 254",
+      "observations": "observations.jsonl"
+    },
+    {
+      "profile_id": "profile-3853a6524c47456d",
+      "name": "Cutter's Cry - map01167",
+      "zone": 255,
+      "map_image": "maps/map01167.png",
+      "map_bounds": [
+        -2080,
+        -2368,
+        -800,
+        -1344
+      ],
+      "coordinate_space": "world",
+      "region": 104,
+      "availability_note": "Warp available: zone 255",
+      "observations": "observations.jsonl"
+    },
+    {
+      "profile_id": "profile-b6879fbd15debfd1",
+      "name": "Dzemael Darkhold - map01321",
+      "zone": 231,
+      "map_image": "maps/map01321.png",
+      "map_bounds": [
+        -560,
+        -384,
+        720,
+        640
+      ],
+      "coordinate_space": "world",
+      "region": 102,
+      "availability_note": "Warp available: zone 231",
+      "observations": "observations.jsonl"
+    },
+    {
+      "profile_id": "profile-05cfb3084cfda6f6",
+      "name": "Dzemael Darkhold - map01331",
+      "zone": 231,
+      "map_image": "maps/map01331.png",
+      "map_bounds": [
+        -736,
+        -593,
+        544,
+        431
+      ],
+      "coordinate_space": "world",
+      "region": 102,
+      "availability_note": "Warp available: zone 231",
+      "observations": "observations.jsonl"
+    },
+    {
+      "profile_id": "profile-b6fb4a323cc18458",
+      "name": "East Shroud - map01201",
+      "zone": 151,
+      "map_image": "maps/map01201.png",
+      "map_bounds": [
+        -3104,
+        -3808,
+        3040,
+        2336
+      ],
+      "coordinate_space": "world",
+      "region": 103,
+      "availability_note": "Warp available: zone 151",
+      "observations": "observations.jsonl"
+    },
+    {
+      "profile_id": "profile-8dcfa2230091e5a0",
+      "name": "Eastern La Noscea - map01001",
+      "zone": 130,
+      "map_image": "maps/map01001.png",
+      "map_bounds": [
+        -2528,
+        -3008,
+        2080,
+        1600
+      ],
+      "coordinate_space": "world",
+      "region": 101,
+      "availability_note": "Warp available: zone 130",
+      "observations": "observations.jsonl"
+    },
+    {
+      "profile_id": "profile-4a77cff17f058184",
+      "name": "Eastern La Noscea - map01001",
+      "zone": 205,
+      "map_image": "maps/map01001.png",
+      "map_bounds": [
+        -2528,
+        -3008,
+        2080,
+        1600
+      ],
+      "coordinate_space": "world",
+      "region": 101,
+      "availability_note": "Warp available: zone 205",
+      "observations": "observations.jsonl"
+    },
+    {
+      "profile_id": "profile-a029d35c06830d61",
+      "name": "Eastern Thanalan - map01101",
+      "zone": 171,
+      "map_image": "maps/map01101.png",
+      "map_bounds": [
+        -2687,
+        -3072,
+        2945,
+        2560
+      ],
+      "coordinate_space": "world",
+      "region": 104,
+      "availability_note": "Warp available: zone 171",
+      "observations": "observations.jsonl"
+    },
+    {
+      "profile_id": "profile-bb17ea610608bfa9",
+      "name": "Gridania - map01063",
+      "zone": 155,
+      "map_image": "maps/map01063.png",
+      "map_bounds": [
+        128,
+        192,
+        512,
+        448
+      ],
+      "coordinate_space": "world",
+      "region": 204,
+      "availability_note": "Warp available: zone 155",
+      "observations": "observations.jsonl"
+    },
+    {
+      "profile_id": "profile-3a4d40e162e22753",
+      "name": "Gridania - map01063",
+      "zone": 206,
+      "map_image": "maps/map01063.png",
+      "map_bounds": [
+        128,
+        192,
+        512,
+        448
+      ],
+      "coordinate_space": "world",
+      "region": 204,
+      "availability_note": "Warp available: zone 206",
+      "observations": "observations.jsonl"
+    },
+    {
+      "profile_id": "profile-aca000ebe98faa29",
+      "name": "Gridania - map01142",
+      "zone": 155,
+      "map_image": "maps/map01142.png",
+      "map_bounds": [
+        288,
+        408,
+        672,
+        664
+      ],
+      "coordinate_space": "world",
+      "region": 204,
+      "availability_note": "Warp available: zone 155",
+      "observations": "observations.jsonl"
+    },
+    {
+      "profile_id": "profile-9d89266306f0c9f9",
+      "name": "Gridania - map01142",
+      "zone": 206,
+      "map_image": "maps/map01142.png",
+      "map_bounds": [
+        288,
+        408,
+        672,
+        664
+      ],
+      "coordinate_space": "world",
+      "region": 204,
+      "availability_note": "Warp available: zone 206",
+      "observations": "observations.jsonl"
+    },
+    {
+      "profile_id": "profile-502794250860fc77",
+      "name": "Gridania - map01211",
+      "zone": 155,
+      "map_image": "maps/map01211.png",
+      "map_bounds": [
+        -608,
+        -1824,
+        672,
+        -800
+      ],
+      "coordinate_space": "world",
+      "region": 103,
+      "availability_note": "Warp available: zone 155",
+      "observations": "observations.jsonl"
+    },
+    {
+      "profile_id": "profile-a21b92f973a6a66f",
+      "name": "Gridania - map01211",
+      "zone": 206,
+      "map_image": "maps/map01211.png",
+      "map_bounds": [
+        -608,
+        -1824,
+        672,
+        -800
+      ],
+      "coordinate_space": "world",
+      "region": 103,
+      "availability_note": "Warp available: zone 206",
+      "observations": "observations.jsonl"
+    },
+    {
+      "profile_id": "profile-b520a6d1daf1b15c",
+      "name": "Gridania - map01216",
+      "zone": 155,
+      "map_image": "maps/map01216.png",
+      "map_bounds": [
+        -32,
+        32,
+        352,
+        288
+      ],
+      "coordinate_space": "world",
+      "region": 204,
+      "availability_note": "Warp available: zone 155",
+      "observations": "observations.jsonl"
+    },
+    {
+      "profile_id": "profile-74081be057e936e4",
+      "name": "Gridania - map01216",
+      "zone": 206,
+      "map_image": "maps/map01216.png",
+      "map_bounds": [
+        -32,
+        32,
+        352,
+        288
+      ],
+      "coordinate_space": "world",
+      "region": 204,
+      "availability_note": "Warp available: zone 206",
+      "observations": "observations.jsonl"
+    },
+    {
+      "profile_id": "profile-b93dcab271383e67",
+      "name": "Gridania - map01251",
+      "zone": 155,
+      "map_image": "maps/map01251.png",
+      "map_bounds": [
+        -27,
+        -296,
+        357,
+        -40
+      ],
+      "coordinate_space": "world",
+      "region": 204,
+      "availability_note": "Warp available: zone 155",
+      "observations": "observations.jsonl"
+    },
+    {
+      "profile_id": "profile-7d34de69424023ef",
+      "name": "Gridania - map01251",
+      "zone": 206,
+      "map_image": "maps/map01251.png",
+      "map_bounds": [
+        -27,
+        -296,
+        357,
+        -40
+      ],
+      "coordinate_space": "world",
+      "region": 204,
+      "availability_note": "Warp available: zone 206",
+      "observations": "observations.jsonl"
+    },
+    {
+      "profile_id": "profile-aab4083f05d0bf07",
+      "name": "Gridania - map01351",
+      "zone": 155,
+      "map_image": "maps/map01351.png",
+      "map_bounds": [
+        -352,
+        -2400,
+        416,
+        -1888
+      ],
+      "coordinate_space": "world",
+      "region": 103,
+      "availability_note": "Warp available: zone 155",
+      "observations": "observations.jsonl"
+    },
+    {
+      "profile_id": "profile-f1b3c82776c8f797",
+      "name": "Gridania - map01351",
+      "zone": 206,
+      "map_image": "maps/map01351.png",
+      "map_bounds": [
+        -352,
+        -2400,
+        416,
+        -1888
+      ],
+      "coordinate_space": "world",
+      "region": 103,
+      "availability_note": "Warp available: zone 206",
+      "observations": "observations.jsonl"
+    },
+    {
+      "profile_id": "profile-ab08d85c9f1b8e20",
+      "name": "Gridania - map01353",
+      "zone": 155,
+      "map_image": "maps/map01353.png",
+      "map_bounds": [
+        64,
+        96,
+        256,
+        224
+      ],
+      "coordinate_space": "world",
+      "region": 209,
+      "availability_note": "Warp available: zone 155",
+      "observations": "observations.jsonl"
+    },
+    {
+      "profile_id": "profile-74b6d234b3407223",
+      "name": "Gridania - map01353",
+      "zone": 206,
+      "map_image": "maps/map01353.png",
+      "map_bounds": [
+        64,
+        96,
+        256,
+        224
+      ],
+      "coordinate_space": "world",
+      "region": 209,
+      "availability_note": "Warp available: zone 206",
+      "observations": "observations.jsonl"
+    },
+    {
+      "profile_id": "profile-9a110de93ce02073",
+      "name": "Limsa Lominsa - map01021",
+      "zone": 133,
+      "map_image": "maps/map01021.png",
+      "map_bounds": [
+        -256,
+        88,
+        -64,
+        216
+      ],
+      "coordinate_space": "world",
+      "region": 202,
+      "availability_note": "Warp available: zone 133",
+      "observations": "observations.jsonl"
+    },
+    {
+      "profile_id": "profile-e647a34145744257",
+      "name": "Limsa Lominsa - map01021",
+      "zone": 230,
+      "map_image": "maps/map01021.png",
+      "map_bounds": [
+        -256,
+        88,
+        -64,
+        216
+      ],
+      "coordinate_space": "world",
+      "region": 202,
+      "availability_note": "Warp available: zone 230",
+      "observations": "observations.jsonl"
+    },
+    {
+      "profile_id": "profile-6ca726993f898905",
+      "name": "Limsa Lominsa - map01023",
+      "zone": 133,
+      "map_image": "maps/map01023.png",
+      "map_bounds": [
+        -256,
+        -224,
+        -64,
+        -96
+      ],
+      "coordinate_space": "world",
+      "region": 209,
+      "availability_note": "Warp available: zone 133",
+      "observations": "observations.jsonl"
+    },
+    {
+      "profile_id": "profile-8ed6bf938ae28163",
+      "name": "Limsa Lominsa - map01023",
+      "zone": 230,
+      "map_image": "maps/map01023.png",
+      "map_bounds": [
+        -256,
+        -224,
+        -64,
+        -96
+      ],
+      "coordinate_space": "world",
+      "region": 209,
+      "availability_note": "Warp available: zone 230",
+      "observations": "observations.jsonl"
+    },
+    {
+      "profile_id": "profile-dc089450a8740c7d",
+      "name": "Limsa Lominsa - map01041",
+      "zone": 133,
+      "map_image": "maps/map01041.png",
+      "map_bounds": [
+        -1216,
+        -320,
+        64,
+        704
+      ],
+      "coordinate_space": "world",
+      "region": 101,
+      "availability_note": "Warp available: zone 133",
+      "observations": "observations.jsonl"
+    },
+    {
+      "profile_id": "profile-117d6704465c81e4",
+      "name": "Limsa Lominsa - map01041",
+      "zone": 230,
+      "map_image": "maps/map01041.png",
+      "map_bounds": [
+        -1216,
+        -320,
+        64,
+        704
+      ],
+      "coordinate_space": "world",
+      "region": 101,
+      "availability_note": "Warp available: zone 230",
+      "observations": "observations.jsonl"
+    },
+    {
+      "profile_id": "profile-90b2e0586c95fccd",
+      "name": "Limsa Lominsa - map01046",
+      "zone": 133,
+      "map_image": "maps/map01046.png",
+      "map_bounds": [
+        -1216,
+        -320,
+        64,
+        704
+      ],
+      "coordinate_space": "world",
+      "region": 101,
+      "availability_note": "Warp available: zone 133",
+      "observations": "observations.jsonl"
+    },
+    {
+      "profile_id": "profile-352be42e177bb9fa",
+      "name": "Limsa Lominsa - map01046",
+      "zone": 230,
+      "map_image": "maps/map01046.png",
+      "map_bounds": [
+        -1216,
+        -320,
+        64,
+        704
+      ],
+      "coordinate_space": "world",
+      "region": 101,
+      "availability_note": "Warp available: zone 230",
+      "observations": "observations.jsonl"
+    },
+    {
+      "profile_id": "profile-de03f31014daec61",
+      "name": "Limsa Lominsa - map01061",
+      "zone": 133,
+      "map_image": "maps/map01061.png",
+      "map_bounds": [
+        -32,
+        32,
+        352,
+        288
+      ],
+      "coordinate_space": "world",
+      "region": 202,
+      "availability_note": "Warp available: zone 133",
+      "observations": "observations.jsonl"
+    },
+    {
+      "profile_id": "profile-338dae13f838fd53",
+      "name": "Limsa Lominsa - map01061",
+      "zone": 230,
+      "map_image": "maps/map01061.png",
+      "map_bounds": [
+        -32,
+        32,
+        352,
+        288
+      ],
+      "coordinate_space": "world",
+      "region": 202,
+      "availability_note": "Warp available: zone 230",
+      "observations": "observations.jsonl"
+    },
+    {
+      "profile_id": "profile-72ef4f2cbf9c82ba",
+      "name": "Limsa Lominsa - map01071",
+      "zone": 133,
+      "map_image": "maps/map01071.png",
+      "map_bounds": [
+        -26,
+        -296,
+        358,
+        -40
+      ],
+      "coordinate_space": "world",
+      "region": 202,
+      "availability_note": "Warp available: zone 133",
+      "observations": "observations.jsonl"
+    },
+    {
+      "profile_id": "profile-274594ada45da596",
+      "name": "Limsa Lominsa - map01071",
+      "zone": 230,
+      "map_image": "maps/map01071.png",
+      "map_bounds": [
+        -26,
+        -296,
+        358,
+        -40
+      ],
+      "coordinate_space": "world",
+      "region": 202,
+      "availability_note": "Warp available: zone 230",
+      "observations": "observations.jsonl"
+    },
+    {
+      "profile_id": "profile-b8d1c285971d06da",
+      "name": "Limsa Lominsa - map01076",
+      "zone": 133,
+      "map_image": "maps/map01076.png",
+      "map_bounds": [
+        -656,
+        64,
+        -272,
+        320
+      ],
+      "coordinate_space": "world",
+      "region": 101,
+      "availability_note": "Warp available: zone 133",
+      "observations": "observations.jsonl"
+    },
+    {
+      "profile_id": "profile-037edd0c5d216a2f",
+      "name": "Limsa Lominsa - map01076",
+      "zone": 230,
+      "map_image": "maps/map01076.png",
+      "map_bounds": [
+        -656,
+        64,
+        -272,
+        320
+      ],
+      "coordinate_space": "world",
+      "region": 101,
+      "availability_note": "Warp available: zone 230",
+      "observations": "observations.jsonl"
+    },
+    {
+      "profile_id": "profile-de3de3df9ffbeb9d",
+      "name": "Limsa Lominsa - map01081",
+      "zone": 133,
+      "map_image": "maps/map01081.png",
+      "map_bounds": [
+        -512,
+        -448,
+        -128,
+        -192
+      ],
+      "coordinate_space": "world",
+      "region": 202,
+      "availability_note": "Warp available: zone 133",
+      "observations": "observations.jsonl"
+    },
+    {
+      "profile_id": "profile-e15b15b11c48efeb",
+      "name": "Limsa Lominsa - map01081",
+      "zone": 230,
+      "map_image": "maps/map01081.png",
+      "map_bounds": [
+        -512,
+        -448,
+        -128,
+        -192
+      ],
+      "coordinate_space": "world",
+      "region": 202,
+      "availability_note": "Warp available: zone 230",
+      "observations": "observations.jsonl"
+    },
+    {
+      "profile_id": "profile-52ab9e9dc4058725",
+      "name": "Limsa Lominsa - map01143",
+      "zone": 230,
+      "map_image": "maps/map01143.png",
+      "map_bounds": [
+        128,
+        248,
+        512,
+        504
+      ],
+      "coordinate_space": "world",
+      "region": 202,
+      "availability_note": "Warp available: zone 230",
+      "observations": "observations.jsonl"
+    },
+    {
+      "profile_id": "profile-a5ffee97c0c04511",
+      "name": "Limsa Lominsa - map01217",
+      "zone": 230,
+      "map_image": "maps/map01217.png",
+      "map_bounds": [
+        288,
+        352,
+        672,
+        608
+      ],
+      "coordinate_space": "world",
+      "region": 202,
+      "availability_note": "Warp available: zone 230",
+      "observations": "observations.jsonl"
+    },
+    {
+      "profile_id": "profile-f9240fc1c2219fbf",
+      "name": "Lower La Noscea - map01001",
+      "zone": 141,
+      "map_image": "maps/map01001.png",
+      "map_bounds": [
+        -2528,
+        -3008,
+        2080,
+        1600
+      ],
+      "coordinate_space": "world",
+      "region": 101,
+      "availability_note": "Warp available: zone 141",
+      "observations": "observations.jsonl"
+    },
+    {
+      "profile_id": "profile-59190923c3422bd0",
+      "name": "Mistbeard Cove - map01051",
+      "zone": 131,
+      "map_image": "maps/map01051.png",
+      "map_bounds": [
+        -2400,
+        -2176,
+        -1120,
+        -1152
+      ],
+      "coordinate_space": "world",
+      "region": 101,
+      "availability_note": "Warp available: zone 131",
+      "observations": "observations.jsonl"
+    },
+    {
+      "profile_id": "profile-a0c58b95907685c3",
+      "name": "Mor Dhona - map01401",
+      "zone": 190,
+      "map_image": "maps/map01401.png",
+      "map_bounds": [
+        -1280,
+        -1344,
+        1280,
+        1216
+      ],
+      "coordinate_space": "world",
+      "region": 105,
+      "availability_note": "Warp available: zone 190",
+      "observations": "observations.jsonl"
+    },
+    {
+      "profile_id": "profile-8cc5ad4eed9ae743",
+      "name": "Mor Dhona - map01401",
+      "zone": 266,
+      "map_image": "maps/map01401.png",
+      "map_bounds": [
+        -1280,
+        -1344,
+        1280,
+        1216
+      ],
+      "coordinate_space": "world",
+      "region": 105,
+      "availability_note": "Warp available: zone 266",
+      "observations": "observations.jsonl"
+    },
+    {
+      "profile_id": "profile-10f945831408a563",
+      "name": "Mor Dhona - map01403",
+      "zone": 190,
+      "map_image": "maps/map01403.png",
+      "map_bounds": [
+        -384,
+        -256,
+        384,
+        256
+      ],
+      "coordinate_space": "world",
+      "region": 105,
+      "availability_note": "Warp available: zone 190",
+      "observations": "observations.jsonl"
+    },
+    {
+      "profile_id": "profile-efe4754abbbedf96",
+      "name": "Mor Dhona - map01403",
+      "zone": 266,
+      "map_image": "maps/map01403.png",
+      "map_bounds": [
+        -384,
+        -256,
+        384,
+        256
+      ],
+      "coordinate_space": "world",
+      "region": 105,
+      "availability_note": "Warp available: zone 266",
+      "observations": "observations.jsonl"
+    },
+    {
+      "profile_id": "profile-55cf29f48090359f",
+      "name": "Nanawa Mines - map01126",
+      "zone": 176,
+      "map_image": "maps/map01126.png",
+      "map_bounds": [
+        -544,
+        -1888,
+        736,
+        -864
+      ],
+      "coordinate_space": "world",
+      "region": 104,
+      "availability_note": "Warp available: zone 176",
+      "observations": "observations.jsonl"
+    },
+    {
+      "profile_id": "profile-81a7b95a4799e9f0",
+      "name": "North Shroud - map01201",
+      "zone": 152,
+      "map_image": "maps/map01201.png",
+      "map_bounds": [
+        -3104,
+        -3808,
+        3040,
+        2336
+      ],
+      "coordinate_space": "world",
+      "region": 103,
+      "availability_note": "Warp available: zone 152",
+      "observations": "observations.jsonl"
+    },
+    {
+      "profile_id": "profile-0831fdf75c1eb5d0",
+      "name": "North Shroud - map01201",
+      "zone": 207,
+      "map_image": "maps/map01201.png",
+      "map_bounds": [
+        -3104,
+        -3808,
+        3040,
+        2336
+      ],
+      "coordinate_space": "world",
+      "region": 103,
+      "availability_note": "Warp available: zone 207",
+      "observations": "observations.jsonl"
+    },
+    {
+      "profile_id": "profile-e61df35669e6664b",
+      "name": "Northern Thanalan - map01101",
+      "zone": 173,
+      "map_image": "maps/map01101.png",
+      "map_bounds": [
+        -2687,
+        -3072,
+        2945,
+        2560
+      ],
+      "coordinate_space": "world",
+      "region": 104,
+      "availability_note": "Warp available: zone 173",
+      "observations": "observations.jsonl"
+    },
+    {
+      "profile_id": "profile-1159e30046ad6e60",
+      "name": "Rivenroad - map01306",
+      "zone": 257,
+      "map_image": "maps/map01306.png",
+      "map_bounds": [
+        -384,
+        -256,
+        384,
+        256
+      ],
+      "coordinate_space": "world",
+      "region": 109,
+      "availability_note": "Warp available: zone 257",
+      "observations": "observations.jsonl"
+    },
+    {
+      "profile_id": "profile-9ec9ffe843cad5c8",
+      "name": "Rivenroad - map01306",
+      "zone": 267,
+      "map_image": "maps/map01306.png",
+      "map_bounds": [
+        -384,
+        -256,
+        384,
+        256
+      ],
+      "coordinate_space": "world",
+      "region": 109,
+      "availability_note": "Warp available: zone 267",
+      "observations": "observations.jsonl"
+    },
+    {
+      "profile_id": "profile-e249d2fd63850e5a",
+      "name": "Rivenroad - map01306",
+      "zone": 268,
+      "map_image": "maps/map01306.png",
+      "map_bounds": [
+        -384,
+        -256,
+        384,
+        256
+      ],
+      "coordinate_space": "world",
+      "region": 109,
+      "availability_note": "Warp available: zone 268",
+      "observations": "observations.jsonl"
+    },
+    {
+      "profile_id": "profile-b409e7f714dfbab9",
+      "name": "Shposhae - map01091",
+      "zone": 235,
+      "map_image": "maps/map01091.png",
+      "map_bounds": [
+        -511,
+        -479,
+        769,
+        545
+      ],
+      "coordinate_space": "world",
+      "region": 101,
+      "availability_note": "Warp available: zone 235",
+      "observations": "observations.jsonl"
+    },
+    {
+      "profile_id": "profile-c19d138a3370256f",
+      "name": "Shposhae - map01093",
+      "zone": 235,
+      "map_image": "maps/map01093.png",
+      "map_bounds": [
+        -544,
+        -607,
+        736,
+        417
+      ],
+      "coordinate_space": "world",
+      "region": 101,
+      "availability_note": "Warp available: zone 235",
+      "observations": "observations.jsonl"
+    },
+    {
+      "profile_id": "profile-592e0bd7acce3cd4",
+      "name": "Shposhae - map01095",
+      "zone": 235,
+      "map_image": "maps/map01095.png",
+      "map_bounds": [
+        -448,
+        -496,
+        832,
+        528
+      ],
+      "coordinate_space": "world",
+      "region": 101,
+      "availability_note": "Warp available: zone 235",
+      "observations": "observations.jsonl"
+    },
+    {
+      "profile_id": "profile-37a1add0247c4249",
+      "name": "Shposhae - map01097",
+      "zone": 235,
+      "map_image": "maps/map01097.png",
+      "map_bounds": [
+        -544,
+        -256,
+        736,
+        768
+      ],
+      "coordinate_space": "world",
+      "region": 101,
+      "availability_note": "Warp available: zone 235",
+      "observations": "observations.jsonl"
+    },
+    {
+      "profile_id": "profile-8503dac5de1e7916",
+      "name": "Shposhae - map01099",
+      "zone": 235,
+      "map_image": "maps/map01099.png",
+      "map_bounds": [
+        -608,
+        -240,
+        672,
+        784
+      ],
+      "coordinate_space": "world",
+      "region": 101,
+      "availability_note": "Warp available: zone 235",
+      "observations": "observations.jsonl"
+    },
+    {
+      "profile_id": "profile-8073a394c39dc40a",
+      "name": "South Shroud - map01201",
+      "zone": 154,
+      "map_image": "maps/map01201.png",
+      "map_bounds": [
+        -3104,
+        -3808,
+        3040,
+        2336
+      ],
+      "coordinate_space": "world",
+      "region": 103,
+      "availability_note": "Warp available: zone 154",
+      "observations": "observations.jsonl"
+    },
+    {
+      "profile_id": "profile-2471c190af129a00",
+      "name": "South Shroud - map01201",
+      "zone": 208,
+      "map_image": "maps/map01201.png",
+      "map_bounds": [
+        -3104,
+        -3808,
+        3040,
+        2336
+      ],
+      "coordinate_space": "world",
+      "region": 103,
+      "availability_note": "Warp available: zone 208",
+      "observations": "observations.jsonl"
+    },
+    {
+      "profile_id": "profile-ef7d8a68a77d1400",
+      "name": "Southern Thanalan - map01101",
+      "zone": 174,
+      "map_image": "maps/map01101.png",
+      "map_bounds": [
+        -2687,
+        -3072,
+        2945,
+        2560
+      ],
+      "coordinate_space": "world",
+      "region": 104,
+      "availability_note": "Warp available: zone 174",
+      "observations": "observations.jsonl"
+    },
+    {
+      "profile_id": "profile-9c0628809bf37f31",
+      "name": "The Aurum Vale - map01341",
+      "zone": 245,
+      "map_image": "maps/map01341.png",
+      "map_bounds": [
+        -1328,
+        768,
+        -48,
+        1792
+      ],
+      "coordinate_space": "world",
+      "region": 102,
+      "availability_note": "Warp available: zone 245",
+      "observations": "observations.jsonl"
+    },
+    {
+      "profile_id": "profile-f9de9878cca6fccb",
+      "name": "The Aurum Vale - map01341",
+      "zone": 252,
+      "map_image": "maps/map01341.png",
+      "map_bounds": [
+        -1328,
+        768,
+        -48,
+        1792
+      ],
+      "coordinate_space": "world",
+      "region": 102,
+      "availability_note": "Warp available: zone 252",
+      "observations": "observations.jsonl"
+    },
+    {
+      "profile_id": "profile-e77fed5418f7ba4f",
+      "name": "The Aurum Vale - map01341",
+      "zone": 253,
+      "map_image": "maps/map01341.png",
+      "map_bounds": [
+        -1328,
+        768,
+        -48,
+        1792
+      ],
+      "coordinate_space": "world",
+      "region": 102,
+      "availability_note": "Warp available: zone 253",
+      "observations": "observations.jsonl"
+    },
+    {
+      "profile_id": "profile-cfb54d6a33fdb82e",
+      "name": "The Aurum Vale - map01343",
+      "zone": 245,
+      "map_image": "maps/map01343.png",
+      "map_bounds": [
+        -1648,
+        800,
+        -368,
+        1824
+      ],
+      "coordinate_space": "world",
+      "region": 102,
+      "availability_note": "Warp available: zone 245",
+      "observations": "observations.jsonl"
+    },
+    {
+      "profile_id": "profile-3a1e976ddca03474",
+      "name": "The Aurum Vale - map01343",
+      "zone": 252,
+      "map_image": "maps/map01343.png",
+      "map_bounds": [
+        -1648,
+        800,
+        -368,
+        1824
+      ],
+      "coordinate_space": "world",
+      "region": 102,
+      "availability_note": "Warp available: zone 252",
+      "observations": "observations.jsonl"
+    },
+    {
+      "profile_id": "profile-2bdd186edcd3baf3",
+      "name": "The Aurum Vale - map01343",
+      "zone": 253,
+      "map_image": "maps/map01343.png",
+      "map_bounds": [
+        -1648,
+        800,
+        -368,
+        1824
+      ],
+      "coordinate_space": "world",
+      "region": 102,
+      "availability_note": "Warp available: zone 253",
+      "observations": "observations.jsonl"
+    },
+    {
+      "profile_id": "profile-a7b29aaac73a6dfb",
+      "name": "The Aurum Vale - map01345",
+      "zone": 245,
+      "map_image": "maps/map01345.png",
+      "map_bounds": [
+        -1488,
+        1072,
+        -208,
+        2096
+      ],
+      "coordinate_space": "world",
+      "region": 102,
+      "availability_note": "Warp available: zone 245",
+      "observations": "observations.jsonl"
+    },
+    {
+      "profile_id": "profile-97e6b4d8a17b5a20",
+      "name": "The Aurum Vale - map01345",
+      "zone": 252,
+      "map_image": "maps/map01345.png",
+      "map_bounds": [
+        -1488,
+        1072,
+        -208,
+        2096
+      ],
+      "coordinate_space": "world",
+      "region": 102,
+      "availability_note": "Warp available: zone 252",
+      "observations": "observations.jsonl"
+    },
+    {
+      "profile_id": "profile-79e40066a7b9da3f",
+      "name": "The Aurum Vale - map01345",
+      "zone": 253,
+      "map_image": "maps/map01345.png",
+      "map_bounds": [
+        -1488,
+        1072,
+        -208,
+        2096
+      ],
+      "coordinate_space": "world",
+      "region": 102,
+      "availability_note": "Warp available: zone 253",
+      "observations": "observations.jsonl"
+    },
+    {
+      "profile_id": "profile-a5399f84d7baacda",
+      "name": "The Bowl of Embers - map01111",
+      "zone": 240,
+      "map_image": "maps/map01111.png",
+      "map_bounds": [
+        1696,
+        1696,
+        3232,
+        2720
+      ],
+      "coordinate_space": "world",
+      "region": 104,
+      "availability_note": "Warp available: zone 240",
+      "observations": "observations.jsonl"
+    },
+    {
+      "profile_id": "profile-f99a3e46ed930409",
+      "name": "The Cieldalaes - map00901",
+      "zone": 139,
+      "map_image": "maps/map00901.png",
+      "map_bounds": [
+        256,
+        512,
+        1792,
+        1536
+      ],
+      "coordinate_space": "world",
+      "region": 108,
+      "availability_note": "Warp available: zone 139",
+      "observations": "observations.jsonl"
+    },
+    {
+      "profile_id": "profile-ca72c1c2a484756e",
+      "name": "The Cieldalaes - map00902",
+      "zone": 139,
+      "map_image": "maps/map00902.png",
+      "map_bounds": [
+        -1792,
+        512,
+        -256,
+        1536
+      ],
+      "coordinate_space": "world",
+      "region": 108,
+      "availability_note": "Warp available: zone 139",
+      "observations": "observations.jsonl"
+    },
+    {
+      "profile_id": "profile-8a75974bffdc8d0b",
+      "name": "The Cieldalaes - map01036",
+      "zone": 139,
+      "map_image": "maps/map01036.png",
+      "map_bounds": [
+        1248,
+        928,
+        2784,
+        1952
+      ],
+      "coordinate_space": "world",
+      "region": 101,
+      "availability_note": "Warp available: zone 139",
+      "observations": "observations.jsonl"
+    },
+    {
+      "profile_id": "profile-a3f0bc8d9bdcf688",
+      "name": "The Howling Eye - map01311",
+      "zone": 239,
+      "map_image": "maps/map01311.png",
+      "map_bounds": [
+        704,
+        -768,
+        2240,
+        256
+      ],
+      "coordinate_space": "world",
+      "region": 102,
+      "availability_note": "Warp available: zone 239",
+      "observations": "observations.jsonl"
+    },
+    {
+      "profile_id": "profile-2d357f05cb604a8e",
+      "name": "The Howling Eye - map01311",
+      "zone": 250,
+      "map_image": "maps/map01311.png",
+      "map_bounds": [
+        704,
+        -768,
+        2240,
+        256
+      ],
+      "coordinate_space": "world",
+      "region": 102,
+      "availability_note": "Warp available: zone 250",
+      "observations": "observations.jsonl"
+    },
+    {
+      "profile_id": "profile-8ec78e473c3ca22a",
+      "name": "The Howling Eye - map01311",
+      "zone": 256,
+      "map_image": "maps/map01311.png",
+      "map_bounds": [
+        704,
+        -768,
+        2240,
+        256
+      ],
+      "coordinate_space": "world",
+      "region": 102,
+      "availability_note": "Warp available: zone 256",
+      "observations": "observations.jsonl"
+    },
+    {
+      "profile_id": "profile-35f4e42684621118",
+      "name": "The Mun-Tuy Cellars - map01221",
+      "zone": 157,
+      "map_image": "maps/map01221.png",
+      "map_bounds": [
+        -1472,
+        -2688,
+        -192,
+        -1664
+      ],
+      "coordinate_space": "world",
+      "region": 103,
+      "availability_note": "Warp available: zone 157",
+      "observations": "observations.jsonl"
+    },
+    {
+      "profile_id": "profile-efb6eda2ef44dda1",
+      "name": "The Tam-Tara Deepcroft - map01226",
+      "zone": 158,
+      "map_image": "maps/map01226.png",
+      "map_bounds": [
+        -384,
+        -608,
+        896,
+        416
+      ],
+      "coordinate_space": "world",
+      "region": 103,
+      "availability_note": "Warp available: zone 158",
+      "observations": "observations.jsonl"
+    },
+    {
+      "profile_id": "profile-9611ab2b00083b2b",
+      "name": "The Tam-Tara Deepcroft - map01231",
+      "zone": 158,
+      "map_image": "maps/map01231.png",
+      "map_bounds": [
+        -384,
+        -608,
+        896,
+        416
+      ],
+      "coordinate_space": "world",
+      "region": 103,
+      "availability_note": "Warp available: zone 158",
+      "observations": "observations.jsonl"
+    },
+    {
+      "profile_id": "profile-4bda7a4d87bab618",
+      "name": "The Thousand Maws of Toto-Rak - map01241",
+      "zone": 159,
+      "map_image": "maps/map01241.png",
+      "map_bounds": [
+        544,
+        224,
+        1824,
+        1248
+      ],
+      "coordinate_space": "world",
+      "region": 103,
+      "availability_note": "Warp available: zone 159",
+      "observations": "observations.jsonl"
+    },
+    {
+      "profile_id": "profile-872139c00c24857d",
+      "name": "Thornmarch - map01261",
+      "zone": 238,
+      "map_image": "maps/map01261.png",
+      "map_bounds": [
+        -2752,
+        -1152,
+        -1984,
+        -640
+      ],
+      "coordinate_space": "world",
+      "region": 103,
+      "availability_note": "Warp available: zone 238",
+      "observations": "observations.jsonl"
+    },
+    {
+      "profile_id": "profile-4bb5873bee11d724",
+      "name": "U'Ghamaro Mines - map01086",
+      "zone": 137,
+      "map_image": "maps/map01086.png",
+      "map_bounds": [
+        -542,
+        -3488,
+        738,
+        -2464
+      ],
+      "coordinate_space": "world",
+      "region": 101,
+      "availability_note": "Warp available: zone 137",
+      "observations": "observations.jsonl"
+    },
+    {
+      "profile_id": "profile-7215252282bdefcc",
+      "name": "Ul'dah - map01062",
+      "zone": 184,
+      "map_image": "maps/map01062.png",
+      "map_bounds": [
+        288,
+        352,
+        672,
+        608
+      ],
+      "coordinate_space": "world",
+      "region": 205,
+      "availability_note": "Warp available: zone 184",
+      "observations": "observations.jsonl"
+    },
+    {
+      "profile_id": "profile-ba2b75fdc96381d1",
+      "name": "Ul'dah - map01062",
+      "zone": 185,
+      "map_image": "maps/map01062.png",
+      "map_bounds": [
+        288,
+        352,
+        672,
+        608
+      ],
+      "coordinate_space": "world",
+      "region": 205,
+      "availability_note": "Warp available: zone 185",
+      "observations": "observations.jsonl"
+    },
+    {
+      "profile_id": "profile-b58b098e42b4f746",
+      "name": "Ul'dah - map01062",
+      "zone": 186,
+      "map_image": "maps/map01062.png",
+      "map_bounds": [
+        288,
+        352,
+        672,
+        608
+      ],
+      "coordinate_space": "world",
+      "region": 205,
+      "availability_note": "Warp available: zone 186",
+      "observations": "observations.jsonl"
+    },
+    {
+      "profile_id": "profile-b790d6637216def0",
+      "name": "Ul'dah - map01062",
+      "zone": 187,
+      "map_image": "maps/map01062.png",
+      "map_bounds": [
+        288,
+        352,
+        672,
+        608
+      ],
+      "coordinate_space": "world",
+      "region": 205,
+      "availability_note": "Warp available: zone 187",
+      "observations": "observations.jsonl"
+    },
+    {
+      "profile_id": "profile-0e40d5721d0a2402",
+      "name": "Ul'dah - map01062",
+      "zone": 188,
+      "map_image": "maps/map01062.png",
+      "map_bounds": [
+        288,
+        352,
+        672,
+        608
+      ],
+      "coordinate_space": "world",
+      "region": 205,
+      "availability_note": "Warp available: zone 188",
+      "observations": "observations.jsonl"
+    },
+    {
+      "profile_id": "profile-2508673e891083bb",
+      "name": "Ul'dah - map01116",
+      "zone": 175,
+      "map_image": "maps/map01116.png",
+      "map_bounds": [
+        -736,
+        -352,
+        544,
+        672
+      ],
+      "coordinate_space": "world",
+      "region": 104,
+      "availability_note": "Warp available: zone 175",
+      "observations": "observations.jsonl"
+    },
+    {
+      "profile_id": "profile-0f828bc27d5d9b85",
+      "name": "Ul'dah - map01116",
+      "zone": 184,
+      "map_image": "maps/map01116.png",
+      "map_bounds": [
+        -736,
+        -352,
+        544,
+        672
+      ],
+      "coordinate_space": "world",
+      "region": 104,
+      "availability_note": "Warp available: zone 184",
+      "observations": "observations.jsonl"
+    },
+    {
+      "profile_id": "profile-d5a2e36fde70e82a",
+      "name": "Ul'dah - map01116",
+      "zone": 185,
+      "map_image": "maps/map01116.png",
+      "map_bounds": [
+        -736,
+        -352,
+        544,
+        672
+      ],
+      "coordinate_space": "world",
+      "region": 104,
+      "availability_note": "Warp available: zone 185",
+      "observations": "observations.jsonl"
+    },
+    {
+      "profile_id": "profile-0dcfa2bcea5c56e6",
+      "name": "Ul'dah - map01116",
+      "zone": 186,
+      "map_image": "maps/map01116.png",
+      "map_bounds": [
+        -736,
+        -352,
+        544,
+        672
+      ],
+      "coordinate_space": "world",
+      "region": 104,
+      "availability_note": "Warp available: zone 186",
+      "observations": "observations.jsonl"
+    },
+    {
+      "profile_id": "profile-be0dfad473e022b9",
+      "name": "Ul'dah - map01116",
+      "zone": 187,
+      "map_image": "maps/map01116.png",
+      "map_bounds": [
+        -736,
+        -352,
+        544,
+        672
+      ],
+      "coordinate_space": "world",
+      "region": 104,
+      "availability_note": "Warp available: zone 187",
+      "observations": "observations.jsonl"
+    },
+    {
+      "profile_id": "profile-873cfa2541d6b9f6",
+      "name": "Ul'dah - map01116",
+      "zone": 188,
+      "map_image": "maps/map01116.png",
+      "map_bounds": [
+        -736,
+        -352,
+        544,
+        672
+      ],
+      "coordinate_space": "world",
+      "region": 104,
+      "availability_note": "Warp available: zone 188",
+      "observations": "observations.jsonl"
+    },
+    {
+      "profile_id": "profile-b0438841591eab1a",
+      "name": "Ul'dah - map01116",
+      "zone": 209,
+      "map_image": "maps/map01116.png",
+      "map_bounds": [
+        -736,
+        -352,
+        544,
+        672
+      ],
+      "coordinate_space": "world",
+      "region": 104,
+      "availability_note": "Warp available: zone 209",
+      "observations": "observations.jsonl"
+    },
+    {
+      "profile_id": "profile-7a2584c8e5fc37be",
+      "name": "Ul'dah - map01121",
+      "zone": 175,
+      "map_image": "maps/map01121.png",
+      "map_bounds": [
+        -736,
+        -352,
+        544,
+        672
+      ],
+      "coordinate_space": "world",
+      "region": 104,
+      "availability_note": "Warp available: zone 175",
+      "observations": "observations.jsonl"
+    },
+    {
+      "profile_id": "profile-05666f96bf149a75",
+      "name": "Ul'dah - map01121",
+      "zone": 184,
+      "map_image": "maps/map01121.png",
+      "map_bounds": [
+        -736,
+        -352,
+        544,
+        672
+      ],
+      "coordinate_space": "world",
+      "region": 104,
+      "availability_note": "Warp available: zone 184",
+      "observations": "observations.jsonl"
+    },
+    {
+      "profile_id": "profile-821b0dd280f6171c",
+      "name": "Ul'dah - map01121",
+      "zone": 185,
+      "map_image": "maps/map01121.png",
+      "map_bounds": [
+        -736,
+        -352,
+        544,
+        672
+      ],
+      "coordinate_space": "world",
+      "region": 104,
+      "availability_note": "Warp available: zone 185",
+      "observations": "observations.jsonl"
+    },
+    {
+      "profile_id": "profile-b8b3a182f8b2c6a0",
+      "name": "Ul'dah - map01121",
+      "zone": 186,
+      "map_image": "maps/map01121.png",
+      "map_bounds": [
+        -736,
+        -352,
+        544,
+        672
+      ],
+      "coordinate_space": "world",
+      "region": 104,
+      "availability_note": "Warp available: zone 186",
+      "observations": "observations.jsonl"
+    },
+    {
+      "profile_id": "profile-5dc43916c0cada59",
+      "name": "Ul'dah - map01121",
+      "zone": 187,
+      "map_image": "maps/map01121.png",
+      "map_bounds": [
+        -736,
+        -352,
+        544,
+        672
+      ],
+      "coordinate_space": "world",
+      "region": 104,
+      "availability_note": "Warp available: zone 187",
+      "observations": "observations.jsonl"
+    },
+    {
+      "profile_id": "profile-999dfcabf391ec0d",
+      "name": "Ul'dah - map01121",
+      "zone": 188,
+      "map_image": "maps/map01121.png",
+      "map_bounds": [
+        -736,
+        -352,
+        544,
+        672
+      ],
+      "coordinate_space": "world",
+      "region": 104,
+      "availability_note": "Warp available: zone 188",
+      "observations": "observations.jsonl"
+    },
+    {
+      "profile_id": "profile-b5a59fd4918a343d",
+      "name": "Ul'dah - map01121",
+      "zone": 209,
+      "map_image": "maps/map01121.png",
+      "map_bounds": [
+        -736,
+        -352,
+        544,
+        672
+      ],
+      "coordinate_space": "world",
+      "region": 104,
+      "availability_note": "Warp available: zone 209",
+      "observations": "observations.jsonl"
+    },
+    {
+      "profile_id": "profile-6e92c8b434642f75",
+      "name": "Ul'dah - map01141",
+      "zone": 175,
+      "map_image": "maps/map01141.png",
+      "map_bounds": [
+        -32,
+        88,
+        352,
+        344
+      ],
+      "coordinate_space": "world",
+      "region": 205,
+      "availability_note": "Warp available: zone 175",
+      "observations": "observations.jsonl"
+    },
+    {
+      "profile_id": "profile-80125bb79ed71251",
+      "name": "Ul'dah - map01141",
+      "zone": 184,
+      "map_image": "maps/map01141.png",
+      "map_bounds": [
+        -32,
+        88,
+        352,
+        344
+      ],
+      "coordinate_space": "world",
+      "region": 205,
+      "availability_note": "Warp available: zone 184",
+      "observations": "observations.jsonl"
+    },
+    {
+      "profile_id": "profile-f729ce53be0b3714",
+      "name": "Ul'dah - map01141",
+      "zone": 185,
+      "map_image": "maps/map01141.png",
+      "map_bounds": [
+        -32,
+        88,
+        352,
+        344
+      ],
+      "coordinate_space": "world",
+      "region": 205,
+      "availability_note": "Warp available: zone 185",
+      "observations": "observations.jsonl"
+    },
+    {
+      "profile_id": "profile-2f27431b46a6dc20",
+      "name": "Ul'dah - map01141",
+      "zone": 186,
+      "map_image": "maps/map01141.png",
+      "map_bounds": [
+        -32,
+        88,
+        352,
+        344
+      ],
+      "coordinate_space": "world",
+      "region": 205,
+      "availability_note": "Warp available: zone 186",
+      "observations": "observations.jsonl"
+    },
+    {
+      "profile_id": "profile-26a55800a80d5a4b",
+      "name": "Ul'dah - map01141",
+      "zone": 187,
+      "map_image": "maps/map01141.png",
+      "map_bounds": [
+        -32,
+        88,
+        352,
+        344
+      ],
+      "coordinate_space": "world",
+      "region": 205,
+      "availability_note": "Warp available: zone 187",
+      "observations": "observations.jsonl"
+    },
+    {
+      "profile_id": "profile-9743fa3fd576c7c8",
+      "name": "Ul'dah - map01141",
+      "zone": 188,
+      "map_image": "maps/map01141.png",
+      "map_bounds": [
+        -32,
+        88,
+        352,
+        344
+      ],
+      "coordinate_space": "world",
+      "region": 205,
+      "availability_note": "Warp available: zone 188",
+      "observations": "observations.jsonl"
+    },
+    {
+      "profile_id": "profile-cd7b598d855ca8c0",
+      "name": "Ul'dah - map01141",
+      "zone": 209,
+      "map_image": "maps/map01141.png",
+      "map_bounds": [
+        -32,
+        88,
+        352,
+        344
+      ],
+      "coordinate_space": "world",
+      "region": 205,
+      "availability_note": "Warp available: zone 209",
+      "observations": "observations.jsonl"
+    },
+    {
+      "profile_id": "profile-647cff010dbaae07",
+      "name": "Ul'dah - map01146",
+      "zone": 175,
+      "map_image": "maps/map01146.png",
+      "map_bounds": [
+        -316,
+        28,
+        68,
+        284
+      ],
+      "coordinate_space": "world",
+      "region": 104,
+      "availability_note": "Warp available: zone 175",
+      "observations": "observations.jsonl"
+    },
+    {
+      "profile_id": "profile-6e7cd6be433f5014",
+      "name": "Ul'dah - map01146",
+      "zone": 184,
+      "map_image": "maps/map01146.png",
+      "map_bounds": [
+        -316,
+        28,
+        68,
+        284
+      ],
+      "coordinate_space": "world",
+      "region": 104,
+      "availability_note": "Warp available: zone 184",
+      "observations": "observations.jsonl"
+    },
+    {
+      "profile_id": "profile-792410114496ca0b",
+      "name": "Ul'dah - map01146",
+      "zone": 185,
+      "map_image": "maps/map01146.png",
+      "map_bounds": [
+        -316,
+        28,
+        68,
+        284
+      ],
+      "coordinate_space": "world",
+      "region": 104,
+      "availability_note": "Warp available: zone 185",
+      "observations": "observations.jsonl"
+    },
+    {
+      "profile_id": "profile-f51033e7487ae276",
+      "name": "Ul'dah - map01146",
+      "zone": 186,
+      "map_image": "maps/map01146.png",
+      "map_bounds": [
+        -316,
+        28,
+        68,
+        284
+      ],
+      "coordinate_space": "world",
+      "region": 104,
+      "availability_note": "Warp available: zone 186",
+      "observations": "observations.jsonl"
+    },
+    {
+      "profile_id": "profile-89e610afb9855ccc",
+      "name": "Ul'dah - map01146",
+      "zone": 187,
+      "map_image": "maps/map01146.png",
+      "map_bounds": [
+        -316,
+        28,
+        68,
+        284
+      ],
+      "coordinate_space": "world",
+      "region": 104,
+      "availability_note": "Warp available: zone 187",
+      "observations": "observations.jsonl"
+    },
+    {
+      "profile_id": "profile-34c35df95289461b",
+      "name": "Ul'dah - map01146",
+      "zone": 188,
+      "map_image": "maps/map01146.png",
+      "map_bounds": [
+        -316,
+        28,
+        68,
+        284
+      ],
+      "coordinate_space": "world",
+      "region": 104,
+      "availability_note": "Warp available: zone 188",
+      "observations": "observations.jsonl"
+    },
+    {
+      "profile_id": "profile-2319000f6e35cd8f",
+      "name": "Ul'dah - map01146",
+      "zone": 209,
+      "map_image": "maps/map01146.png",
+      "map_bounds": [
+        -316,
+        28,
+        68,
+        284
+      ],
+      "coordinate_space": "world",
+      "region": 104,
+      "availability_note": "Warp available: zone 209",
+      "observations": "observations.jsonl"
+    },
+    {
+      "profile_id": "profile-79a0ca0402bbcb0a",
+      "name": "Ul'dah - map01151",
+      "zone": 175,
+      "map_image": "maps/map01151.png",
+      "map_bounds": [
+        -24,
+        -296,
+        360,
+        -40
+      ],
+      "coordinate_space": "world",
+      "region": 205,
+      "availability_note": "Warp available: zone 175",
+      "observations": "observations.jsonl"
+    },
+    {
+      "profile_id": "profile-12de6161d6ab3973",
+      "name": "Ul'dah - map01151",
+      "zone": 184,
+      "map_image": "maps/map01151.png",
+      "map_bounds": [
+        -24,
+        -296,
+        360,
+        -40
+      ],
+      "coordinate_space": "world",
+      "region": 205,
+      "availability_note": "Warp available: zone 184",
+      "observations": "observations.jsonl"
+    },
+    {
+      "profile_id": "profile-ffa94c6f75279e89",
+      "name": "Ul'dah - map01151",
+      "zone": 185,
+      "map_image": "maps/map01151.png",
+      "map_bounds": [
+        -24,
+        -296,
+        360,
+        -40
+      ],
+      "coordinate_space": "world",
+      "region": 205,
+      "availability_note": "Warp available: zone 185",
+      "observations": "observations.jsonl"
+    },
+    {
+      "profile_id": "profile-7564092e53c5199f",
+      "name": "Ul'dah - map01151",
+      "zone": 186,
+      "map_image": "maps/map01151.png",
+      "map_bounds": [
+        -24,
+        -296,
+        360,
+        -40
+      ],
+      "coordinate_space": "world",
+      "region": 205,
+      "availability_note": "Warp available: zone 186",
+      "observations": "observations.jsonl"
+    },
+    {
+      "profile_id": "profile-db90b254e4c6936c",
+      "name": "Ul'dah - map01151",
+      "zone": 187,
+      "map_image": "maps/map01151.png",
+      "map_bounds": [
+        -24,
+        -296,
+        360,
+        -40
+      ],
+      "coordinate_space": "world",
+      "region": 205,
+      "availability_note": "Warp available: zone 187",
+      "observations": "observations.jsonl"
+    },
+    {
+      "profile_id": "profile-f800dc41c8aba6bf",
+      "name": "Ul'dah - map01151",
+      "zone": 188,
+      "map_image": "maps/map01151.png",
+      "map_bounds": [
+        -24,
+        -296,
+        360,
+        -40
+      ],
+      "coordinate_space": "world",
+      "region": 205,
+      "availability_note": "Warp available: zone 188",
+      "observations": "observations.jsonl"
+    },
+    {
+      "profile_id": "profile-d696a2ee27d7cb1f",
+      "name": "Ul'dah - map01171",
+      "zone": 175,
+      "map_image": "maps/map01171.png",
+      "map_bounds": [
+        -352,
+        12,
+        32,
+        268
+      ],
+      "coordinate_space": "world",
+      "region": 205,
+      "availability_note": "Warp available: zone 175",
+      "observations": "observations.jsonl"
+    },
+    {
+      "profile_id": "profile-fd8eb2f0e002e59d",
+      "name": "Ul'dah - map01171",
+      "zone": 184,
+      "map_image": "maps/map01171.png",
+      "map_bounds": [
+        -352,
+        12,
+        32,
+        268
+      ],
+      "coordinate_space": "world",
+      "region": 205,
+      "availability_note": "Warp available: zone 184",
+      "observations": "observations.jsonl"
+    },
+    {
+      "profile_id": "profile-8fcae384bad7d4fb",
+      "name": "Ul'dah - map01171",
+      "zone": 185,
+      "map_image": "maps/map01171.png",
+      "map_bounds": [
+        -352,
+        12,
+        32,
+        268
+      ],
+      "coordinate_space": "world",
+      "region": 205,
+      "availability_note": "Warp available: zone 185",
+      "observations": "observations.jsonl"
+    },
+    {
+      "profile_id": "profile-4686bc1782a3322b",
+      "name": "Ul'dah - map01171",
+      "zone": 186,
+      "map_image": "maps/map01171.png",
+      "map_bounds": [
+        -352,
+        12,
+        32,
+        268
+      ],
+      "coordinate_space": "world",
+      "region": 205,
+      "availability_note": "Warp available: zone 186",
+      "observations": "observations.jsonl"
+    },
+    {
+      "profile_id": "profile-264831eca54e627e",
+      "name": "Ul'dah - map01171",
+      "zone": 187,
+      "map_image": "maps/map01171.png",
+      "map_bounds": [
+        -352,
+        12,
+        32,
+        268
+      ],
+      "coordinate_space": "world",
+      "region": 205,
+      "availability_note": "Warp available: zone 187",
+      "observations": "observations.jsonl"
+    },
+    {
+      "profile_id": "profile-b18798d24be2ec85",
+      "name": "Ul'dah - map01171",
+      "zone": 188,
+      "map_image": "maps/map01171.png",
+      "map_bounds": [
+        -352,
+        12,
+        32,
+        268
+      ],
+      "coordinate_space": "world",
+      "region": 205,
+      "availability_note": "Warp available: zone 188",
+      "observations": "observations.jsonl"
+    },
+    {
+      "profile_id": "profile-3339ef32d848ba27",
+      "name": "Ul'dah - map01171",
+      "zone": 209,
+      "map_image": "maps/map01171.png",
+      "map_bounds": [
+        -352,
+        12,
+        32,
+        268
+      ],
+      "coordinate_space": "world",
+      "region": 205,
+      "availability_note": "Warp available: zone 209",
+      "observations": "observations.jsonl"
+    },
+    {
+      "profile_id": "profile-61e6aefca07cb9fc",
+      "name": "Ul'dah - map01173",
+      "zone": 175,
+      "map_image": "maps/map01173.png",
+      "map_bounds": [
+        -96,
+        -64,
+        96,
+        64
+      ],
+      "coordinate_space": "world",
+      "region": 209,
+      "availability_note": "Warp available: zone 175",
+      "observations": "observations.jsonl"
+    },
+    {
+      "profile_id": "profile-e515ff4b567d713f",
+      "name": "Ul'dah - map01173",
+      "zone": 184,
+      "map_image": "maps/map01173.png",
+      "map_bounds": [
+        -96,
+        -64,
+        96,
+        64
+      ],
+      "coordinate_space": "world",
+      "region": 209,
+      "availability_note": "Warp available: zone 184",
+      "observations": "observations.jsonl"
+    },
+    {
+      "profile_id": "profile-44bb260cac15db65",
+      "name": "Ul'dah - map01173",
+      "zone": 185,
+      "map_image": "maps/map01173.png",
+      "map_bounds": [
+        -96,
+        -64,
+        96,
+        64
+      ],
+      "coordinate_space": "world",
+      "region": 209,
+      "availability_note": "Warp available: zone 185",
+      "observations": "observations.jsonl"
+    },
+    {
+      "profile_id": "profile-9a2a681790f30b5f",
+      "name": "Ul'dah - map01173",
+      "zone": 186,
+      "map_image": "maps/map01173.png",
+      "map_bounds": [
+        -96,
+        -64,
+        96,
+        64
+      ],
+      "coordinate_space": "world",
+      "region": 209,
+      "availability_note": "Warp available: zone 186",
+      "observations": "observations.jsonl"
+    },
+    {
+      "profile_id": "profile-bfc1bb4a3e3281ef",
+      "name": "Ul'dah - map01173",
+      "zone": 187,
+      "map_image": "maps/map01173.png",
+      "map_bounds": [
+        -96,
+        -64,
+        96,
+        64
+      ],
+      "coordinate_space": "world",
+      "region": 209,
+      "availability_note": "Warp available: zone 187",
+      "observations": "observations.jsonl"
+    },
+    {
+      "profile_id": "profile-85fb56ac5b28c87d",
+      "name": "Ul'dah - map01173",
+      "zone": 188,
+      "map_image": "maps/map01173.png",
+      "map_bounds": [
+        -96,
+        -64,
+        96,
+        64
+      ],
+      "coordinate_space": "world",
+      "region": 209,
+      "availability_note": "Warp available: zone 188",
+      "observations": "observations.jsonl"
+    },
+    {
+      "profile_id": "profile-011a7482864d11b6",
+      "name": "Ul'dah - map01173",
+      "zone": 209,
+      "map_image": "maps/map01173.png",
+      "map_bounds": [
+        -96,
+        -64,
+        96,
+        64
+      ],
+      "coordinate_space": "world",
+      "region": 209,
+      "availability_note": "Warp available: zone 209",
+      "observations": "observations.jsonl"
+    },
+    {
+      "profile_id": "profile-189240a7724cecdf",
+      "name": "Ul'dah - map01218",
+      "zone": 184,
+      "map_image": "maps/map01218.png",
+      "map_bounds": [
+        128,
+        192,
+        512,
+        448
+      ],
+      "coordinate_space": "world",
+      "region": 205,
+      "availability_note": "Warp available: zone 184",
+      "observations": "observations.jsonl"
+    },
+    {
+      "profile_id": "profile-cf61f4bad19bc3fb",
+      "name": "Ul'dah - map01218",
+      "zone": 185,
+      "map_image": "maps/map01218.png",
+      "map_bounds": [
+        128,
+        192,
+        512,
+        448
+      ],
+      "coordinate_space": "world",
+      "region": 205,
+      "availability_note": "Warp available: zone 185",
+      "observations": "observations.jsonl"
+    },
+    {
+      "profile_id": "profile-c4f86775f362cf92",
+      "name": "Ul'dah - map01218",
+      "zone": 186,
+      "map_image": "maps/map01218.png",
+      "map_bounds": [
+        128,
+        192,
+        512,
+        448
+      ],
+      "coordinate_space": "world",
+      "region": 205,
+      "availability_note": "Warp available: zone 186",
+      "observations": "observations.jsonl"
+    },
+    {
+      "profile_id": "profile-6370ad25d32124f8",
+      "name": "Ul'dah - map01218",
+      "zone": 187,
+      "map_image": "maps/map01218.png",
+      "map_bounds": [
+        128,
+        192,
+        512,
+        448
+      ],
+      "coordinate_space": "world",
+      "region": 205,
+      "availability_note": "Warp available: zone 187",
+      "observations": "observations.jsonl"
+    },
+    {
+      "profile_id": "profile-ab9e4f7e6f58b6f4",
+      "name": "Ul'dah - map01218",
+      "zone": 188,
+      "map_image": "maps/map01218.png",
+      "map_bounds": [
+        128,
+        192,
+        512,
+        448
+      ],
+      "coordinate_space": "world",
+      "region": 205,
+      "availability_note": "Warp available: zone 188",
+      "observations": "observations.jsonl"
+    },
+    {
+      "profile_id": "profile-414eeb24ce9e6f61",
+      "name": "Upper La Noscea - map01001",
+      "zone": 135,
+      "map_image": "maps/map01001.png",
+      "map_bounds": [
+        -2528,
+        -3008,
+        2080,
+        1600
+      ],
+      "coordinate_space": "world",
+      "region": 101,
+      "availability_note": "Warp available: zone 135",
+      "observations": "observations.jsonl"
+    },
+    {
+      "profile_id": "profile-e2bf7e43dbc065cb",
+      "name": "West Shroud - map01201",
+      "zone": 153,
+      "map_image": "maps/map01201.png",
+      "map_bounds": [
+        -3104,
+        -3808,
+        3040,
+        2336
+      ],
+      "coordinate_space": "world",
+      "region": 103,
+      "availability_note": "Warp available: zone 153",
+      "observations": "observations.jsonl"
+    },
+    {
+      "profile_id": "profile-9743b7959634d186",
+      "name": "Western La Noscea - map01001",
+      "zone": 129,
+      "map_image": "maps/map01001.png",
+      "map_bounds": [
+        -2528,
+        -3008,
+        2080,
+        1600
+      ],
+      "coordinate_space": "world",
+      "region": 101,
+      "availability_note": "Warp available: zone 129",
+      "observations": "observations.jsonl"
+    },
+    {
+      "profile_id": "profile-38067277a038e69b",
+      "name": "Western La Noscea - map01001",
+      "zone": 204,
+      "map_image": "maps/map01001.png",
+      "map_bounds": [
+        -2528,
+        -3008,
+        2080,
+        1600
+      ],
+      "coordinate_space": "world",
+      "region": 101,
+      "availability_note": "Warp available: zone 204",
+      "observations": "observations.jsonl"
+    },
+    {
+      "profile_id": "profile-dba1ea3ed4cd3781",
+      "name": "Western Thanalan - map01101",
+      "zone": 172,
+      "map_image": "maps/map01101.png",
+      "map_bounds": [
+        -2687,
+        -3072,
+        2945,
+        2560
+      ],
+      "coordinate_space": "world",
+      "region": 104,
+      "availability_note": "Warp available: zone 172",
+      "observations": "observations.jsonl"
+    }
+  ],
+  "coverage": {
+    "images": 63,
+    "profiles": 173,
+    "world_profiles": 173,
+    "excluded_image_profiles": 37,
+    "zone_bound_profiles": 173
+  },
+  "sources": {
+    "crosswalk_sha256": "855c9f9a587e0ef591638b8aa5af903d52c67733489f155079d4ba04d760ea14",
+    "map_navi_sha256": "f5f37cd8f50fa28f9f0450526d3d4dea399e128ed7508135cb9a246e41bca024"
+  }
+}

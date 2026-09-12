@@ -1,0 +1,3 @@
+LIBRARY "navmut-helper-hook"
+EXPORTS
+    NavmutCallWndProc=_NavmutCallWndProc@12

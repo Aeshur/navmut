@@ -1,0 +1,24 @@
+[package]
+name = "navmut-tools"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+
+[dependencies]
+clap.workspace = true
+csv.workspace = true
+image.workspace = true
+navmut-core = { path = "../navmut-core" }
+serde.workspace = true
+serde_json.workspace = true
+sha2.workspace = true
+tempfile.workspace = true
+
+[[bin]]
+name = "build-map-catalog"
+path = "src/bin/build-map-catalog.rs"
+
+[[bin]]
+name = "build-poi-catalog"
+path = "src/bin/build-poi-catalog.rs"

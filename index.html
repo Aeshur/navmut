@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#801d1a" />
+    <title>Navmut</title>
+    <script type="module" src="/src/main.ts" defer></script>
+  </head>
+  <body>
+    <main class="app-window" aria-label="Navmut field navigation">
+      <header id="titlebar" class="titlebar" data-tauri-drag-region>
+        <div class="brand-mark" aria-hidden="true" data-tauri-drag-region><img id="brand-icon" alt="" data-tauri-drag-region /></div>
+        <div class="title-copy" data-tauri-drag-region><strong data-tauri-drag-region>Navmut</strong></div>
+        <div class="titlebar-spacer" data-tauri-drag-region></div>
+        <div class="title-actions">
+          <button id="title-minimize" type="button" class="icon-button title-button" aria-label="Minimize window"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 8h8" /></svg></button>
+          <button id="title-close" type="button" class="icon-button title-button close-button" aria-label="Close Navmut"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M5 5l6 6M11 5l-6 6" /></svg></button>
+        </div>
+      </header>
+
+      <div class="app-body">
+        <aside class="rail" aria-label="Navigation tools">
+          <nav class="panel-tabs" role="tablist" aria-label="Navmut views">
+            <button id="warp-tab" type="button" role="tab" class="tab-button is-active" data-panel="warp" aria-selected="true" aria-controls="warp-panel" tabindex="0">Warp</button>
+            <button id="journal-tab" type="button" role="tab" class="tab-button" data-panel="journal" aria-selected="false" aria-controls="journal-panel" tabindex="-1">Journal</button>
+          </nav>
+
+          <section id="warp-panel" role="tabpanel" aria-labelledby="warp-tab">
+            <div class="rail-section compass-section" role="group" tabindex="0" aria-label="Position controls. Use arrow keys to move horizontally and Page Up or Page Down to move vertically.">
+              <div class="section-title">POSITION CONTROLS</div>
+              <div class="compass" aria-label="Movement directions">
+                <button type="button" class="move-button move-nw" data-direction="nw" aria-label="Move northwest" tabindex="-1">NW</button>
+                <button type="button" class="move-button move-n" data-direction="n" aria-label="Move north" aria-keyshortcuts="ArrowUp" title="Arrow Up" tabindex="-1">N</button>
+                <button type="button" class="move-button move-ne" data-direction="ne" aria-label="Move northeast" tabindex="-1">NE</button>
+                <button type="button" class="move-button move-w" data-direction="w" aria-label="Move west" aria-keyshortcuts="ArrowLeft" title="Arrow Left" tabindex="-1">W</button>
+                <select id="step-select" class="compass-center" aria-label="Movement distance">
+                  <option value="5" selected>5</option><option value="10">10</option><option value="15">15</option><option value="20">20</option>
+                </select>
+                <button type="button" class="move-button move-e" data-direction="e" aria-label="Move east" aria-keyshortcuts="ArrowRight" title="Arrow Right" tabindex="-1">E</button>
+                <button type="button" class="move-button move-sw" data-direction="sw" aria-label="Move southwest" tabindex="-1">SW</button>
+                <button type="button" class="move-button move-s" data-direction="s" aria-label="Move south" aria-keyshortcuts="ArrowDown" title="Arrow Down" tabindex="-1">S</button>
+                <button type="button" class="move-button move-se" data-direction="se" aria-label="Move southeast" tabindex="-1">SE</button>
+              </div>
+              <div class="vertical-controls"><button type="button" class="move-button" data-direction="up" aria-label="Move up" aria-keyshortcuts="PageUp" title="Page Up" tabindex="-1">UP</button><button type="button" class="move-button" data-direction="down" aria-label="Move down" aria-keyshortcuts="PageDown" title="Page Down" tabindex="-1">DOWN</button></div>
+            </div>
+
+            <div class="rail-section point-manager-section">
+              <div class="section-title">POINT OF INTEREST MANAGER</div>
+              <div class="field-row"><input id="point-name" class="full-field" type="text" maxlength="80" placeholder="POI name" aria-label="POI name" autocomplete="off" /><button id="add-point" type="button" class="outline-button">Add</button></div>
+              <div class="field-row point-row-control"><select id="point-select" aria-label="Packaged POIs and saved points"><option value="">Loading points...</option></select><button id="warp-point" type="button" class="outline-button">Warp</button></div>
+              <div class="field-row point-row-control"><div id="point-coords" class="point-coordinates">(0.00, 0.00, 0.00)</div><button id="delete-point" type="button" class="outline-button" disabled>Delete</button></div>
+            </div>
+
+            <div class="rail-section set-position-section">
+              <div class="section-title">SET POSITION</div>
+              <div class="field-row"><input id="position-input" class="full-field position-input" type="text" placeholder="X, Y, Z" aria-label="Position X, Y, Z" autocomplete="off" /><button id="to-position" type="button" class="outline-button">Go to</button></div>
+            </div>
+
+            <div class="rail-section profile-section">
+              <div class="section-title">MAP</div>
+              <select id="profile-select" class="full-field" aria-label="Map profile"><option value="">Loading profiles...</option></select>
+              <div class="map-actions"><button id="refresh-zone" type="button" class="outline-button">Refresh zone</button><label class="check-row"><input id="override-zone" type="checkbox" /> <span>Override zone</span></label></div>
+            </div>
+
+            <div class="rail-section window-section">
+              <div class="section-title">WINDOW</div>
+              <div class="window-checks"><label class="check-row"><input id="show-map" type="checkbox" checked /> <span>Show map</span></label><label class="check-row"><input id="always-on-top" type="checkbox" /> <span>Always on top</span></label></div>
+              <label class="opacity-label" for="opacity-range"><span>Opacity</span><output id="opacity-value">100%</output></label>
+              <input id="opacity-range" type="range" min="35" max="100" step="1" value="100" aria-label="Window opacity" />
+            </div>
+
+            <div class="rail-section connection-section">
+              <div class="section-title">GAME CONNECTION</div>
+              <div class="field-row"><select id="pid-select" aria-label="Game process PID"><option value="">Loading...</option></select><button id="refresh-pid" type="button" class="outline-button">Refresh game</button></div>
+            </div>
+          </section>
+
+          <section id="journal-panel" role="tabpanel" aria-labelledby="journal-tab" hidden>
+            <div class="rail-section journal-section">
+              <div class="section-title">OBSERVATIONS</div>
+              <div class="observation-grid">
+                <label for="observation-name-id">Name/ID</label><input id="observation-name-id" type="text" maxlength="120" autocomplete="off" />
+                <label for="observation-type">Type</label><select id="observation-type"><option value="npc" selected>NPC</option><option value="mob">Mob</option><option value="misc">Misc</option></select>
+              </div>
+              <label class="observation-notes" for="observation-notes">Notes</label>
+              <textarea id="observation-notes" aria-label="Observation notes" autocomplete="off"></textarea>
+              <ul id="journal-list" class="journal-list" aria-label="Captured observations" hidden></ul>
+              <div class="journal-actions"><button id="capture-button" type="button" class="outline-button">Save observation</button><button id="export-button" type="button" class="outline-button">Export observations</button></div>
+            </div>
+          </section>
+
+          <div class="rail-section status-section"><div id="status-message" class="status-message" role="status" aria-live="polite">Starting...</div></div>
+        </aside>
+
+        <section class="workspace" aria-label="Map workspace">
+          <div id="map-shell" class="map-shell">
+            <canvas id="map-canvas" aria-label="Map. Click an opaque map location to warp." tabindex="0"></canvas>
+          </div>
+        </section>
+      </div>
+    </main>
+  </body>
+</html>

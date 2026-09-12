@@ -1,0 +1,3536 @@
+{
+  "schema_version": 1,
+  "pois": [
+    {
+      "poi_id": "aetheryte-1280001",
+      "kind": "aetheryte",
+      "name": "Limsa Lominsa",
+      "zone": 230,
+      "position": [
+        -407.0,
+        42.5,
+        337.0
+      ],
+      "height_anchor": true,
+      "aetheryte_id": 1280001,
+      "source_symbol": "LIMSA_LOMINSA"
+    },
+    {
+      "poi_id": "aetheryte-1280002",
+      "kind": "aetheryte",
+      "name": "Camp Bearded Rock",
+      "zone": 128,
+      "position": [
+        29.97,
+        45.83,
+        -35.47
+      ],
+      "height_anchor": true,
+      "aetheryte_id": 1280002,
+      "source_symbol": "CAMP_BEARDED_ROCK"
+    },
+    {
+      "poi_id": "aetheryte-1280003",
+      "kind": "aetheryte",
+      "name": "Camp Skull Valley",
+      "zone": 129,
+      "position": [
+        -991.88,
+        61.71,
+        -1120.79
+      ],
+      "height_anchor": true,
+      "aetheryte_id": 1280003,
+      "source_symbol": "CAMP_SKULL_VALLEY"
+    },
+    {
+      "poi_id": "aetheryte-1280004",
+      "kind": "aetheryte",
+      "name": "Camp Bald Knoll",
+      "zone": 129,
+      "position": [
+        -1883.47,
+        53.77,
+        -1372.68
+      ],
+      "height_anchor": true,
+      "aetheryte_id": 1280004,
+      "source_symbol": "CAMP_BALD_KNOLL"
+    },
+    {
+      "poi_id": "aetheryte-1280005",
+      "kind": "aetheryte",
+      "name": "Camp Bloodshore",
+      "zone": 130,
+      "position": [
+        1123.29,
+        45.7,
+        -928.69
+      ],
+      "height_anchor": true,
+      "aetheryte_id": 1280005,
+      "source_symbol": "CAMP_BLOODSHORE"
+    },
+    {
+      "poi_id": "aetheryte-1280006",
+      "kind": "aetheryte",
+      "name": "Camp Iron Lake",
+      "zone": 135,
+      "position": [
+        -278.181,
+        77.63,
+        -2260.79
+      ],
+      "height_anchor": true,
+      "aetheryte_id": 1280006,
+      "source_symbol": "CAMP_IRON_LAKE"
+    },
+    {
+      "poi_id": "aetheryte-1280007",
+      "kind": "aetheryte",
+      "name": "Cedarwood",
+      "zone": 128,
+      "position": [
+        582.47,
+        54.52,
+        -1.2
+      ],
+      "height_anchor": true,
+      "aetheryte_id": 1280007,
+      "source_symbol": "CEDARWOOD"
+    },
+    {
+      "poi_id": "aetheryte-1280008",
+      "kind": "aetheryte",
+      "name": "Widow Cliffs",
+      "zone": 128,
+      "position": [
+        962.836,
+        46.507,
+        832.206
+      ],
+      "height_anchor": true,
+      "aetheryte_id": 1280008,
+      "source_symbol": "WIDOW_CLIFFS"
+    },
+    {
+      "poi_id": "aetheryte-1280009",
+      "kind": "aetheryte",
+      "name": "Moraby Bay",
+      "zone": 128,
+      "position": [
+        318.0,
+        24.5,
+        581.0
+      ],
+      "height_anchor": true,
+      "aetheryte_id": 1280009,
+      "source_symbol": "MORABY_BAY"
+    },
+    {
+      "poi_id": "aetheryte-1280010",
+      "kind": "aetheryte",
+      "name": "Woad Whisper Canyon",
+      "zone": 129,
+      "position": [
+        -636.0,
+        48.8,
+        -1287.0
+      ],
+      "height_anchor": true,
+      "aetheryte_id": 1280010,
+      "source_symbol": "WOAD_WHISPER_CANYON"
+    },
+    {
+      "poi_id": "aetheryte-1280011",
+      "kind": "aetheryte",
+      "name": "Isles Of Umbra",
+      "zone": 129,
+      "position": [
+        -2016.72,
+        60.055,
+        -766.962
+      ],
+      "height_anchor": true,
+      "aetheryte_id": 1280011,
+      "source_symbol": "ISLES_OF_UMBRA"
+    },
+    {
+      "poi_id": "aetheryte-1280012",
+      "kind": "aetheryte",
+      "name": "Tiger Helm Island",
+      "zone": 130,
+      "position": [
+        1628.0,
+        60.3,
+        -449.0
+      ],
+      "height_anchor": true,
+      "aetheryte_id": 1280012,
+      "source_symbol": "TIGER_HELM_ISLAND"
+    },
+    {
+      "poi_id": "aetheryte-1280013",
+      "kind": "aetheryte",
+      "name": "South Bloodshore",
+      "zone": 130,
+      "position": [
+        1522.0,
+        1.7,
+        -669.0
+      ],
+      "height_anchor": true,
+      "aetheryte_id": 1280013,
+      "source_symbol": "SOUTH_BLOODSHORE"
+    },
+    {
+      "poi_id": "aetheryte-1280014",
+      "kind": "aetheryte",
+      "name": "Agelyss Wise",
+      "zone": 130,
+      "position": [
+        1410.0,
+        53.3,
+        -1650.0
+      ],
+      "height_anchor": true,
+      "aetheryte_id": 1280014,
+      "source_symbol": "AGELYSS_WISE"
+    },
+    {
+      "poi_id": "aetheryte-1280015",
+      "kind": "aetheryte",
+      "name": "Zelmas Run",
+      "zone": 135,
+      "position": [
+        -123.315,
+        60.061,
+        -1438.8
+      ],
+      "height_anchor": true,
+      "aetheryte_id": 1280015,
+      "source_symbol": "ZELMAS_RUN"
+    },
+    {
+      "poi_id": "aetheryte-1280016",
+      "kind": "aetheryte",
+      "name": "Bronze Lake",
+      "zone": 135,
+      "position": [
+        -320.322,
+        52.835,
+        -1823.68
+      ],
+      "height_anchor": true,
+      "aetheryte_id": 1280016,
+      "source_symbol": "BRONZE_LAKE"
+    },
+    {
+      "poi_id": "aetheryte-1280017",
+      "kind": "aetheryte",
+      "name": "Oakwood",
+      "zone": 135,
+      "position": [
+        -894.0,
+        41.2,
+        -2188.0
+      ],
+      "height_anchor": true,
+      "aetheryte_id": 1280017,
+      "source_symbol": "OAKWOOD"
+    },
+    {
+      "poi_id": "aetheryte-1280018",
+      "kind": "aetheryte",
+      "name": "Mistbeard Cove",
+      "zone": 131,
+      "position": [
+        -1694.5,
+        -19.9,
+        -1534.0
+      ],
+      "height_anchor": true,
+      "aetheryte_id": 1280018,
+      "source_symbol": "MISTBEARD_COVE"
+    },
+    {
+      "poi_id": "aetheryte-1280020",
+      "kind": "aetheryte",
+      "name": "Cassiopeia Hollow",
+      "zone": 132,
+      "position": [
+        1343.5,
+        -54.38,
+        -870.84
+      ],
+      "height_anchor": true,
+      "aetheryte_id": 1280020,
+      "source_symbol": "CASSIOPEIA_HOLLOW"
+    },
+    {
+      "poi_id": "aetheryte-1280031",
+      "kind": "aetheryte",
+      "name": "Uldah",
+      "zone": 175,
+      "position": [
+        -235.0,
+        185.0,
+        -3.9
+      ],
+      "height_anchor": true,
+      "aetheryte_id": 1280031,
+      "source_symbol": "ULDAH"
+    },
+    {
+      "poi_id": "aetheryte-1280032",
+      "kind": "aetheryte",
+      "name": "Camp Black Brush",
+      "zone": 170,
+      "position": [
+        33.0,
+        200.1,
+        -482.0
+      ],
+      "height_anchor": true,
+      "aetheryte_id": 1280032,
+      "source_symbol": "CAMP_BLACK_BRUSH"
+    },
+    {
+      "poi_id": "aetheryte-1280033",
+      "kind": "aetheryte",
+      "name": "Camp Drybone",
+      "zone": 171,
+      "position": [
+        1250.9,
+        264.0,
+        -544.2
+      ],
+      "height_anchor": true,
+      "aetheryte_id": 1280033,
+      "source_symbol": "CAMP_DRYBONE"
+    },
+    {
+      "poi_id": "aetheryte-1280034",
+      "kind": "aetheryte",
+      "name": "Camp Horizon",
+      "zone": 172,
+      "position": [
+        -1313.91,
+        56.023,
+        -145.597
+      ],
+      "height_anchor": true,
+      "aetheryte_id": 1280034,
+      "source_symbol": "CAMP_HORIZON"
+    },
+    {
+      "poi_id": "aetheryte-1280035",
+      "kind": "aetheryte",
+      "name": "Camp Bluefog",
+      "zone": 173,
+      "position": [
+        -165.816,
+        280.002,
+        -1698.45
+      ],
+      "height_anchor": true,
+      "aetheryte_id": 1280035,
+      "source_symbol": "CAMP_BLUEFOG"
+    },
+    {
+      "poi_id": "aetheryte-1280036",
+      "kind": "aetheryte",
+      "name": "Camp Broken Water",
+      "zone": 174,
+      "position": [
+        1687.64,
+        296.002,
+        992.283
+      ],
+      "height_anchor": true,
+      "aetheryte_id": 1280036,
+      "source_symbol": "CAMP_BROKEN_WATER"
+    },
+    {
+      "poi_id": "aetheryte-1280037",
+      "kind": "aetheryte",
+      "name": "Cactus Basin",
+      "zone": 170,
+      "position": [
+        639.0,
+        183.9,
+        122.0
+      ],
+      "height_anchor": true,
+      "aetheryte_id": 1280037,
+      "source_symbol": "CACTUS_BASIN"
+    },
+    {
+      "poi_id": "aetheryte-1280038",
+      "kind": "aetheryte",
+      "name": "Four Sisters",
+      "zone": 170,
+      "position": [
+        539.0,
+        215.8,
+        -14.0
+      ],
+      "height_anchor": true,
+      "aetheryte_id": 1280038,
+      "source_symbol": "FOUR_SISTERS"
+    },
+    {
+      "poi_id": "aetheryte-1280039",
+      "kind": "aetheryte",
+      "name": "Halatali",
+      "zone": 171,
+      "position": [
+        1599.0,
+        256.7,
+        -233.0
+      ],
+      "height_anchor": true,
+      "aetheryte_id": 1280039,
+      "source_symbol": "HALATALI"
+    },
+    {
+      "poi_id": "aetheryte-1280040",
+      "kind": "aetheryte",
+      "name": "Burning Wall",
+      "zone": 171,
+      "position": [
+        2010.0,
+        280.3,
+        -768.0
+      ],
+      "height_anchor": true,
+      "aetheryte_id": 1280040,
+      "source_symbol": "BURNING_WALL"
+    },
+    {
+      "poi_id": "aetheryte-1280041",
+      "kind": "aetheryte",
+      "name": "Sandgate",
+      "zone": 171,
+      "position": [
+        2015.0,
+        247.8,
+        64.0
+      ],
+      "height_anchor": true,
+      "aetheryte_id": 1280041,
+      "source_symbol": "SANDGATE"
+    },
+    {
+      "poi_id": "aetheryte-1280042",
+      "kind": "aetheryte",
+      "name": "Nophicas Wells",
+      "zone": 172,
+      "position": [
+        -864.991,
+        88.84,
+        375.18
+      ],
+      "height_anchor": true,
+      "aetheryte_id": 1280042,
+      "source_symbol": "NOPHICAS_WELLS"
+    },
+    {
+      "poi_id": "aetheryte-1280043",
+      "kind": "aetheryte",
+      "name": "Footfalls",
+      "zone": 172,
+      "position": [
+        -1653.0,
+        24.5,
+        -469.0
+      ],
+      "height_anchor": true,
+      "aetheryte_id": 1280043,
+      "source_symbol": "FOOTFALLS"
+    },
+    {
+      "poi_id": "aetheryte-1280044",
+      "kind": "aetheryte",
+      "name": "Scorpion Keep",
+      "zone": 172,
+      "position": [
+        -1220.38,
+        69.854,
+        194.365
+      ],
+      "height_anchor": true,
+      "aetheryte_id": 1280044,
+      "source_symbol": "SCORPION_KEEP"
+    },
+    {
+      "poi_id": "aetheryte-1280045",
+      "kind": "aetheryte",
+      "name": "Hidden Gorge",
+      "zone": 173,
+      "position": [
+        -635.0,
+        280.0,
+        -1797.0
+      ],
+      "height_anchor": true,
+      "aetheryte_id": 1280045,
+      "source_symbol": "HIDDEN_GORGE"
+    },
+    {
+      "poi_id": "aetheryte-1280046",
+      "kind": "aetheryte",
+      "name": "Sea Of Spires",
+      "zone": 173,
+      "position": [
+        447.0,
+        259.1,
+        -2158.0
+      ],
+      "height_anchor": true,
+      "aetheryte_id": 1280046,
+      "source_symbol": "SEA_OF_SPIRES"
+    },
+    {
+      "poi_id": "aetheryte-1280047",
+      "kind": "aetheryte",
+      "name": "Cutters Pass",
+      "zone": 173,
+      "position": [
+        -710.0,
+        280.4,
+        -2212.0
+      ],
+      "height_anchor": true,
+      "aetheryte_id": 1280047,
+      "source_symbol": "CUTTERS_PASS"
+    },
+    {
+      "poi_id": "aetheryte-1280048",
+      "kind": "aetheryte",
+      "name": "Red Labyrinth",
+      "zone": 174,
+      "position": [
+        1797.0,
+        248.0,
+        1856.0
+      ],
+      "height_anchor": true,
+      "aetheryte_id": 1280048,
+      "source_symbol": "RED_LABYRINTH"
+    },
+    {
+      "poi_id": "aetheryte-1280049",
+      "kind": "aetheryte",
+      "name": "Burnt Lizard Creek",
+      "zone": 174,
+      "position": [
+        1185.0,
+        279.8,
+        1407.0
+      ],
+      "height_anchor": true,
+      "aetheryte_id": 1280049,
+      "source_symbol": "BURNT_LIZARD_CREEK"
+    },
+    {
+      "poi_id": "aetheryte-1280050",
+      "kind": "aetheryte",
+      "name": "Zanrak",
+      "zone": 174,
+      "position": [
+        2416.0,
+        248.3,
+        1535.0
+      ],
+      "height_anchor": true,
+      "aetheryte_id": 1280050,
+      "source_symbol": "ZANRAK"
+    },
+    {
+      "poi_id": "aetheryte-1280052",
+      "kind": "aetheryte",
+      "name": "Nanawa Mines",
+      "zone": 176,
+      "position": [
+        80.056,
+        167.929,
+        -1267.94
+      ],
+      "height_anchor": true,
+      "aetheryte_id": 1280052,
+      "source_symbol": "NANAWA_MINES"
+    },
+    {
+      "poi_id": "aetheryte-1280054",
+      "kind": "aetheryte",
+      "name": "Copperbell Mines",
+      "zone": 178,
+      "position": [
+        -620.374,
+        110.429,
+        -113.903
+      ],
+      "height_anchor": true,
+      "aetheryte_id": 1280054,
+      "source_symbol": "COPPERBELL_MINES"
+    },
+    {
+      "poi_id": "aetheryte-1280061",
+      "kind": "aetheryte",
+      "name": "Gridania",
+      "zone": 206,
+      "position": [
+        -120.0,
+        16.0,
+        -1332.0
+      ],
+      "height_anchor": true,
+      "aetheryte_id": 1280061,
+      "source_symbol": "GRIDANIA"
+    },
+    {
+      "poi_id": "aetheryte-1280062",
+      "kind": "aetheryte",
+      "name": "Camp Bentbranch",
+      "zone": 150,
+      "position": [
+        288.0,
+        4.0,
+        -543.928
+      ],
+      "height_anchor": true,
+      "aetheryte_id": 1280062,
+      "source_symbol": "CAMP_BENTBRANCH"
+    },
+    {
+      "poi_id": "aetheryte-1280063",
+      "kind": "aetheryte",
+      "name": "Camp Nine Ivies",
+      "zone": 151,
+      "position": [
+        1702.0,
+        20.0,
+        -862.0
+      ],
+      "height_anchor": true,
+      "aetheryte_id": 1280063,
+      "source_symbol": "CAMP_NINE_IVIES"
+    },
+    {
+      "poi_id": "aetheryte-1280064",
+      "kind": "aetheryte",
+      "name": "Camp Emerald Moss",
+      "zone": 152,
+      "position": [
+        -1052.0,
+        20.0,
+        -1760.0
+      ],
+      "height_anchor": true,
+      "aetheryte_id": 1280064,
+      "source_symbol": "CAMP_EMERALD_MOSS"
+    },
+    {
+      "poi_id": "aetheryte-1280065",
+      "kind": "aetheryte",
+      "name": "Camp Crimson Bark",
+      "zone": 153,
+      "position": [
+        -1566.035,
+        -11.89,
+        -550.51
+      ],
+      "height_anchor": true,
+      "aetheryte_id": 1280065,
+      "source_symbol": "CAMP_CRIMSON_BARK"
+    },
+    {
+      "poi_id": "aetheryte-1280066",
+      "kind": "aetheryte",
+      "name": "Camp Tranquil",
+      "zone": 154,
+      "position": [
+        734.0,
+        -12.0,
+        1126.0
+      ],
+      "height_anchor": true,
+      "aetheryte_id": 1280066,
+      "source_symbol": "CAMP_TRANQUIL"
+    },
+    {
+      "poi_id": "aetheryte-1280067",
+      "kind": "aetheryte",
+      "name": "Humblehearth",
+      "zone": 150,
+      "position": [
+        -94.07,
+        4.0,
+        -543.16
+      ],
+      "height_anchor": true,
+      "aetheryte_id": 1280067,
+      "source_symbol": "HUMBLEHEARTH"
+    },
+    {
+      "poi_id": "aetheryte-1280068",
+      "kind": "aetheryte",
+      "name": "Sorrel Haven",
+      "zone": 150,
+      "position": [
+        -285.0,
+        -21.8,
+        -46.0
+      ],
+      "height_anchor": true,
+      "aetheryte_id": 1280068,
+      "source_symbol": "SORREL_HAVEN"
+    },
+    {
+      "poi_id": "aetheryte-1280069",
+      "kind": "aetheryte",
+      "name": "Five Hangs",
+      "zone": 150,
+      "position": [
+        636.0,
+        16.2,
+        -324.0
+      ],
+      "height_anchor": true,
+      "aetheryte_id": 1280069,
+      "source_symbol": "FIVE_HANGS"
+    },
+    {
+      "poi_id": "aetheryte-1280070",
+      "kind": "aetheryte",
+      "name": "Verdant Drop",
+      "zone": 151,
+      "position": [
+        1529.83,
+        26.991,
+        -1140.15
+      ],
+      "height_anchor": true,
+      "aetheryte_id": 1280070,
+      "source_symbol": "VERDANT_DROP"
+    },
+    {
+      "poi_id": "aetheryte-1280071",
+      "kind": "aetheryte",
+      "name": "Lynxpelt Patch",
+      "zone": 151,
+      "position": [
+        1296.0,
+        47.2,
+        -1534.0
+      ],
+      "height_anchor": true,
+      "aetheryte_id": 1280071,
+      "source_symbol": "LYNXPELT_PATCH"
+    },
+    {
+      "poi_id": "aetheryte-1280072",
+      "kind": "aetheryte",
+      "name": "Larkscall",
+      "zone": 151,
+      "position": [
+        2297.02,
+        31.546,
+        -697.828
+      ],
+      "height_anchor": true,
+      "aetheryte_id": 1280072,
+      "source_symbol": "LARKSCALL"
+    },
+    {
+      "poi_id": "aetheryte-1280073",
+      "kind": "aetheryte",
+      "name": "Treespeak",
+      "zone": 152,
+      "position": [
+        -883.769,
+        34.688,
+        -2187.45
+      ],
+      "height_anchor": true,
+      "aetheryte_id": 1280073,
+      "source_symbol": "TREESPEAK"
+    },
+    {
+      "poi_id": "aetheryte-1280074",
+      "kind": "aetheryte",
+      "name": "Alder Springs",
+      "zone": 152,
+      "position": [
+        -1567.0,
+        16.1,
+        -2593.0
+      ],
+      "height_anchor": true,
+      "aetheryte_id": 1280074,
+      "source_symbol": "ALDER_SPRINGS"
+    },
+    {
+      "poi_id": "aetheryte-1280075",
+      "kind": "aetheryte",
+      "name": "Lasthold",
+      "zone": 152,
+      "position": [
+        -800.277,
+        32.0,
+        -2785.4
+      ],
+      "height_anchor": true,
+      "aetheryte_id": 1280075,
+      "source_symbol": "LASTHOLD"
+    },
+    {
+      "poi_id": "aetheryte-1280076",
+      "kind": "aetheryte",
+      "name": "Lichenweed",
+      "zone": 153,
+      "position": [
+        -1908.0,
+        0.3,
+        -1042.0
+      ],
+      "height_anchor": true,
+      "aetheryte_id": 1280076,
+      "source_symbol": "LICHENWEED"
+    },
+    {
+      "poi_id": "aetheryte-1280077",
+      "kind": "aetheryte",
+      "name": "Murmur Rills",
+      "zone": 153,
+      "position": [
+        -2158.0,
+        -46.1,
+        -166.0
+      ],
+      "height_anchor": true,
+      "aetheryte_id": 1280077,
+      "source_symbol": "MURMUR_RILLS"
+    },
+    {
+      "poi_id": "aetheryte-1280078",
+      "kind": "aetheryte",
+      "name": "Turning Leaf",
+      "zone": 153,
+      "position": [
+        -1333.0,
+        -14.2,
+        324.0
+      ],
+      "height_anchor": true,
+      "aetheryte_id": 1280078,
+      "source_symbol": "TURNING_LEAF"
+    },
+    {
+      "poi_id": "aetheryte-1280079",
+      "kind": "aetheryte",
+      "name": "Silent Arbor",
+      "zone": 154,
+      "position": [
+        991.0,
+        -11.8,
+        600.0
+      ],
+      "height_anchor": true,
+      "aetheryte_id": 1280079,
+      "source_symbol": "SILENT_ARBOR"
+    },
+    {
+      "poi_id": "aetheryte-1280080",
+      "kind": "aetheryte",
+      "name": "Longroot",
+      "zone": 154,
+      "position": [
+        1126.0,
+        -0.1,
+        1440.0
+      ],
+      "height_anchor": true,
+      "aetheryte_id": 1280080,
+      "source_symbol": "LONGROOT"
+    },
+    {
+      "poi_id": "aetheryte-1280081",
+      "kind": "aetheryte",
+      "name": "Snakemolt",
+      "zone": 154,
+      "position": [
+        189.0,
+        0.1,
+        1337.0
+      ],
+      "height_anchor": true,
+      "aetheryte_id": 1280081,
+      "source_symbol": "SNAKEMOLT"
+    },
+    {
+      "poi_id": "aetheryte-1280082",
+      "kind": "aetheryte",
+      "name": "Mun Tuy Cellars",
+      "zone": 157,
+      "position": [
+        -687.916,
+        -15.308,
+        -2063.94
+      ],
+      "height_anchor": true,
+      "aetheryte_id": 1280082,
+      "source_symbol": "MUN_TUY_CELLARS"
+    },
+    {
+      "poi_id": "aetheryte-1280083",
+      "kind": "aetheryte",
+      "name": "Tam Tara Deepcroft",
+      "zone": 158,
+      "position": [
+        314.801,
+        -36.2,
+        -167.843
+      ],
+      "height_anchor": true,
+      "aetheryte_id": 1280083,
+      "source_symbol": "TAM_TARA_DEEPCROFT"
+    },
+    {
+      "poi_id": "aetheryte-1280092",
+      "kind": "aetheryte",
+      "name": "Camp Dragonhead",
+      "zone": 143,
+      "position": [
+        216.0,
+        302.1,
+        -258.0
+      ],
+      "height_anchor": true,
+      "aetheryte_id": 1280092,
+      "source_symbol": "CAMP_DRAGONHEAD"
+    },
+    {
+      "poi_id": "aetheryte-1280093",
+      "kind": "aetheryte",
+      "name": "Camp Crooked Fork",
+      "zone": 144,
+      "position": [
+        1122.21,
+        270.004,
+        -1149.29
+      ],
+      "height_anchor": true,
+      "aetheryte_id": 1280093,
+      "source_symbol": "CAMP_CROOKED_FORK"
+    },
+    {
+      "poi_id": "aetheryte-1280094",
+      "kind": "aetheryte",
+      "name": "Camp Glory",
+      "zone": 145,
+      "position": [
+        1500.78,
+        206.036,
+        767.546
+      ],
+      "height_anchor": true,
+      "aetheryte_id": 1280094,
+      "source_symbol": "CAMP_GLORY"
+    },
+    {
+      "poi_id": "aetheryte-1280095",
+      "kind": "aetheryte",
+      "name": "Camp Ever Lakes",
+      "zone": 147,
+      "position": [
+        -159.828,
+        222.037,
+        1154.81
+      ],
+      "height_anchor": true,
+      "aetheryte_id": 1280095,
+      "source_symbol": "CAMP_EVER_LAKES"
+    },
+    {
+      "poi_id": "aetheryte-1280096",
+      "kind": "aetheryte",
+      "name": "Camp Riversmeet",
+      "zone": 148,
+      "position": [
+        -1760.36,
+        270.059,
+        -194.713
+      ],
+      "height_anchor": true,
+      "aetheryte_id": 1280096,
+      "source_symbol": "CAMP_RIVERSMEET"
+    },
+    {
+      "poi_id": "aetheryte-1280097",
+      "kind": "aetheryte",
+      "name": "Boulder Downs",
+      "zone": 143,
+      "position": [
+        -517.0,
+        207.9,
+        543.0
+      ],
+      "height_anchor": true,
+      "aetheryte_id": 1280097,
+      "source_symbol": "BOULDER_DOWNS"
+    },
+    {
+      "poi_id": "aetheryte-1280098",
+      "kind": "aetheryte",
+      "name": "Prominence Point",
+      "zone": 143,
+      "position": [
+        190.0,
+        367.4,
+        -662.0
+      ],
+      "height_anchor": true,
+      "aetheryte_id": 1280098,
+      "source_symbol": "PROMINENCE_POINT"
+    },
+    {
+      "poi_id": "aetheryte-1280099",
+      "kind": "aetheryte",
+      "name": "Feathergorge",
+      "zone": 143,
+      "position": [
+        960.0,
+        287.4,
+        -22.0
+      ],
+      "height_anchor": true,
+      "aetheryte_id": 1280099,
+      "source_symbol": "FEATHERGORGE"
+    },
+    {
+      "poi_id": "aetheryte-1280100",
+      "kind": "aetheryte",
+      "name": "Maiden Glen",
+      "zone": 144,
+      "position": [
+        1737.0,
+        176.5,
+        -1250.0
+      ],
+      "height_anchor": true,
+      "aetheryte_id": 1280100,
+      "source_symbol": "MAIDEN_GLEN"
+    },
+    {
+      "poi_id": "aetheryte-1280101",
+      "kind": "aetheryte",
+      "name": "Hushed Boughs",
+      "zone": 144,
+      "position": [
+        1390.0,
+        222.6,
+        -736.0
+      ],
+      "height_anchor": true,
+      "aetheryte_id": 1280101,
+      "source_symbol": "HUSHED_BOUGHS"
+    },
+    {
+      "poi_id": "aetheryte-1280102",
+      "kind": "aetheryte",
+      "name": "Scarwing Fall",
+      "zone": 144,
+      "position": [
+        1788.0,
+        164.8,
+        -829.0
+      ],
+      "height_anchor": true,
+      "aetheryte_id": 1280102,
+      "source_symbol": "SCARWING_FALL"
+    },
+    {
+      "poi_id": "aetheryte-1280103",
+      "kind": "aetheryte",
+      "name": "Weeping Vale",
+      "zone": 145,
+      "position": [
+        1383.0,
+        231.8,
+        422.0
+      ],
+      "height_anchor": true,
+      "aetheryte_id": 1280103,
+      "source_symbol": "WEEPING_VALE"
+    },
+    {
+      "poi_id": "aetheryte-1280104",
+      "kind": "aetheryte",
+      "name": "Clearwater",
+      "zone": 145,
+      "position": [
+        2160.0,
+        142.7,
+        622.0
+      ],
+      "height_anchor": true,
+      "aetheryte_id": 1280104,
+      "source_symbol": "CLEARWATER"
+    },
+    {
+      "poi_id": "aetheryte-1280105",
+      "kind": "aetheryte",
+      "name": "Teriggans Stand",
+      "zone": 147,
+      "position": [
+        -1.0,
+        144.1,
+        1373.0
+      ],
+      "height_anchor": true,
+      "aetheryte_id": 1280105,
+      "source_symbol": "TERIGGANS_STAND"
+    },
+    {
+      "poi_id": "aetheryte-1280106",
+      "kind": "aetheryte",
+      "name": "Shepherd Peak",
+      "zone": 147,
+      "position": [
+        -64.0,
+        185.1,
+        1924.0
+      ],
+      "height_anchor": true,
+      "aetheryte_id": 1280106,
+      "source_symbol": "SHEPHERD_PEAK"
+    },
+    {
+      "poi_id": "aetheryte-1280107",
+      "kind": "aetheryte",
+      "name": "Fellwood",
+      "zone": 147,
+      "position": [
+        -908.0,
+        191.7,
+        2162.0
+      ],
+      "height_anchor": true,
+      "aetheryte_id": 1280107,
+      "source_symbol": "FELLWOOD"
+    },
+    {
+      "poi_id": "aetheryte-1280108",
+      "kind": "aetheryte",
+      "name": "Wyrmkings Perch",
+      "zone": 148,
+      "position": [
+        -1734.82,
+        285.069,
+        -839.63
+      ],
+      "height_anchor": true,
+      "aetheryte_id": 1280108,
+      "source_symbol": "WYRMKINGS_PERCH"
+    },
+    {
+      "poi_id": "aetheryte-1280109",
+      "kind": "aetheryte",
+      "name": "Lance",
+      "zone": 148,
+      "position": [
+        -2366.07,
+        336.041,
+        -1054.75
+      ],
+      "height_anchor": true,
+      "aetheryte_id": 1280109,
+      "source_symbol": "LANCE"
+    },
+    {
+      "poi_id": "aetheryte-1280110",
+      "kind": "aetheryte",
+      "name": "Twinpools",
+      "zone": 148,
+      "position": [
+        -2821.0,
+        256.1,
+        -290.0
+      ],
+      "height_anchor": true,
+      "aetheryte_id": 1280110,
+      "source_symbol": "TWINPOOLS"
+    },
+    {
+      "poi_id": "aetheryte-1280121",
+      "kind": "aetheryte",
+      "name": "Camp Brittlebark",
+      "zone": 190,
+      "position": [
+        487.445,
+        18.531,
+        672.244
+      ],
+      "height_anchor": true,
+      "aetheryte_id": 1280121,
+      "source_symbol": "CAMP_BRITTLEBARK"
+    },
+    {
+      "poi_id": "aetheryte-1280122",
+      "kind": "aetheryte",
+      "name": "Camp Revenants Toll",
+      "zone": 190,
+      "position": [
+        -215.76,
+        18.54,
+        -668.703
+      ],
+      "height_anchor": true,
+      "aetheryte_id": 1280122,
+      "source_symbol": "CAMP_REVENANTS_TOLL"
+    },
+    {
+      "poi_id": "aetheryte-1280123",
+      "kind": "aetheryte",
+      "name": "Fogfens",
+      "zone": 190,
+      "position": [
+        -458.0,
+        -40.9,
+        -318.0
+      ],
+      "height_anchor": true,
+      "aetheryte_id": 1280123,
+      "source_symbol": "FOGFENS"
+    },
+    {
+      "poi_id": "aetheryte-1280124",
+      "kind": "aetheryte",
+      "name": "Singing Shards",
+      "zone": 190,
+      "position": [
+        580.0,
+        58.2,
+        206.0
+      ],
+      "height_anchor": true,
+      "aetheryte_id": 1280124,
+      "source_symbol": "SINGING_SHARDS"
+    },
+    {
+      "poi_id": "aetheryte-1280125",
+      "kind": "aetheryte",
+      "name": "Jagged Crest Cave",
+      "zone": 190,
+      "position": [
+        -365.724,
+        -18.591,
+        -25.448
+      ],
+      "height_anchor": true,
+      "aetheryte_id": 1280125,
+      "source_symbol": "JAGGED_CREST_CAVE"
+    },
+    {
+      "poi_id": "quest-npc-6",
+      "kind": "quest_npc",
+      "name": "Baderon",
+      "zone": 133,
+      "position": [
+        -428.06,
+        40.2,
+        185.96
+      ],
+      "height_anchor": true,
+      "spawn_id": 6,
+      "actor_class_id": 1000137,
+      "unique_id": "public_baderon",
+      "display_name_id": 1000015,
+      "rotation": -1.37,
+      "quest_unique_id": "man0l1_baderon"
+    },
+    {
+      "poi_id": "quest-npc-8",
+      "kind": "quest_npc",
+      "name": "Mytesyn",
+      "zone": 133,
+      "position": [
+        -435.2,
+        40.0,
+        207.07
+      ],
+      "height_anchor": true,
+      "spawn_id": 8,
+      "actor_class_id": 1000167,
+      "unique_id": "mytesyn",
+      "display_name_id": 1600123,
+      "rotation": -1.9,
+      "quest_unique_id": "mytesyn"
+    },
+    {
+      "poi_id": "quest-npc-43",
+      "kind": "quest_npc",
+      "name": "Rorojaru",
+      "zone": 175,
+      "position": [
+        28.93,
+        192.0,
+        109.69
+      ],
+      "height_anchor": true,
+      "spawn_id": 43,
+      "actor_class_id": 1000374,
+      "unique_id": "rorojaru",
+      "display_name_id": 1400067,
+      "rotation": 1.84,
+      "quest_unique_id": "rorojaru"
+    },
+    {
+      "poi_id": "quest-npc-45",
+      "kind": "quest_npc",
+      "name": "Popori",
+      "zone": 175,
+      "position": [
+        -175.1,
+        188.6,
+        96.47
+      ],
+      "height_anchor": true,
+      "spawn_id": 45,
+      "actor_class_id": 1000651,
+      "unique_id": "popori",
+      "display_name_id": 1500009,
+      "rotation": 2.37,
+      "quest_unique_id": "popori"
+    },
+    {
+      "poi_id": "quest-npc-59",
+      "kind": "quest_npc",
+      "name": "Rururaji",
+      "zone": 175,
+      "position": [
+        -36.99,
+        192.1,
+        15.9
+      ],
+      "height_anchor": true,
+      "spawn_id": 59,
+      "actor_class_id": 1000840,
+      "unique_id": "rururaji",
+      "display_name_id": 1400060,
+      "rotation": -0.56,
+      "quest_unique_id": "rururaji"
+    },
+    {
+      "poi_id": "quest-npc-60",
+      "kind": "quest_npc",
+      "name": "Momodi",
+      "zone": 175,
+      "position": [
+        -74.91,
+        195.45,
+        81.14
+      ],
+      "height_anchor": true,
+      "spawn_id": 60,
+      "actor_class_id": 1000841,
+      "unique_id": "momodi",
+      "display_name_id": 1500014,
+      "rotation": 2.88,
+      "quest_unique_id": "momodi"
+    },
+    {
+      "poi_id": "quest-npc-61",
+      "kind": "quest_npc",
+      "name": "Gagaruna",
+      "zone": 175,
+      "position": [
+        -184.94,
+        190.55,
+        108.87
+      ],
+      "height_anchor": true,
+      "spawn_id": 61,
+      "actor_class_id": 1000862,
+      "unique_id": "gagaruna",
+      "display_name_id": 1400019,
+      "rotation": 1.49,
+      "quest_unique_id": "gagaruna"
+    },
+    {
+      "poi_id": "quest-npc-62",
+      "kind": "quest_npc",
+      "name": "Otopa Pottopa",
+      "zone": 175,
+      "position": [
+        -66.44,
+        195.45,
+        81.64
+      ],
+      "height_anchor": true,
+      "spawn_id": 62,
+      "actor_class_id": 1000864,
+      "unique_id": "otopa_pottopa",
+      "display_name_id": 1400113,
+      "rotation": -3.07,
+      "quest_unique_id": "otopa_pottopa"
+    },
+    {
+      "poi_id": "quest-npc-64",
+      "kind": "quest_npc",
+      "name": "Titinin",
+      "zone": 175,
+      "position": [
+        -170.63,
+        190.01,
+        117.15
+      ],
+      "height_anchor": true,
+      "spawn_id": 64,
+      "actor_class_id": 1000934,
+      "unique_id": "titinin",
+      "display_name_id": 1400021,
+      "rotation": -1.58,
+      "quest_unique_id": "titinin"
+    },
+    {
+      "poi_id": "quest-npc-65",
+      "kind": "quest_npc",
+      "name": "Naida Zamaida",
+      "zone": 175,
+      "position": [
+        0.29,
+        196.4,
+        144.53
+      ],
+      "height_anchor": true,
+      "spawn_id": 65,
+      "actor_class_id": 1000955,
+      "unique_id": "naida_zamaida",
+      "display_name_id": 1400111,
+      "rotation": 1.8,
+      "quest_unique_id": "naida_zamaida"
+    },
+    {
+      "poi_id": "quest-npc-66",
+      "kind": "quest_npc",
+      "name": "Halstein",
+      "zone": 175,
+      "position": [
+        -160.78,
+        188.7,
+        117.31
+      ],
+      "height_anchor": true,
+      "spawn_id": 66,
+      "actor_class_id": 1001007,
+      "unique_id": "halstein",
+      "display_name_id": 1000134,
+      "rotation": -2.56,
+      "quest_unique_id": "halstein"
+    },
+    {
+      "poi_id": "quest-npc-67",
+      "kind": "quest_npc",
+      "name": "Melisie",
+      "zone": 175,
+      "position": [
+        -171.69,
+        190.0,
+        123.84
+      ],
+      "height_anchor": true,
+      "spawn_id": 67,
+      "actor_class_id": 1001009,
+      "unique_id": "melisie",
+      "display_name_id": 1300104,
+      "rotation": -1.77,
+      "quest_unique_id": "melisie"
+    },
+    {
+      "poi_id": "quest-npc-68",
+      "kind": "quest_npc",
+      "name": "Shamani Lohmani",
+      "zone": 175,
+      "position": [
+        -168.34,
+        188.7,
+        116.06
+      ],
+      "height_anchor": true,
+      "spawn_id": 68,
+      "actor_class_id": 1001012,
+      "unique_id": "shamani_lohmani",
+      "display_name_id": 1400105,
+      "rotation": 2.96,
+      "quest_unique_id": "shamani_lohmani"
+    },
+    {
+      "poi_id": "quest-npc-72",
+      "kind": "quest_npc",
+      "name": "Gunnulf",
+      "zone": 175,
+      "position": [
+        -173.16,
+        188.7,
+        106.58
+      ],
+      "height_anchor": true,
+      "spawn_id": 72,
+      "actor_class_id": 1001256,
+      "unique_id": "gunnulf",
+      "display_name_id": 2200127,
+      "rotation": 0.92,
+      "quest_unique_id": "gunnulf"
+    },
+    {
+      "poi_id": "quest-npc-73",
+      "kind": "quest_npc",
+      "name": "Heibert",
+      "zone": 175,
+      "position": [
+        -158.15,
+        188.7,
+        107.36
+      ],
+      "height_anchor": true,
+      "spawn_id": 73,
+      "actor_class_id": 1001257,
+      "unique_id": "heibert",
+      "display_name_id": 1000322,
+      "rotation": -0.45,
+      "quest_unique_id": "heibert"
+    },
+    {
+      "poi_id": "quest-npc-74",
+      "kind": "quest_npc",
+      "name": "I'paghlo",
+      "zone": 175,
+      "position": [
+        -145.89,
+        185.45,
+        122.34
+      ],
+      "height_anchor": true,
+      "spawn_id": 74,
+      "actor_class_id": 1001260,
+      "unique_id": "ipaghlo",
+      "display_name_id": 1900082,
+      "rotation": -2.18,
+      "quest_unique_id": "ipaghlo"
+    },
+    {
+      "poi_id": "quest-npc-77",
+      "kind": "quest_npc",
+      "name": "Gegeissa",
+      "zone": 175,
+      "position": [
+        -56.69,
+        192.0,
+        -6.59
+      ],
+      "height_anchor": true,
+      "spawn_id": 77,
+      "actor_class_id": 1001424,
+      "unique_id": "gegeissa",
+      "display_name_id": 1400157,
+      "rotation": 2.89,
+      "quest_unique_id": "gegeissa"
+    },
+    {
+      "poi_id": "quest-npc-89",
+      "kind": "quest_npc",
+      "name": "mammet",
+      "zone": 175,
+      "position": [
+        -182.02,
+        193.45,
+        85.12
+      ],
+      "height_anchor": true,
+      "spawn_id": 89,
+      "actor_class_id": 1001455,
+      "unique_id": "mammet",
+      "display_name_id": 4000536,
+      "rotation": -2.52,
+      "quest_unique_id": "mammet"
+    },
+    {
+      "poi_id": "quest-npc-90",
+      "kind": "quest_npc",
+      "name": "Qata Nelhah",
+      "zone": 175,
+      "position": [
+        -183.3,
+        193.0,
+        86.33
+      ],
+      "height_anchor": true,
+      "spawn_id": 90,
+      "actor_class_id": 1001462,
+      "unique_id": "qata_nelhah",
+      "display_name_id": 1900116,
+      "rotation": -2.48,
+      "quest_unique_id": "qata_nelhah"
+    },
+    {
+      "poi_id": "quest-npc-119",
+      "kind": "quest_npc",
+      "name": "Yayatoki",
+      "zone": 175,
+      "position": [
+        -27.31,
+        196.0,
+        87.25
+      ],
+      "height_anchor": true,
+      "spawn_id": 119,
+      "actor_class_id": 1500129,
+      "unique_id": "yayatoki",
+      "display_name_id": 1400148,
+      "rotation": 1.91,
+      "quest_unique_id": "yayatoki"
+    },
+    {
+      "poi_id": "quest-npc-147",
+      "kind": "quest_npc",
+      "name": "Gogofu",
+      "zone": 209,
+      "position": [
+        -301.18,
+        206.0,
+        239.6
+      ],
+      "height_anchor": true,
+      "spawn_id": 147,
+      "actor_class_id": 1000046,
+      "unique_id": "gogofu",
+      "display_name_id": 1500072,
+      "rotation": -1.82,
+      "quest_unique_id": "gogofu"
+    },
+    {
+      "poi_id": "quest-npc-148",
+      "kind": "quest_npc",
+      "name": "Hahayo",
+      "zone": 209,
+      "position": [
+        7.24,
+        206.5,
+        301.88
+      ],
+      "height_anchor": true,
+      "spawn_id": 148,
+      "actor_class_id": 1000047,
+      "unique_id": "hahayo",
+      "display_name_id": 1500034,
+      "rotation": 0.46,
+      "quest_unique_id": "hahayo"
+    },
+    {
+      "poi_id": "quest-npc-149",
+      "kind": "quest_npc",
+      "name": "Deaustie",
+      "zone": 209,
+      "position": [
+        38.84,
+        195.59,
+        257.89
+      ],
+      "height_anchor": true,
+      "spawn_id": 149,
+      "actor_class_id": 1000293,
+      "unique_id": "deaustie",
+      "display_name_id": 1300034,
+      "rotation": 1.37,
+      "quest_unique_id": "deaustie"
+    },
+    {
+      "poi_id": "quest-npc-150",
+      "kind": "quest_npc",
+      "name": "Nogeloix",
+      "zone": 209,
+      "position": [
+        -211.67,
+        229.6,
+        279.04
+      ],
+      "height_anchor": true,
+      "spawn_id": 150,
+      "actor_class_id": 1000597,
+      "unique_id": "nogeloix",
+      "display_name_id": 1200017,
+      "rotation": 0.38,
+      "quest_unique_id": "nogeloix"
+    },
+    {
+      "poi_id": "quest-npc-153",
+      "kind": "quest_npc",
+      "name": "Kylene",
+      "zone": 209,
+      "position": [
+        -210.07,
+        229.6,
+        278.19
+      ],
+      "height_anchor": true,
+      "spawn_id": 153,
+      "actor_class_id": 1000634,
+      "unique_id": "kylene",
+      "display_name_id": 1100203,
+      "rotation": 0.6,
+      "quest_unique_id": "kylene"
+    },
+    {
+      "poi_id": "quest-npc-154",
+      "kind": "quest_npc",
+      "name": "Hnaufrid",
+      "zone": 209,
+      "position": [
+        -129.71,
+        201.6,
+        256.29
+      ],
+      "height_anchor": true,
+      "spawn_id": 154,
+      "actor_class_id": 1000635,
+      "unique_id": "hnaufrid",
+      "display_name_id": 2200154,
+      "rotation": 0.63,
+      "quest_unique_id": "hnaufrid"
+    },
+    {
+      "poi_id": "quest-npc-156",
+      "kind": "quest_npc",
+      "name": "Shilgen",
+      "zone": 209,
+      "position": [
+        -91.81,
+        195.6,
+        314.82
+      ],
+      "height_anchor": true,
+      "spawn_id": 156,
+      "actor_class_id": 1000637,
+      "unique_id": "shilgen",
+      "display_name_id": 2200216,
+      "rotation": -1.05,
+      "quest_unique_id": "shilgen"
+    },
+    {
+      "poi_id": "quest-npc-175",
+      "kind": "quest_npc",
+      "name": "Yayake",
+      "zone": 209,
+      "position": [
+        -292.89,
+        206.46,
+        219.88
+      ],
+      "height_anchor": true,
+      "spawn_id": 175,
+      "actor_class_id": 1000846,
+      "unique_id": "yayake",
+      "display_name_id": 1500017,
+      "rotation": -0.52,
+      "quest_unique_id": "yayake"
+    },
+    {
+      "poi_id": "quest-npc-177",
+      "kind": "quest_npc",
+      "name": "Linette",
+      "zone": 209,
+      "position": [
+        -92.38,
+        195.6,
+        313.43
+      ],
+      "height_anchor": true,
+      "spawn_id": 177,
+      "actor_class_id": 1000861,
+      "unique_id": "linette",
+      "display_name_id": 1100016,
+      "rotation": -1.43,
+      "quest_unique_id": "linette"
+    },
+    {
+      "poi_id": "quest-npc-178",
+      "kind": "quest_npc",
+      "name": "Lulutsu",
+      "zone": 209,
+      "position": [
+        -193.46,
+        195.05,
+        183.65
+      ],
+      "height_anchor": true,
+      "spawn_id": 178,
+      "actor_class_id": 1000863,
+      "unique_id": "lulutsu",
+      "display_name_id": 1500022,
+      "rotation": 0.61,
+      "quest_unique_id": "lulutsu"
+    },
+    {
+      "poi_id": "quest-npc-182",
+      "kind": "quest_npc",
+      "name": "Elecotte",
+      "zone": 209,
+      "position": [
+        -131.49,
+        201.6,
+        256.97
+      ],
+      "height_anchor": true,
+      "spawn_id": 182,
+      "actor_class_id": 1000950,
+      "unique_id": "elecotte",
+      "display_name_id": 1300001,
+      "rotation": 0.37,
+      "quest_unique_id": "elecotte"
+    },
+    {
+      "poi_id": "quest-npc-183",
+      "kind": "quest_npc",
+      "name": "Papawa",
+      "zone": 209,
+      "position": [
+        -175.05,
+        193.2,
+        201.17
+      ],
+      "height_anchor": true,
+      "spawn_id": 183,
+      "actor_class_id": 1000962,
+      "unique_id": "papawa",
+      "display_name_id": 1500003,
+      "rotation": -2.46,
+      "quest_unique_id": "papawa"
+    },
+    {
+      "poi_id": "quest-npc-185",
+      "kind": "quest_npc",
+      "name": "Fruhybolg",
+      "zone": 209,
+      "position": [
+        -186.65,
+        193.2,
+        198.78
+      ],
+      "height_anchor": true,
+      "spawn_id": 185,
+      "actor_class_id": 1000964,
+      "unique_id": "fruhybolg",
+      "display_name_id": 1600076,
+      "rotation": 1.59,
+      "quest_unique_id": "fruhybolg"
+    },
+    {
+      "poi_id": "quest-npc-186",
+      "kind": "quest_npc",
+      "name": "Abylgo Hamylgo",
+      "zone": 209,
+      "position": [
+        -180.83,
+        193.2,
+        206.51
+      ],
+      "height_anchor": true,
+      "spawn_id": 186,
+      "actor_class_id": 1000965,
+      "unique_id": "abylgo_hamylgo",
+      "display_name_id": 1400085,
+      "rotation": 2.83,
+      "quest_unique_id": "abylgo_hamylgo"
+    },
+    {
+      "poi_id": "quest-npc-188",
+      "kind": "quest_npc",
+      "name": "Swerdahrm",
+      "zone": 209,
+      "position": [
+        -182.91,
+        189.95,
+        221.78
+      ],
+      "height_anchor": true,
+      "spawn_id": 188,
+      "actor_class_id": 1000967,
+      "unique_id": "swerdahrm",
+      "display_name_id": 1600186,
+      "rotation": 2.53,
+      "quest_unique_id": "swerdahrm"
+    },
+    {
+      "poi_id": "quest-npc-202",
+      "kind": "quest_npc",
+      "name": "Sinette",
+      "zone": 209,
+      "position": [
+        -305.49,
+        206.0,
+        221.67
+      ],
+      "height_anchor": true,
+      "spawn_id": 202,
+      "actor_class_id": 1001145,
+      "unique_id": "sinette",
+      "display_name_id": 1300074,
+      "rotation": 1.84,
+      "quest_unique_id": "sinette"
+    },
+    {
+      "poi_id": "quest-npc-214",
+      "kind": "quest_npc",
+      "name": "Tyago Moui",
+      "zone": 209,
+      "position": [
+        -116.04,
+        194.2,
+        313.08
+      ],
+      "height_anchor": true,
+      "spawn_id": 214,
+      "actor_class_id": 1001203,
+      "unique_id": "tyago_moui",
+      "display_name_id": 1900130,
+      "rotation": 0.87,
+      "quest_unique_id": "tyago_moui"
+    },
+    {
+      "poi_id": "quest-npc-224",
+      "kind": "quest_npc",
+      "name": "Singleton",
+      "zone": 209,
+      "position": [
+        -191.98,
+        194.6,
+        181.33
+      ],
+      "height_anchor": true,
+      "spawn_id": 224,
+      "actor_class_id": 1001445,
+      "unique_id": "singleton",
+      "display_name_id": 1000229,
+      "rotation": 1.06,
+      "quest_unique_id": "singleton"
+    },
+    {
+      "poi_id": "quest-npc-273",
+      "kind": "quest_npc",
+      "name": "Pamisolaux",
+      "zone": 209,
+      "position": [
+        -128.58,
+        201.6,
+        255.11
+      ],
+      "height_anchor": true,
+      "spawn_id": 273,
+      "actor_class_id": 1600040,
+      "unique_id": "pamisolaux",
+      "display_name_id": 1200070,
+      "rotation": 0.95,
+      "quest_unique_id": "pamisolaux"
+    },
+    {
+      "poi_id": "quest-npc-275",
+      "kind": "quest_npc",
+      "name": "Nortmoen",
+      "zone": 209,
+      "position": [
+        -90.84,
+        195.6,
+        315.94
+      ],
+      "height_anchor": true,
+      "spawn_id": 275,
+      "actor_class_id": 1600042,
+      "unique_id": "nortmoen",
+      "display_name_id": 1600127,
+      "rotation": -0.82,
+      "quest_unique_id": "nortmoen"
+    },
+    {
+      "poi_id": "quest-npc-304",
+      "kind": "quest_npc",
+      "name": "Iofa",
+      "zone": 230,
+      "position": [
+        -490.59,
+        42.8,
+        420.71
+      ],
+      "height_anchor": true,
+      "spawn_id": 304,
+      "actor_class_id": 1000135,
+      "unique_id": "iofa",
+      "display_name_id": 1100138,
+      "rotation": -1.74,
+      "quest_unique_id": "iofa"
+    },
+    {
+      "poi_id": "quest-npc-305",
+      "kind": "quest_npc",
+      "name": "Charlys",
+      "zone": 230,
+      "position": [
+        -511.16,
+        42.3,
+        27.91
+      ],
+      "height_anchor": true,
+      "spawn_id": 305,
+      "actor_class_id": 1000138,
+      "unique_id": "charlys",
+      "display_name_id": 1000066,
+      "rotation": -0.37,
+      "quest_unique_id": "charlys"
+    },
+    {
+      "poi_id": "quest-npc-306",
+      "kind": "quest_npc",
+      "name": "Bodenolf",
+      "zone": 230,
+      "position": [
+        -500.06,
+        42.8,
+        416.06
+      ],
+      "height_anchor": true,
+      "spawn_id": 306,
+      "actor_class_id": 1000144,
+      "unique_id": "bodenolf",
+      "display_name_id": 2200064,
+      "rotation": 1.19,
+      "quest_unique_id": "bodenolf"
+    },
+    {
+      "poi_id": "quest-npc-323",
+      "kind": "quest_npc",
+      "name": "P'tahjha",
+      "zone": 230,
+      "position": [
+        -790.22,
+        12.9,
+        195.4
+      ],
+      "height_anchor": true,
+      "spawn_id": 323,
+      "actor_class_id": 1000150,
+      "unique_id": "ptahjha",
+      "display_name_id": 1900003,
+      "rotation": 0.43,
+      "quest_unique_id": "ptahjha"
+    },
+    {
+      "poi_id": "quest-npc-324",
+      "kind": "quest_npc",
+      "name": "Isaudorel",
+      "zone": 230,
+      "position": [
+        -611.23,
+        43.0,
+        -55.39
+      ],
+      "height_anchor": true,
+      "spawn_id": 324,
+      "actor_class_id": 1000152,
+      "unique_id": "isaudorel",
+      "display_name_id": 1200100,
+      "rotation": 1.97,
+      "quest_unique_id": "isaudorel"
+    },
+    {
+      "poi_id": "quest-npc-325",
+      "kind": "quest_npc",
+      "name": "N'nmulika",
+      "zone": 230,
+      "position": [
+        -612.9,
+        4.55,
+        341.42
+      ],
+      "height_anchor": true,
+      "spawn_id": 325,
+      "actor_class_id": 1000153,
+      "unique_id": "nnmulika",
+      "display_name_id": 1900011,
+      "rotation": 0.69,
+      "quest_unique_id": "nnmulika"
+    },
+    {
+      "poi_id": "quest-npc-328",
+      "kind": "quest_npc",
+      "name": "Totoruto",
+      "zone": 230,
+      "position": [
+        -603.41,
+        43.0,
+        -70.45
+      ],
+      "height_anchor": true,
+      "spawn_id": 328,
+      "actor_class_id": 1000161,
+      "unique_id": "totoruto",
+      "display_name_id": 1400033,
+      "rotation": -1.21,
+      "quest_unique_id": "totoruto"
+    },
+    {
+      "poi_id": "quest-npc-329",
+      "kind": "quest_npc",
+      "name": "Joellaut",
+      "zone": 230,
+      "position": [
+        -482.91,
+        41.53,
+        438.15
+      ],
+      "height_anchor": true,
+      "spawn_id": 329,
+      "actor_class_id": 1000163,
+      "unique_id": "joellaut",
+      "display_name_id": 1200058,
+      "rotation": 2.36,
+      "quest_unique_id": "joellaut"
+    },
+    {
+      "poi_id": "quest-npc-351",
+      "kind": "quest_npc",
+      "name": "Waekbyrt",
+      "zone": 230,
+      "position": [
+        -752.53,
+        7.35,
+        382.14
+      ],
+      "height_anchor": true,
+      "spawn_id": 351,
+      "actor_class_id": 1000003,
+      "unique_id": "waekbyrt",
+      "display_name_id": 1600217,
+      "rotation": -1.64,
+      "quest_unique_id": "waekbyrt"
+    },
+    {
+      "poi_id": "quest-npc-353",
+      "kind": "quest_npc",
+      "name": "Hob",
+      "zone": 230,
+      "position": [
+        -834.77,
+        6.0,
+        241.55
+      ],
+      "height_anchor": true,
+      "spawn_id": 353,
+      "actor_class_id": 1000151,
+      "unique_id": "hob",
+      "display_name_id": 1000017,
+      "rotation": -2.79,
+      "quest_unique_id": "hob"
+    },
+    {
+      "poi_id": "quest-npc-359",
+      "kind": "quest_npc",
+      "name": "pearly-toothed porter",
+      "zone": 230,
+      "position": [
+        -823.86,
+        6.0,
+        198.95
+      ],
+      "height_anchor": true,
+      "spawn_id": 359,
+      "actor_class_id": 1000260,
+      "unique_id": "pearly-toothed_porter",
+      "display_name_id": 4000102,
+      "rotation": 0.13,
+      "quest_unique_id": "pearly-toothed_porter"
+    },
+    {
+      "poi_id": "quest-npc-360",
+      "kind": "quest_npc",
+      "name": "muscle-bound deckhand",
+      "zone": 230,
+      "position": [
+        -823.75,
+        6.0,
+        200.27
+      ],
+      "height_anchor": true,
+      "spawn_id": 360,
+      "actor_class_id": 1000261,
+      "unique_id": "muscle-bound_deckhand",
+      "display_name_id": 4000103,
+      "rotation": -2.7,
+      "quest_unique_id": "muscle-bound_deckhand"
+    },
+    {
+      "poi_id": "quest-npc-374",
+      "kind": "quest_npc",
+      "name": "Hihine",
+      "zone": 230,
+      "position": [
+        -475.29,
+        41.5,
+        436.08
+      ],
+      "height_anchor": true,
+      "spawn_id": 374,
+      "actor_class_id": 1000267,
+      "unique_id": "hihine",
+      "display_name_id": 1500052,
+      "rotation": 0.31,
+      "quest_unique_id": "hihine"
+    },
+    {
+      "poi_id": "quest-npc-375",
+      "kind": "quest_npc",
+      "name": "Trinne",
+      "zone": 230,
+      "position": [
+        -474.72,
+        41.51,
+        431.37
+      ],
+      "height_anchor": true,
+      "spawn_id": 375,
+      "actor_class_id": 1000268,
+      "unique_id": "trinne",
+      "display_name_id": 1300093,
+      "rotation": -2.45,
+      "quest_unique_id": "trinne"
+    },
+    {
+      "poi_id": "quest-npc-397",
+      "kind": "quest_npc",
+      "name": "Gert",
+      "zone": 230,
+      "position": [
+        -809.15,
+        8.0,
+        230.88
+      ],
+      "height_anchor": true,
+      "spawn_id": 397,
+      "actor_class_id": 1500004,
+      "unique_id": "gert",
+      "display_name_id": 1100075,
+      "rotation": 0.4,
+      "quest_unique_id": "gert"
+    },
+    {
+      "poi_id": "quest-npc-398",
+      "kind": "quest_npc",
+      "name": "Lorhzant",
+      "zone": 230,
+      "position": [
+        -809.19,
+        8.0,
+        244.86
+      ],
+      "height_anchor": true,
+      "spawn_id": 398,
+      "actor_class_id": 1500005,
+      "unique_id": "lorhzant",
+      "display_name_id": 1600103,
+      "rotation": -2.78,
+      "quest_unique_id": "lorhzant"
+    },
+    {
+      "poi_id": "quest-npc-428",
+      "kind": "quest_npc",
+      "name": "Merlzirn",
+      "zone": 230,
+      "position": [
+        -614.34,
+        28.48,
+        -51.26
+      ],
+      "height_anchor": true,
+      "spawn_id": 428,
+      "actor_class_id": 1000472,
+      "unique_id": "merlzirn",
+      "display_name_id": 1600113,
+      "rotation": 1.03,
+      "quest_unique_id": "merlzirn"
+    },
+    {
+      "poi_id": "quest-npc-501",
+      "kind": "quest_npc",
+      "name": "Ascilia",
+      "zone": 184,
+      "position": [
+        -1.5,
+        196.0,
+        124.5
+      ],
+      "height_anchor": true,
+      "spawn_id": 501,
+      "actor_class_id": 1000042,
+      "unique_id": "ascilia",
+      "display_name_id": 1100003,
+      "rotation": 1.8,
+      "quest_unique_id": "ascilia"
+    },
+    {
+      "poi_id": "quest-npc-502",
+      "kind": "quest_npc",
+      "name": "Warburton",
+      "zone": 184,
+      "position": [
+        -0.2,
+        196.0,
+        123.26
+      ],
+      "height_anchor": true,
+      "spawn_id": 502,
+      "actor_class_id": 1000186,
+      "unique_id": "warburton",
+      "display_name_id": 1000347,
+      "rotation": -0.8,
+      "quest_unique_id": "warburton"
+    },
+    {
+      "poi_id": "quest-npc-503",
+      "kind": "quest_npc",
+      "name": "stocky stranger",
+      "zone": 184,
+      "position": [
+        12.18,
+        196.0,
+        133.42
+      ],
+      "height_anchor": true,
+      "spawn_id": 503,
+      "actor_class_id": 1001644,
+      "unique_id": "stocky_stranger",
+      "display_name_id": 4000607,
+      "rotation": -1.26,
+      "quest_unique_id": "stocky_stranger"
+    },
+    {
+      "poi_id": "quest-npc-504",
+      "kind": "quest_npc",
+      "name": "Rururaji",
+      "zone": 184,
+      "position": [
+        9.07,
+        196.0,
+        126.69
+      ],
+      "height_anchor": true,
+      "spawn_id": 504,
+      "actor_class_id": 1000840,
+      "unique_id": "rururaji",
+      "display_name_id": 1400060,
+      "rotation": -1.26,
+      "quest_unique_id": "rururaji"
+    },
+    {
+      "poi_id": "quest-npc-505",
+      "kind": "quest_npc",
+      "name": "big-bellied barker",
+      "zone": 184,
+      "position": [
+        -19.7,
+        196.0,
+        79.93
+      ],
+      "height_anchor": true,
+      "spawn_id": 505,
+      "actor_class_id": 1001490,
+      "unique_id": "big-bellied_barker",
+      "display_name_id": 4000542,
+      "rotation": -0.38,
+      "quest_unique_id": "big-bellied_barker"
+    },
+    {
+      "poi_id": "quest-npc-506",
+      "kind": "quest_npc",
+      "name": "fretful farmhand",
+      "zone": 184,
+      "position": [
+        3.4,
+        196.0,
+        115.5
+      ],
+      "height_anchor": true,
+      "spawn_id": 506,
+      "actor_class_id": 1001491,
+      "unique_id": "fretful_farmhand",
+      "display_name_id": 4000543,
+      "rotation": 2.7,
+      "quest_unique_id": "fretful_farmhand"
+    },
+    {
+      "poi_id": "quest-npc-507",
+      "kind": "quest_npc",
+      "name": "debauched demoness",
+      "zone": 184,
+      "position": [
+        0.8,
+        196.0,
+        103.18
+      ],
+      "height_anchor": true,
+      "spawn_id": 507,
+      "actor_class_id": 1001492,
+      "unique_id": "debauched_demoness",
+      "display_name_id": 4000544,
+      "rotation": -1.13,
+      "quest_unique_id": "debauched_demoness"
+    },
+    {
+      "poi_id": "quest-npc-508",
+      "kind": "quest_npc",
+      "name": "dapper dan",
+      "zone": 184,
+      "position": [
+        -33.57,
+        196.0,
+        82.42
+      ],
+      "height_anchor": true,
+      "spawn_id": 508,
+      "actor_class_id": 1001493,
+      "unique_id": "dapper_dan",
+      "display_name_id": 4000545,
+      "rotation": 1.63,
+      "quest_unique_id": "dapper_dan"
+    },
+    {
+      "poi_id": "quest-npc-509",
+      "kind": "quest_npc",
+      "name": "loutish lad",
+      "zone": 184,
+      "position": [
+        -9.13,
+        196.0,
+        114.84
+      ],
+      "height_anchor": true,
+      "spawn_id": 509,
+      "actor_class_id": 1001494,
+      "unique_id": "loutish_lad",
+      "display_name_id": 4000546,
+      "rotation": 2.33,
+      "quest_unique_id": "loutish_lad"
+    },
+    {
+      "poi_id": "quest-npc-510",
+      "kind": "quest_npc",
+      "name": "gil-digging mistress",
+      "zone": 184,
+      "position": [
+        -19.11,
+        196.0,
+        95.09
+      ],
+      "height_anchor": true,
+      "spawn_id": 510,
+      "actor_class_id": 1001495,
+      "unique_id": "gil-digging_mistress",
+      "display_name_id": 4000547,
+      "rotation": 2.13,
+      "quest_unique_id": "gil-digging_mistress"
+    },
+    {
+      "poi_id": "quest-npc-511",
+      "kind": "quest_npc",
+      "name": "twittering tomboy",
+      "zone": 184,
+      "position": [
+        -32.37,
+        196.0,
+        80.75
+      ],
+      "height_anchor": true,
+      "spawn_id": 511,
+      "actor_class_id": 1001496,
+      "unique_id": "twittering_tomboy",
+      "display_name_id": 4000548,
+      "rotation": -0.74,
+      "quest_unique_id": "twittering_tomboy"
+    },
+    {
+      "poi_id": "quest-npc-514",
+      "kind": "quest_npc",
+      "name": "well-traveled merchant",
+      "zone": 193,
+      "position": [
+        -0.71,
+        10.35,
+        -40.51
+      ],
+      "height_anchor": true,
+      "spawn_id": 514,
+      "actor_class_id": 1000438,
+      "unique_id": "well-traveled_merchant",
+      "display_name_id": 4000157,
+      "rotation": 0.3,
+      "quest_unique_id": "well-traveled_merchant"
+    },
+    {
+      "poi_id": "quest-npc-515",
+      "kind": "quest_npc",
+      "name": "tipsy adventurer",
+      "zone": 193,
+      "position": [
+        -1.87,
+        9.15,
+        -30.67
+      ],
+      "height_anchor": true,
+      "spawn_id": 515,
+      "actor_class_id": 1000439,
+      "unique_id": "tipsy_adventurer",
+      "display_name_id": 4000158,
+      "rotation": 2.44,
+      "quest_unique_id": "tipsy_adventurer"
+    },
+    {
+      "poi_id": "quest-npc-516",
+      "kind": "quest_npc",
+      "name": "cultivated tender",
+      "zone": 193,
+      "position": [
+        7.06,
+        9.15,
+        -28.62
+      ],
+      "height_anchor": true,
+      "spawn_id": 516,
+      "actor_class_id": 1000440,
+      "unique_id": "cultivated_tender",
+      "display_name_id": 4000159,
+      "rotation": -1.54,
+      "quest_unique_id": "cultivated_tender"
+    },
+    {
+      "poi_id": "quest-npc-517",
+      "kind": "quest_npc",
+      "name": "anxious adventurer",
+      "zone": 193,
+      "position": [
+        2.63,
+        9.15,
+        -33.91
+      ],
+      "height_anchor": true,
+      "spawn_id": 517,
+      "actor_class_id": 1000441,
+      "unique_id": "anxious_adventurer",
+      "display_name_id": 4000160,
+      "rotation": -0.16,
+      "quest_unique_id": "anxious_adventurer"
+    },
+    {
+      "poi_id": "quest-npc-518",
+      "kind": "quest_npc",
+      "name": "baby-faced adventurer",
+      "zone": 193,
+      "position": [
+        4.2,
+        10.35,
+        -21.98
+      ],
+      "height_anchor": true,
+      "spawn_id": 518,
+      "actor_class_id": 1000442,
+      "unique_id": "baby-faced_adventurer",
+      "display_name_id": 4000161,
+      "rotation": 3.11,
+      "quest_unique_id": "baby-faced_adventurer"
+    },
+    {
+      "poi_id": "quest-npc-519",
+      "kind": "quest_npc",
+      "name": "austere adventurer",
+      "zone": 193,
+      "position": [
+        4.06,
+        10.35,
+        -35.24
+      ],
+      "height_anchor": true,
+      "spawn_id": 519,
+      "actor_class_id": 1000443,
+      "unique_id": "austere_adventurer",
+      "display_name_id": 4000162,
+      "rotation": 2.52,
+      "quest_unique_id": "austere_adventurer"
+    },
+    {
+      "poi_id": "quest-npc-520",
+      "kind": "quest_npc",
+      "name": "undignified adventurer",
+      "zone": 193,
+      "position": [
+        -4.72,
+        10.35,
+        -22.56
+      ],
+      "height_anchor": true,
+      "spawn_id": 520,
+      "actor_class_id": 1000444,
+      "unique_id": "undignified_adventurer",
+      "display_name_id": 4000163,
+      "rotation": 2.06,
+      "quest_unique_id": "undignified_adventurer"
+    },
+    {
+      "poi_id": "quest-npc-521",
+      "kind": "quest_npc",
+      "name": "shadowy traveler",
+      "zone": 193,
+      "position": [
+        -4.09,
+        9.15,
+        -24.55
+      ],
+      "height_anchor": true,
+      "spawn_id": 521,
+      "actor_class_id": 1000445,
+      "unique_id": "shadowy_traveler",
+      "display_name_id": 4000164,
+      "rotation": 2.09,
+      "quest_unique_id": "shadowy_traveler"
+    },
+    {
+      "poi_id": "quest-npc-522",
+      "kind": "quest_npc",
+      "name": "astute merchant",
+      "zone": 193,
+      "position": [
+        -0.72,
+        9.15,
+        -31.81
+      ],
+      "height_anchor": true,
+      "spawn_id": 522,
+      "actor_class_id": 1000446,
+      "unique_id": "astute_merchant",
+      "display_name_id": 4000165,
+      "rotation": -1.18,
+      "quest_unique_id": "astute_merchant"
+    },
+    {
+      "poi_id": "quest-npc-523",
+      "kind": "quest_npc",
+      "name": "voluptuous vixen",
+      "zone": 193,
+      "position": [
+        -2.16,
+        9.15,
+        -26.18
+      ],
+      "height_anchor": true,
+      "spawn_id": 523,
+      "actor_class_id": 1000447,
+      "unique_id": "voluptuous_vixen",
+      "display_name_id": 4000166,
+      "rotation": 0.09,
+      "quest_unique_id": "voluptuous_vixen"
+    },
+    {
+      "poi_id": "quest-npc-524",
+      "kind": "quest_npc",
+      "name": "indifferent passerby",
+      "zone": 193,
+      "position": [
+        5.93,
+        10.35,
+        -25.09
+      ],
+      "height_anchor": true,
+      "spawn_id": 524,
+      "actor_class_id": 1000448,
+      "unique_id": "indifferent_passerby",
+      "display_name_id": 4000167,
+      "rotation": -2.01,
+      "quest_unique_id": "indifferent_passerby"
+    },
+    {
+      "poi_id": "quest-npc-525",
+      "kind": "quest_npc",
+      "name": "prattling adventurer",
+      "zone": 193,
+      "position": [
+        -1.92,
+        9.15,
+        -34.19
+      ],
+      "height_anchor": true,
+      "spawn_id": 525,
+      "actor_class_id": 1000449,
+      "unique_id": "prattling_adventurer",
+      "display_name_id": 4000168,
+      "rotation": 0.82,
+      "quest_unique_id": "prattling_adventurer"
+    },
+    {
+      "poi_id": "quest-npc-526",
+      "kind": "quest_npc",
+      "name": "lanky traveler",
+      "zone": 193,
+      "position": [
+        4.88,
+        9.15,
+        -29.5
+      ],
+      "height_anchor": true,
+      "spawn_id": 526,
+      "actor_class_id": 1000450,
+      "unique_id": "lanky_traveler",
+      "display_name_id": 4000169,
+      "rotation": 0.65,
+      "quest_unique_id": "lanky_traveler"
+    },
+    {
+      "poi_id": "quest-npc-527",
+      "kind": "quest_npc",
+      "name": "grinning adventurer",
+      "zone": 193,
+      "position": [
+        -1.1,
+        9.85,
+        -33.62
+      ],
+      "height_anchor": true,
+      "spawn_id": 527,
+      "actor_class_id": 1000451,
+      "unique_id": "grinning_adventurer",
+      "display_name_id": 4000170,
+      "rotation": -0.82,
+      "quest_unique_id": "grinning_adventurer"
+    },
+    {
+      "poi_id": "quest-npc-528",
+      "kind": "quest_npc",
+      "name": "Rostnsthal",
+      "zone": 193,
+      "position": [
+        -7.73,
+        9.967,
+        -27.44
+      ],
+      "height_anchor": true,
+      "spawn_id": 528,
+      "actor_class_id": 1001652,
+      "unique_id": "rostnsthal",
+      "display_name_id": 1600150,
+      "rotation": 1.6,
+      "quest_unique_id": "rostnsthal"
+    },
+    {
+      "poi_id": "quest-npc-542",
+      "kind": "quest_npc",
+      "name": "Eldid",
+      "zone": 206,
+      "position": [
+        -195.3,
+        23.96,
+        -1410.34
+      ],
+      "height_anchor": true,
+      "spawn_id": 542,
+      "actor_class_id": 1001469,
+      "unique_id": "eldid",
+      "display_name_id": 1100061,
+      "rotation": 0.98,
+      "quest_unique_id": "eldid"
+    },
+    {
+      "poi_id": "quest-npc-547",
+      "kind": "quest_npc",
+      "name": "Opyltyl",
+      "zone": 206,
+      "position": [
+        -205.68,
+        20.0,
+        -1454.72
+      ],
+      "height_anchor": true,
+      "spawn_id": 547,
+      "actor_class_id": 1000236,
+      "unique_id": "opyltyl",
+      "display_name_id": 1600132,
+      "rotation": 3.08,
+      "quest_unique_id": "opyltyl"
+    },
+    {
+      "poi_id": "quest-npc-548",
+      "kind": "quest_npc",
+      "name": "Cicely",
+      "zone": 206,
+      "position": [
+        -202.69,
+        20.0,
+        -1461.13
+      ],
+      "height_anchor": true,
+      "spawn_id": 548,
+      "actor_class_id": 1000326,
+      "unique_id": "cicely",
+      "display_name_id": 1100263,
+      "rotation": 1.84,
+      "quest_unique_id": "cicely"
+    },
+    {
+      "poi_id": "quest-npc-576",
+      "kind": "quest_npc",
+      "name": "V'korolon",
+      "zone": 155,
+      "position": [
+        55.82,
+        4.0,
+        -1212.23
+      ],
+      "height_anchor": true,
+      "spawn_id": 576,
+      "actor_class_id": 1000458,
+      "unique_id": "vkorolon",
+      "display_name_id": 1900110,
+      "rotation": 1.91,
+      "quest_unique_id": "vkorolon"
+    },
+    {
+      "poi_id": "quest-npc-587",
+      "kind": "quest_npc",
+      "name": "Miounne",
+      "zone": 155,
+      "position": [
+        55.94,
+        4.0,
+        -1196.44
+      ],
+      "height_anchor": true,
+      "spawn_id": 587,
+      "actor_class_id": 1000230,
+      "unique_id": "miounne",
+      "display_name_id": 1300018,
+      "rotation": 1.67,
+      "quest_unique_id": "miounne"
+    },
+    {
+      "poi_id": "quest-npc-631",
+      "kind": "quest_npc",
+      "name": "Frances",
+      "zone": 206,
+      "position": [
+        11.85,
+        8.75,
+        -1266.45
+      ],
+      "height_anchor": true,
+      "spawn_id": 631,
+      "actor_class_id": 1000466,
+      "unique_id": "frances",
+      "display_name_id": 1100316,
+      "rotation": 1.48,
+      "quest_unique_id": "frances"
+    },
+    {
+      "poi_id": "quest-npc-675",
+      "kind": "quest_npc",
+      "name": "A'naidjaa",
+      "zone": 206,
+      "position": [
+        11.86,
+        8.75,
+        -1265.19
+      ],
+      "height_anchor": true,
+      "spawn_id": 675,
+      "actor_class_id": 1000465,
+      "unique_id": "anaidjaa",
+      "display_name_id": 1900034,
+      "rotation": 1.66,
+      "quest_unique_id": "anaidjaa"
+    },
+    {
+      "poi_id": "quest-npc-691",
+      "kind": "quest_npc",
+      "name": "Hereward",
+      "zone": 206,
+      "position": [
+        97.02,
+        20.0,
+        -1459.46
+      ],
+      "height_anchor": true,
+      "spawn_id": 691,
+      "actor_class_id": 1000231,
+      "unique_id": "hereward",
+      "display_name_id": 1000324,
+      "rotation": -0.48,
+      "quest_unique_id": "hereward"
+    },
+    {
+      "poi_id": "quest-npc-699",
+      "kind": "quest_npc",
+      "name": "Nonolato",
+      "zone": 206,
+      "position": [
+        232.88,
+        12.46,
+        -1268.94
+      ],
+      "height_anchor": true,
+      "spawn_id": 699,
+      "actor_class_id": 1000463,
+      "unique_id": "nonolato",
+      "display_name_id": 1400007,
+      "rotation": -1.38,
+      "quest_unique_id": "nonolato"
+    },
+    {
+      "poi_id": "quest-npc-709",
+      "kind": "quest_npc",
+      "name": "Burchard",
+      "zone": 206,
+      "position": [
+        194.35,
+        27.9,
+        -1578.68
+      ],
+      "height_anchor": true,
+      "spawn_id": 709,
+      "actor_class_id": 1000243,
+      "unique_id": "burchard",
+      "display_name_id": 1000013,
+      "rotation": 3.13,
+      "quest_unique_id": "burchard"
+    },
+    {
+      "poi_id": "quest-npc-710",
+      "kind": "quest_npc",
+      "name": "Nuala",
+      "zone": 206,
+      "position": [
+        195.17,
+        27.9,
+        -1578.8
+      ],
+      "height_anchor": true,
+      "spawn_id": 710,
+      "actor_class_id": 1000681,
+      "unique_id": "nuala",
+      "display_name_id": 1100210,
+      "rotation": -2.27,
+      "quest_unique_id": "nuala"
+    },
+    {
+      "poi_id": "quest-npc-712",
+      "kind": "quest_npc",
+      "name": "Willelda",
+      "zone": 206,
+      "position": [
+        179.15,
+        27.5,
+        -1580.59
+      ],
+      "height_anchor": true,
+      "spawn_id": 712,
+      "actor_class_id": 1000242,
+      "unique_id": "willelda",
+      "display_name_id": 1100014,
+      "rotation": -1.45,
+      "quest_unique_id": "willelda"
+    },
+    {
+      "poi_id": "quest-npc-724",
+      "kind": "quest_npc",
+      "name": "Lonsygg",
+      "zone": 155,
+      "position": [
+        162.79,
+        -1.48,
+        -1153.32
+      ],
+      "height_anchor": true,
+      "spawn_id": 724,
+      "actor_class_id": 1000951,
+      "unique_id": "lonsygg",
+      "display_name_id": 1600102,
+      "rotation": 1.94,
+      "quest_unique_id": "lonsygg"
+    },
+    {
+      "poi_id": "quest-npc-961",
+      "kind": "quest_npc",
+      "name": "Decima",
+      "zone": 206,
+      "position": [
+        -8.6,
+        8.75,
+        -1261.71
+      ],
+      "height_anchor": true,
+      "spawn_id": 961,
+      "actor_class_id": 1000622,
+      "unique_id": "decima",
+      "display_name_id": 1100276,
+      "rotation": 1.563,
+      "quest_unique_id": "decima"
+    },
+    {
+      "poi_id": "quest-npc-962",
+      "kind": "quest_npc",
+      "name": "Chalyo Tamlyo",
+      "zone": 206,
+      "position": [
+        -8.961,
+        12.0703,
+        -1257.55
+      ],
+      "height_anchor": true,
+      "spawn_id": 962,
+      "actor_class_id": 1000623,
+      "unique_id": "chalyo_tamlyo",
+      "display_name_id": 1400083,
+      "rotation": 0.0,
+      "quest_unique_id": "chalyo_tamlyo"
+    },
+    {
+      "poi_id": "quest-npc-963",
+      "kind": "quest_npc",
+      "name": "Ulmhylt",
+      "zone": 206,
+      "position": [
+        -3.903,
+        8.75,
+        -1263.3
+      ],
+      "height_anchor": true,
+      "spawn_id": 963,
+      "actor_class_id": 1000823,
+      "unique_id": "ulmhylt",
+      "display_name_id": 1600210,
+      "rotation": 0.44,
+      "quest_unique_id": "ulmhylt"
+    },
+    {
+      "poi_id": "quest-npc-964",
+      "kind": "quest_npc",
+      "name": "Caplan",
+      "zone": 206,
+      "position": [
+        -8.783,
+        8.75,
+        -1268.19
+      ],
+      "height_anchor": true,
+      "spawn_id": 964,
+      "actor_class_id": 1000822,
+      "unique_id": "caplan",
+      "display_name_id": 1000061,
+      "rotation": 3.138,
+      "quest_unique_id": "caplan"
+    },
+    {
+      "poi_id": "quest-npc-1113",
+      "kind": "quest_npc",
+      "name": "Soileine",
+      "zone": 206,
+      "position": [
+        -331.15,
+        8.0,
+        -1683.098
+      ],
+      "height_anchor": true,
+      "spawn_id": 1113,
+      "actor_class_id": 1000234,
+      "unique_id": "man0g1_soileine",
+      "display_name_id": 1300064,
+      "rotation": -0.016,
+      "quest_unique_id": "man0g1_soileine"
+    },
+    {
+      "poi_id": "quest-npc-1114",
+      "kind": "quest_npc",
+      "name": "Hetzkin",
+      "zone": 206,
+      "position": [
+        -329.12,
+        8.0,
+        -1683.098
+      ],
+      "height_anchor": true,
+      "spawn_id": 1114,
+      "actor_class_id": 1000460,
+      "unique_id": "man0g1_hetzkin_fane",
+      "display_name_id": 2200149,
+      "rotation": -0.016,
+      "quest_unique_id": "man0g1_hetzkin_echo"
+    },
+    {
+      "poi_id": "quest-npc-1242",
+      "kind": "quest_npc",
+      "name": "slow-witted miner",
+      "zone": 180,
+      "position": [
+        -191.233,
+        0.0,
+        -165.667
+      ],
+      "height_anchor": true,
+      "spawn_id": 1242,
+      "actor_class_id": 1000689,
+      "unique_id": "man0u1_slowwitted_miner",
+      "display_name_id": 4000201,
+      "rotation": 3.125,
+      "quest_unique_id": "man0u1_slowwitted_miner"
+    },
+    {
+      "poi_id": "quest-npc-1243",
+      "kind": "quest_npc",
+      "name": "qualmish miner",
+      "zone": 180,
+      "position": [
+        -190.809,
+        -2.0,
+        -178.704
+      ],
+      "height_anchor": true,
+      "spawn_id": 1243,
+      "actor_class_id": 1000699,
+      "unique_id": "man0u1_qualmish_miner",
+      "display_name_id": 4000211,
+      "rotation": -0.28,
+      "quest_unique_id": "man0u1_qualmish_miner"
+    },
+    {
+      "poi_id": "quest-npc-1244",
+      "kind": "quest_npc",
+      "name": "muscular miner",
+      "zone": 180,
+      "position": [
+        -196.664,
+        -2.0,
+        -174.713
+      ],
+      "height_anchor": true,
+      "spawn_id": 1244,
+      "actor_class_id": 1000690,
+      "unique_id": "man0u1_muscular_miner_ward",
+      "display_name_id": 4000202,
+      "rotation": 2.363,
+      "quest_unique_id": "man0u1_muscular_miner"
+    },
+    {
+      "poi_id": "quest-npc-1245",
+      "kind": "quest_npc",
+      "name": "worrisome assistant",
+      "zone": 180,
+      "position": [
+        -155.354,
+        0.0,
+        -158.791
+      ],
+      "height_anchor": true,
+      "spawn_id": 1245,
+      "actor_class_id": 1001207,
+      "unique_id": "man0u1_worrisome_assistant",
+      "display_name_id": 4000401,
+      "rotation": -1.613,
+      "quest_unique_id": "man0u1_worrisome_assistant"
+    },
+    {
+      "poi_id": "quest-npc-1246",
+      "kind": "quest_npc",
+      "name": "well-washed leech",
+      "zone": 180,
+      "position": [
+        -160.914,
+        2.0,
+        -181.741
+      ],
+      "height_anchor": true,
+      "spawn_id": 1246,
+      "actor_class_id": 1001210,
+      "unique_id": "man0u1_wellwashed_leech",
+      "display_name_id": 4000404,
+      "rotation": 0.689,
+      "quest_unique_id": "man0u1_wellwashed_leech"
+    },
+    {
+      "poi_id": "quest-npc-1413",
+      "kind": "quest_npc",
+      "name": "Minfilia",
+      "zone": 181,
+      "position": [
+        -123.998,
+        1.2,
+        -162.07
+      ],
+      "height_anchor": true,
+      "spawn_id": 1413,
+      "actor_class_id": 1000843,
+      "unique_id": "merchward_minfilia",
+      "display_name_id": 1100449,
+      "rotation": -0.784,
+      "quest_unique_id": "merchward_minfilia"
+    },
+    {
+      "poi_id": "quest-npc-1414",
+      "kind": "quest_npc",
+      "name": "Tataru",
+      "zone": 181,
+      "position": [
+        -199.563,
+        0.0,
+        -162.347
+      ],
+      "height_anchor": true,
+      "spawn_id": 1414,
+      "actor_class_id": 1001046,
+      "unique_id": "merchward_tataru",
+      "display_name_id": 1500054,
+      "rotation": -1.5,
+      "quest_unique_id": "merchward_tataru"
+    },
+    {
+      "poi_id": "quest-npc-1415",
+      "kind": "quest_npc",
+      "name": "Satzfloh",
+      "zone": 181,
+      "position": [
+        -195.544,
+        2.0,
+        -137.897
+      ],
+      "height_anchor": true,
+      "spawn_id": 1415,
+      "actor_class_id": 1001228,
+      "unique_id": "merchward_satzfloh",
+      "display_name_id": 1600159,
+      "rotation": 2.2,
+      "quest_unique_id": "merchward_satzfloh"
+    },
+    {
+      "poi_id": "quest-npc-1416",
+      "kind": "quest_npc",
+      "name": "Percevains",
+      "zone": 181,
+      "position": [
+        -195.987,
+        2.0,
+        -139.692
+      ],
+      "height_anchor": true,
+      "spawn_id": 1416,
+      "actor_class_id": 1001229,
+      "unique_id": "merchward_percevains",
+      "display_name_id": 1200152,
+      "rotation": 0.5,
+      "quest_unique_id": "merchward_percevains"
+    },
+    {
+      "poi_id": "quest-npc-1417",
+      "kind": "quest_npc",
+      "name": "Una Tayuun",
+      "zone": 181,
+      "position": [
+        -194.12,
+        2.0,
+        -138.018
+      ],
+      "height_anchor": true,
+      "spawn_id": 1417,
+      "actor_class_id": 1001230,
+      "unique_id": "merchward_una_tayuun",
+      "display_name_id": 1900127,
+      "rotation": -1.55,
+      "quest_unique_id": "merchward_una_tayuun"
+    },
+    {
+      "poi_id": "quest-npc-1418",
+      "kind": "quest_npc",
+      "name": "rough-spoken fellow",
+      "zone": 181,
+      "position": [
+        -194.372,
+        -3.0,
+        -221.987
+      ],
+      "height_anchor": true,
+      "spawn_id": 1418,
+      "actor_class_id": 1001274,
+      "unique_id": "merchward_rough_fellow",
+      "display_name_id": 4000435,
+      "rotation": 0.22,
+      "quest_unique_id": "merchward_rough_fellow"
+    },
+    {
+      "poi_id": "quest-npc-1419",
+      "kind": "quest_npc",
+      "name": "red-shoed rascal",
+      "zone": 181,
+      "position": [
+        -162.993,
+        0.0,
+        -128.995
+      ],
+      "height_anchor": true,
+      "spawn_id": 1419,
+      "actor_class_id": 1001275,
+      "unique_id": "merchward_red_shoed_rascal",
+      "display_name_id": 4000436,
+      "rotation": 1.6,
+      "quest_unique_id": "merchward_red_shoed_rascal"
+    },
+    {
+      "poi_id": "quest-npc-1420",
+      "kind": "quest_npc",
+      "name": "abstracted gladiator",
+      "zone": 181,
+      "position": [
+        -178.771,
+        -3.0,
+        -211.962
+      ],
+      "height_anchor": true,
+      "spawn_id": 1420,
+      "actor_class_id": 1001276,
+      "unique_id": "merchward_abs_gladiator",
+      "display_name_id": 4000437,
+      "rotation": -1.1,
+      "quest_unique_id": "merchward_abs_gladiator"
+    },
+    {
+      "poi_id": "quest-npc-1421",
+      "kind": "quest_npc",
+      "name": "chapeaued chap",
+      "zone": 181,
+      "position": [
+        -179.285,
+        -2.0,
+        -184.68
+      ],
+      "height_anchor": true,
+      "spawn_id": 1421,
+      "actor_class_id": 1001277,
+      "unique_id": "merchward_chapeaued_chap",
+      "display_name_id": 4000438,
+      "rotation": -2.78,
+      "quest_unique_id": "man2u0_chapeaued_chap"
+    },
+    {
+      "poi_id": "quest-npc-1422",
+      "kind": "quest_npc",
+      "name": "barratrous buccaneer",
+      "zone": 181,
+      "position": [
+        -178.925,
+        -2.0,
+        -190.74
+      ],
+      "height_anchor": true,
+      "spawn_id": 1422,
+      "actor_class_id": 1001278,
+      "unique_id": "merchward_barratrous_bucc",
+      "display_name_id": 4000439,
+      "rotation": 1.1,
+      "quest_unique_id": "merchward_barratrous_bucc"
+    },
+    {
+      "poi_id": "quest-npc-1423",
+      "kind": "quest_npc",
+      "name": "soft-hearted septuagenarian",
+      "zone": 181,
+      "position": [
+        -195.54,
+        -2.0,
+        -195.882
+      ],
+      "height_anchor": true,
+      "spawn_id": 1423,
+      "actor_class_id": 1001279,
+      "unique_id": "merchward_softhearted_sept",
+      "display_name_id": 4000440,
+      "rotation": 1.2,
+      "quest_unique_id": "merchward_softhearted_sept"
+    },
+    {
+      "poi_id": "quest-npc-1424",
+      "kind": "quest_npc",
+      "name": "indigo-eyed archer",
+      "zone": 181,
+      "position": [
+        -197.377,
+        -3.0,
+        -205.768
+      ],
+      "height_anchor": true,
+      "spawn_id": 1424,
+      "actor_class_id": 1001280,
+      "unique_id": "merchward_indigo_archer",
+      "display_name_id": 4000441,
+      "rotation": 0.9,
+      "quest_unique_id": "merchward_indigo_archer"
+    },
+    {
+      "poi_id": "quest-npc-1425",
+      "kind": "quest_npc",
+      "name": "loam-scented lady",
+      "zone": 181,
+      "position": [
+        -194.934,
+        -3.0,
+        -220.397
+      ],
+      "height_anchor": true,
+      "spawn_id": 1425,
+      "actor_class_id": 1001281,
+      "unique_id": "merchward_loam_lady",
+      "display_name_id": 4000442,
+      "rotation": 2.68,
+      "quest_unique_id": "merchward_loam_lady"
+    },
+    {
+      "poi_id": "quest-npc-1426",
+      "kind": "quest_npc",
+      "name": "uncomfortable brute",
+      "zone": 181,
+      "position": [
+        -162.388,
+        0.0,
+        -126.902
+      ],
+      "height_anchor": true,
+      "spawn_id": 1426,
+      "actor_class_id": 1001282,
+      "unique_id": "merchward_uncomf_brute",
+      "display_name_id": 4000443,
+      "rotation": -3.03,
+      "quest_unique_id": "merchward_uncomf_brute"
+    },
+    {
+      "poi_id": "quest-npc-1427",
+      "kind": "quest_npc",
+      "name": "Sahja Zhwan",
+      "zone": 181,
+      "position": [
+        -156.327,
+        0.0,
+        -156.19
+      ],
+      "height_anchor": true,
+      "spawn_id": 1427,
+      "actor_class_id": 1001373,
+      "unique_id": "merchward_sahja_zhwan",
+      "display_name_id": 1900129,
+      "rotation": -1.842,
+      "quest_unique_id": "merchward_sahja_zhwan"
+    },
+    {
+      "poi_id": "quest-npc-1428",
+      "kind": "quest_npc",
+      "name": "Nenekani",
+      "zone": 181,
+      "position": [
+        -162.314,
+        0.0,
+        -140.11
+      ],
+      "height_anchor": true,
+      "spawn_id": 1428,
+      "actor_class_id": 1001374,
+      "unique_id": "merchward_nenekani",
+      "display_name_id": 1400142,
+      "rotation": 3.1,
+      "quest_unique_id": "merchward_nenekani"
+    },
+    {
+      "poi_id": "quest-npc-1429",
+      "kind": "quest_npc",
+      "name": "Godfrey",
+      "zone": 181,
+      "position": [
+        -188.765,
+        0.0,
+        -155.78
+      ],
+      "height_anchor": true,
+      "spawn_id": 1429,
+      "actor_class_id": 1001375,
+      "unique_id": "merchward_godfrey",
+      "display_name_id": 1000125,
+      "rotation": -1.55,
+      "quest_unique_id": "merchward_godfrey"
+    },
+    {
+      "poi_id": "quest-npc-1430",
+      "kind": "quest_npc",
+      "name": "Fenana",
+      "zone": 181,
+      "position": [
+        -197.455,
+        -2.0,
+        -178.362
+      ],
+      "height_anchor": true,
+      "spawn_id": 1430,
+      "actor_class_id": 1001376,
+      "unique_id": "merchward_fenana",
+      "display_name_id": 1500130,
+      "rotation": 1.0,
+      "quest_unique_id": "merchward_fenana"
+    },
+    {
+      "poi_id": "quest-npc-1431",
+      "kind": "quest_npc",
+      "name": "Nonoru",
+      "zone": 181,
+      "position": [
+        -177.75,
+        0.0,
+        -156.924
+      ],
+      "height_anchor": true,
+      "spawn_id": 1431,
+      "actor_class_id": 1001377,
+      "unique_id": "merchward_nonoru",
+      "display_name_id": 1500141,
+      "rotation": -3.135,
+      "quest_unique_id": "merchward_nonoru"
+    },
+    {
+      "poi_id": "quest-npc-1432",
+      "kind": "quest_npc",
+      "name": "Seranelien",
+      "zone": 181,
+      "position": [
+        -137.165,
+        1.0,
+        -162.52
+      ],
+      "height_anchor": true,
+      "spawn_id": 1432,
+      "actor_class_id": 1001378,
+      "unique_id": "merchward_seranelien",
+      "display_name_id": 1200184,
+      "rotation": -1.516,
+      "quest_unique_id": "merchward_seranelien"
+    }
+  ],
+  "coverage": {
+    "aetherytes": 88,
+    "quest_npc_placements": 127,
+    "total": 215
+  },
+  "sources": {
+    "aetheryte_lua_sha256": "69ebbe18972b98a7f1a77eadee1262b8176161f387b5b64a72e0b61381f9ffd5",
+    "aetheryte_yaml_sha256": "fda530ed9bf51fa08c3a7d1f1f53b66de97f8b48e9915ae8f29658b89d001b5f",
+    "server_spawns_sha256": "f3f98cec7404c978a5da2428d0417f80b5a4e2fbe172fb28925973b8cec255c5",
+    "quest_conditions_sha256": "d13a8c9de53a598a1b133d15a76b652c7c7aac91eddf96a9f3ed5fb1f6b8e460",
+    "actorclass_sha256": "63538f7783e94eed5e308205a1fe482ac5745b7f408bc565464bcdc3a4e47dce",
+    "display_names_sha256": "1237bc5f0f19391949bdbfb92d8be7d68d84bbcc73542b4ea296350550b4aa2e"
+  }
+}
