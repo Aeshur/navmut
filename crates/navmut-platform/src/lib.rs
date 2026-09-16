@@ -5,6 +5,7 @@
 
 mod bridge;
 mod capabilities;
+mod client_identity;
 mod error;
 mod helper;
 mod player_state;
@@ -16,6 +17,11 @@ pub use bridge::{
     BridgeWindow, WindowsBridgeBackend, BRIDGE_PROTOCOL_VERSION,
 };
 pub use capabilities::{Capability, CapabilitySet, PlatformCapabilities};
+pub use client_identity::{
+    is_supported_client_name, mask_launcher_patch_slots, normalised_client_sha256,
+    verify_client_image, ClientIdentityError, LAUNCHER_PATCH_SLOTS, RETAIL_CLIENT_SHA256,
+    SUPPORTED_CLIENT_NAMES, SUPPORTED_CLIENT_NORMALISED_SHA256, SUPPORTED_CLIENT_SIZE,
+};
 pub use error::PlatformError;
 pub use helper::{
     format_position_command, parse_helper_response, validate_position, HelperResponse,

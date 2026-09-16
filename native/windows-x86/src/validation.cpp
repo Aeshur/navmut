@@ -84,4 +84,47 @@ bool compare_exact_prologue(std::span<const std::uint8_t> actual,
     return true;
 }
 
+bool is_supported_client_name(std::wstring_view filename)
+{
+    for (const wchar_t* candidate : kSupportedClientNames)
+    {
+        const std::wstring_view expected(candidate);
+        if (expected.size() != filename.size())
+        {
+            continue;
+        }
+        bool equal = true;
+        for (std::size_t index = 0; index < expected.size(); ++index)
+        {
+            const wchar_t actual = filename[index];
+            const wchar_t lowered = actual >= L'A' && actual <= L'Z' ? actual + (L'a' - L'A') : actual;
+            if (lowered != expected[index])
+            {
+                equal = false;
+                break;
+            }
+        }
+        if (equal)
+        {
+            return true;
+        }
+    }
+    return false;
+}
+
+void mask_launcher_patch_slots(std::span<std::uint8_t> image)
+{
+    for (const PatchSlot& slot : kLauncherPatchSlots)
+    {
+        if (slot.offset > image.size() || slot.length > image.size() - slot.offset)
+        {
+            continue;
+        }
+        for (std::size_t index = 0; index < slot.length; ++index)
+        {
+            image[slot.offset + index] = 0;
+        }
+    }
+}
+
 } // namespace navmut::native

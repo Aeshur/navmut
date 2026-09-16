@@ -12,6 +12,7 @@
 #include <cstdint>
 #include <iostream>
 #include <string>
+#include <vector>
 
 namespace
 {
@@ -77,6 +78,42 @@ void test_validation()
     assert(!navmut::native::compare_exact_prologue(changed, bytes));
 }
 
+void test_client_identity()
+{
+    assert(navmut::native::is_supported_client_name(L"ffxivgame.exe"));
+    assert(navmut::native::is_supported_client_name(L"FFXIVGAME.EXE"));
+    assert(navmut::native::is_supported_client_name(L"ffxivgame.patched.exe"));
+    assert(navmut::native::is_supported_client_name(L"FFXIVGame.Patched.EXE"));
+    assert(!navmut::native::is_supported_client_name(L"ffxivboot.exe"));
+    assert(!navmut::native::is_supported_client_name(L"ffxivgame.patched.exe.bak"));
+
+    std::vector<std::uint8_t> image(static_cast<std::size_t>(navmut::native::kSupportedClientSize));
+    for (std::size_t index = 0; index < image.size(); ++index)
+    {
+        image[index] = static_cast<std::uint8_t>(index % 251);
+    }
+    auto patched = image;
+    for (const auto& slot : navmut::native::kLauncherPatchSlots)
+    {
+        for (std::size_t index = 0; index < slot.length; ++index)
+        {
+            patched[slot.offset + index] = static_cast<std::uint8_t>(~patched[slot.offset + index]);
+        }
+    }
+    navmut::native::mask_launcher_patch_slots(image);
+    navmut::native::mask_launcher_patch_slots(patched);
+    assert(image == patched);
+    const auto& first = navmut::native::kLauncherPatchSlots[0];
+    assert(image[first.offset] == 0);
+    assert(image[first.offset + first.length - 1] == 0);
+    assert(image[first.offset - 1] == static_cast<std::uint8_t>((first.offset - 1) % 251));
+    assert(image[first.offset + first.length] == static_cast<std::uint8_t>((first.offset + first.length) % 251));
+
+    std::vector<std::uint8_t> tiny(16, 7);
+    navmut::native::mask_launcher_patch_slots(tiny);
+    assert(tiny == std::vector<std::uint8_t>(16, 7));
+}
+
 void test_shared_cleanup()
 {
     navmut::native::SharedBlock block;
@@ -110,7 +147,8 @@ int main()
 {
     test_protocol();
     test_validation();
+    test_client_identity();
     test_shared_cleanup();
-    std::cout << "native protocol, validation, and cleanup tests passed\n";
+    std::cout << "native protocol, validation, client identity, and cleanup tests passed\n";
     return 0;
 }

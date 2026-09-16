@@ -6,6 +6,7 @@
 #include <cstdint>
 #include <span>
 #include <string>
+#include <string_view>
 
 namespace navmut::native
 {
@@ -31,5 +32,7 @@ bool validate_scene_chain(const SceneChainSample& sample, std::string& reason);
 bool validate_chat_manager(const ChatManagerSample& sample, std::string& reason);
 bool compare_exact_prologue(std::span<const std::uint8_t> actual,
                             std::span<const std::uint8_t> expected);
+bool is_supported_client_name(std::wstring_view filename);
+void mask_launcher_patch_slots(std::span<std::uint8_t> image);
 
 } // namespace navmut::native
