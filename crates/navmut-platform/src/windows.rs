@@ -75,7 +75,7 @@ pub fn enumerate_game_windows() -> Result<Vec<GameWindow>, PlatformError> {
         if !Path::new(&image_path)
             .file_name()
             .and_then(|name| name.to_str())
-            .is_some_and(|name| name.eq_ignore_ascii_case("ffxivgame.exe"))
+            .is_some_and(crate::is_supported_client_name)
         {
             return BOOL(1);
         }

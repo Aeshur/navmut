@@ -8,8 +8,34 @@ namespace navmut::native
 {
 
 inline constexpr std::uint64_t kSupportedClientSize = 15'996'808ULL;
-inline constexpr char kSupportedClientSha256[] =
+// Raw digest of the unpatched retail executable, kept as provenance; the
+// helper compares kSupportedClientNormalisedSha256.
+inline constexpr char kRetailClientSha256[] =
     "9341f2b4567440b310a4d494f5cc5599ca334ba51c8042247317ff466492f2e9";
+// Digest of the retail executable after mask_launcher_patch_slots. Launchers
+// run `ffxivgame.patched.exe` with five in-place patches whose lobby-host
+// bytes vary per server, so identity is the hash with those slots zeroed.
+inline constexpr char kSupportedClientNormalisedSha256[] =
+    "c8bd8e58bb48de41096e1f31b907e75ffe1ebc60e594bb0a897312ce7b99be65";
+inline constexpr std::array<const wchar_t*, 2> kSupportedClientNames{L"ffxivgame.exe",
+                                                                     L"ffxivgame.patched.exe"};
+
+struct PatchSlot
+{
+    std::size_t offset;
+    std::size_t length;
+};
+
+// Launcher patch slots as (file offset, length), ascending. Offsets equal the
+// launcher RVAs because every patched section's raw pointer equals its
+// virtual address in this image.
+inline constexpr std::array<PatchSlot, 5> kLauncherPatchSlots{{
+    {0x00492550U, 29},   // null-this guard
+    {0x00494B70U, 4},    // null-member8 write NOP
+    {0x00648BBFU, 16},   // assert-log forwarder
+    {0x009A15E3U, 5},    // encryption-time immediate
+    {0x00B90110U, 0x14}, // lobby host name
+}};
 
 inline constexpr std::uint32_t kImageBase = 0x00400000U;
 inline constexpr std::uint32_t kImageSize = 0x00F99000U;

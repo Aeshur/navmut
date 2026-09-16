@@ -3,11 +3,6 @@ use serde::{Deserialize, Serialize};
 use crate::{GameWindow, PlatformError};
 
 #[cfg(windows)]
-pub const SUPPORTED_CLIENT_SIZE: u64 = 15_996_808;
-#[cfg(windows)]
-pub const SUPPORTED_CLIENT_SHA256: &str =
-    "9341f2b4567440b310a4d494f5cc5599ca334ba51c8042247317ff466492f2e9";
-#[cfg(windows)]
 pub const SCENE_VTABLE: u32 = 0x00F8CC1C;
 #[cfg(windows)]
 pub const SCENE_TICK: u32 = 0x004B3C50;
@@ -74,7 +69,6 @@ impl PlayerStateReader {
 #[cfg(windows)]
 mod live {
     use super::*;
-    use sha2::{Digest, Sha256};
     use std::cmp::{max, min};
     use std::ffi::OsString;
     use std::mem::size_of;
@@ -319,25 +313,18 @@ mod live {
             let metadata = std::fs::metadata(path).map_err(|error| {
                 PlatformError::Windows(format!("could not inspect FFXIV executable: {error}"))
             })?;
-            if !file_name.is_some_and(|value| value.eq_ignore_ascii_case("ffxivgame.exe"))
-                || metadata.len() != SUPPORTED_CLIENT_SIZE
+            if !file_name.is_some_and(crate::is_supported_client_name)
+                || metadata.len() != crate::SUPPORTED_CLIENT_SIZE
             {
                 return Err(PlatformError::Windows(
-                    "live state supports only the retail FFXIV 1.23b executable".to_owned(),
+                    crate::ClientIdentityError::UnsupportedName.to_string(),
                 ));
             }
-            let mut hash = Sha256::new();
             let bytes = std::fs::read(path).map_err(|error| {
                 PlatformError::Windows(format!("could not hash FFXIV executable: {error}"))
             })?;
-            hash.update(bytes);
-            let digest = format!("{:x}", hash.finalize());
-            if digest != SUPPORTED_CLIENT_SHA256 {
-                return Err(PlatformError::Windows(
-                    "FFXIV executable SHA-256 does not match retail 1.23b".to_owned(),
-                ));
-            }
-            Ok(())
+            crate::verify_client_image(file_name, &bytes)
+                .map_err(|error| PlatformError::Windows(error.to_string()))
         }
 
         fn world_position(&self, actor: u32, depth: u8) -> Result<(f64, f64, f64), PlatformError> {

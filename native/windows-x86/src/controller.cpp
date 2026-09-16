@@ -125,16 +125,8 @@ bool read_file(const std::wstring& path, std::vector<std::uint8_t>& bytes, std::
     return true;
 }
 
-bool hash_file(const std::wstring& path, std::array<std::uint8_t, 32>& digest, std::string& reason)
+bool hash_bytes(std::span<const std::uint8_t> bytes, std::array<std::uint8_t, 32>& digest, std::string& reason)
 {
-    HANDLE file = CreateFileW(path.c_str(), GENERIC_READ, FILE_SHARE_READ | FILE_SHARE_WRITE | FILE_SHARE_DELETE,
-                              nullptr, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, nullptr);
-    if (file == INVALID_HANDLE_VALUE)
-    {
-        reason = win32_reason("could not open the FFXIV executable");
-        return false;
-    }
-
     BCRYPT_ALG_HANDLE algorithm = nullptr;
     BCRYPT_HASH_HANDLE hash = nullptr;
     DWORD object_size = 0;
@@ -151,21 +143,12 @@ bool hash_file(const std::wstring& path, std::array<std::uint8_t, 32>& digest, s
         object.resize(object_size);
         status = BCryptCreateHash(algorithm, &hash, object.data(), object_size, nullptr, 0, 0);
     }
-    std::vector<std::uint8_t> buffer(1024 * 1024);
-    while (status == 0)
+    std::size_t offset = 0;
+    while (status == 0 && offset < bytes.size())
     {
-        DWORD received = 0;
-        if (!ReadFile(file, buffer.data(), static_cast<DWORD>(buffer.size()), &received, nullptr))
-        {
-            reason = win32_reason("could not read the FFXIV executable");
-            status = static_cast<NTSTATUS>(0xC0000001L);
-            break;
-        }
-        if (received == 0)
-        {
-            break;
-        }
-        status = BCryptHashData(hash, buffer.data(), received, 0);
+        const std::size_t chunk = std::min<std::size_t>(bytes.size() - offset, 1024 * 1024);
+        status = BCryptHashData(hash, const_cast<PUCHAR>(bytes.data() + offset), static_cast<ULONG>(chunk), 0);
+        offset += chunk;
     }
     if (status == 0)
     {
@@ -179,13 +162,9 @@ bool hash_file(const std::wstring& path, std::array<std::uint8_t, 32>& digest, s
     {
         BCryptCloseAlgorithmProvider(algorithm, 0);
     }
-    CloseHandle(file);
     if (status != 0)
     {
-        if (reason.empty())
-        {
-            reason = "could not calculate the FFXIV executable SHA256";
-        }
+        reason = "could not calculate the FFXIV executable SHA256";
         return false;
     }
     return true;
@@ -582,9 +561,9 @@ bool inspect_target(std::uint32_t process_id, std::uint32_t window_handle, Targe
     const std::wstring image_path(path_buffer.data(), path_length);
     const std::size_t separator = image_path.find_last_of(L"\\/");
     const std::wstring filename = separator == std::wstring::npos ? image_path : image_path.substr(separator + 1);
-    if (_wcsicmp(filename.c_str(), L"ffxivgame.exe") != 0)
+    if (!is_supported_client_name(filename))
     {
-        reason = "the selected process is not ffxivgame.exe";
+        reason = "the selected process is not ffxivgame.exe or ffxivgame.patched.exe";
         return fail();
     }
     std::vector<std::uint8_t> image_bytes;
@@ -597,13 +576,16 @@ bool inspect_target(std::uint32_t process_id, std::uint32_t window_handle, Targe
         reason = "the FFXIV executable size does not match retail 1.23b";
         return fail();
     }
+    // image_bytes is only used for identity; PeImage reloads from disk.
+    mask_launcher_patch_slots(image_bytes);
     std::array<std::uint8_t, 32> digest{};
-    if (!hash_file(image_path, digest, reason) || hex_digest(digest) != kSupportedClientSha256)
+    if (!hash_bytes(image_bytes, digest, reason))
     {
-        if (reason.empty())
-        {
-            reason = "the FFXIV executable SHA256 does not match retail 1.23b";
-        }
+        return fail();
+    }
+    if (hex_digest(digest) != kSupportedClientNormalisedSha256)
+    {
+        reason = "the FFXIV executable SHA256 does not match retail 1.23b";
         return fail();
     }
     PeImage image;
