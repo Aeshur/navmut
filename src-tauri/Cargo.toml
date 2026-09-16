@@ -1,6 +1,6 @@
 [package]
 name = "navmut"
-version = "1.0.0"
+version = "1.1.0"
 description = "A tool for traversing FFXIV 1.23b and recording NPC/mob positions."
 license = "AGPL-3.0-or-later"
 edition = "2021"
