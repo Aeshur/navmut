@@ -71,7 +71,7 @@ pub fn map_image_transform(
         || !origin_z.is_finite()
     {
         return Err(Error::invalid(
-            "image size, view scale, and origin must be finite and positive",
+            "image size and view scale must be finite and positive; origin must be finite",
         ));
     }
     let sx = image_width / width;

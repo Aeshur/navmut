@@ -105,14 +105,14 @@ describe("runtime contracts", () => {
     expect(errorMessage("selected game window is no longer valid", "fallback")).toBe("The selected game is no longer available.");
     expect(errorMessage("FFXIV executable SHA-256 does not match retail 1.23b", "fallback")).toBe("This game version is not supported.");
     expect(errorMessage("configured bridge lacks silent-position", "fallback")).toBe("The bridge is incompatible with this version of Navmut.");
-    expect(errorMessage("movement outcome was uncertain: silent-position outcome is uncertain", "fallback")).toBe("The position outcome is unknown. Check the game before trying again.");
+    expect(errorMessage("movement outcome was uncertain: silent-position outcome is uncertain", "fallback")).toBe("Could not confirm the position change. Check the game before trying again.");
     expect(errorMessage(new UiError("Select a live game before saving a point."), "fallback")).toBe("Select a live game before saving a point.");
     expect(errorMessage(new Error("Select a live game before saving a point."), "fallback")).toBe("fallback");
   });
 
   it("presents an unavailable player state as a neutral connection wait", () => {
     expect(gameStateFailure("game connection failed: could not find live FFXIV player state")).toEqual({
-      message: "Waiting for a logged in character...",
+      message: "Waiting for a character to log in...",
       isError: false,
       persistent: false,
     });
@@ -126,7 +126,7 @@ describe("runtime contracts", () => {
 
   it("describes disconnected game states without platform language", () => {
     expect(gameConnectionStatus({ connected: false, pid: null })).toBe("Waiting for a game...");
-    expect(gameConnectionStatus({ connected: false, pid: 123 })).toBe("Waiting for a logged in character...");
+    expect(gameConnectionStatus({ connected: false, pid: 123 })).toBe("Waiting for a character to log in...");
     expect(gameConnectionStatus({ connected: true, pid: 123 })).toBe("Ready");
   });
 

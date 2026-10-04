@@ -46,9 +46,9 @@
             </div>
 
             <div class="rail-section point-manager-section">
-              <div class="section-title">POINT OF INTEREST MANAGER</div>
-              <div class="field-row"><input id="point-name" class="full-field" type="text" maxlength="80" placeholder="POI name" aria-label="POI name" autocomplete="off" /><button id="add-point" type="button" class="outline-button">Add</button></div>
-              <div class="field-row point-row-control"><select id="point-select" aria-label="Packaged POIs and saved points"><option value="">Loading points...</option></select><button id="warp-point" type="button" class="outline-button">Warp</button></div>
+              <div class="section-title">POINTS OF INTEREST</div>
+              <div class="field-row"><input id="point-name" class="full-field" type="text" maxlength="80" placeholder="Point name" aria-label="Point name" autocomplete="off" /><button id="add-point" type="button" class="outline-button">Add</button></div>
+              <div class="field-row point-row-control"><select id="point-select" aria-label="Bundled points of interest and saved points"><option value="">Loading points...</option></select><button id="warp-point" type="button" class="outline-button">Warp</button></div>
               <div class="field-row point-row-control"><div id="point-coords" class="point-coordinates">(0.00, 0.00, 0.00)</div><button id="delete-point" type="button" class="outline-button" disabled>Delete</button></div>
             </div>
 
@@ -95,7 +95,7 @@
 
         <section class="workspace" aria-label="Map workspace">
           <div id="map-shell" class="map-shell">
-            <canvas id="map-canvas" aria-label="Map. Click an opaque map location to warp." tabindex="0"></canvas>
+            <canvas id="map-canvas" aria-label="Map. Click a visible area of the map to warp." tabindex="0"></canvas>
           </div>
         </section>
       </div>

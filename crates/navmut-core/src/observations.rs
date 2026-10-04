@@ -159,8 +159,8 @@ pub fn load_observations(
     load_observations_filtered(path, Some(zone), profile_id)
 }
 
-/// Load only version 2 observations belonging to a profile without inventing
-/// a zone for profiles whose catalog entry intentionally has none.
+/// Load version 2 observations for a profile without filtering by zone.
+/// This also supports profiles whose catalog entry intentionally has no zone.
 pub fn load_observations_for_profile(
     path: impl AsRef<Path>,
     profile_id: &str,

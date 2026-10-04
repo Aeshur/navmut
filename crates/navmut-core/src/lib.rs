@@ -63,7 +63,8 @@ pub(crate) fn absolute_without_io(path: &std::path::Path) -> PathBuf {
     }
 }
 
-/// Replace a same-directory temporary file without deleting the destination.
+/// Replace the destination with a temporary file from the same directory.
+/// Do not delete the destination first.
 ///
 /// Windows' `std::fs::rename` refuses to replace an existing file, so the
 /// Windows path uses the kernel's `ReplaceFileW`. The destination remains in

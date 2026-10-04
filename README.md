@@ -5,7 +5,7 @@
 </p>
 
 <p align="center">
-Map navigation and NPC/mob position recording for Final Fantasy XIV 1.23b
+Navigate maps and record NPC and mob positions on Final Fantasy XIV 1.23b
 emulation servers.
 </p>
 
@@ -16,11 +16,9 @@ emulation servers.
 
 ## About
 
-- Navigate maps for Final Fantasy XIV 1.23b emulation servers.
-- Use the bundled map catalog and artwork without external setup.
-- Record NPC and mob positions.
-- Keep settings, saved points, and journal observations in the portable
-  Windows ZIP's `data` folder.
+The map catalog and artwork are bundled, so no external map setup is needed.
+The portable Windows app stores settings, saved points, and journal observations
+in its `data` folder.
 
 ## Controls
 
@@ -38,7 +36,7 @@ typing in a text field or using a selector.
 
 ## Wine bridge
 
-For live game access from native Linux/macOS Navmut, see the
+To connect the native Linux or macOS app to a running game, see the
 [Wine bridge setup](docs/bridge.md). The Windows ZIP includes the x86 bridge
 and its native helpers.
 
@@ -64,7 +62,7 @@ npm run tauri -- build
 
 ## Acknowledgement
 
-ProjectTako, used as a reference.
+ProjectTako was used as a reference.
 
 ## License
 

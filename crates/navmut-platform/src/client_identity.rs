@@ -1,12 +1,12 @@
-//! Identity of the FFXIV 1.23b client executable that live state and the
-//! native helper support.
+//! Identity checks for the FFXIV 1.23b executable used by live state access
+//! and the native helper.
 //!
-//! Launchers run a working copy named `ffxivgame.patched.exe` carrying five
-//! in-place byte patches (encryption-time immediate, lobby host name, and
-//! three Wine stability patches). Each patch keeps the file size and section
-//! layout, and the lobby host bytes vary per server, so the identity check
-//! hashes the file with those slots zeroed: retail and every patched copy
-//! normalise to the same digest.
+//! Launchers run `ffxivgame.patched.exe` with five in-place byte patches:
+//! the encryption-time immediate, the lobby host name, and three Wine stability
+//! patches. The patches preserve the file size and section layout. Because the
+//! lobby host bytes vary by server, the identity check hashes the file with all
+//! five patch slots zeroed. Retail and launcher-patched copies then share a
+//! digest.
 
 use sha2::{Digest, Sha256};
 
@@ -25,9 +25,9 @@ pub const SUPPORTED_CLIENT_NORMALISED_SHA256: &str =
 /// Executable file names the live endpoints accept, compared case-insensitively.
 pub const SUPPORTED_CLIENT_NAMES: [&str; 2] = ["ffxivgame.exe", "ffxivgame.patched.exe"];
 
-/// Launcher patch slots as `(file offset, length)`, ascending. The offsets equal
-/// the launcher RVAs because every patched section in this image has its raw
-/// pointer equal to its virtual address.
+/// Launcher patch slots as `(file offset, length)`, sorted by offset. The offsets
+/// equal the launcher RVAs because each patched section's raw pointer equals its
+/// virtual address in this image.
 pub const LAUNCHER_PATCH_SLOTS: [(usize, usize); 5] = [
     (0x0049_2550, 29),   // null-this guard
     (0x0049_4B70, 4),    // null-member8 write NOP

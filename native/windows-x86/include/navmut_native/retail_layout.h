@@ -13,8 +13,8 @@ inline constexpr std::uint64_t kSupportedClientSize = 15'996'808ULL;
 inline constexpr char kRetailClientSha256[] =
     "9341f2b4567440b310a4d494f5cc5599ca334ba51c8042247317ff466492f2e9";
 // Digest of the retail executable after mask_launcher_patch_slots. Launchers
-// run `ffxivgame.patched.exe` with five in-place patches whose lobby-host
-// bytes vary per server, so identity is the hash with those slots zeroed.
+// run `ffxivgame.patched.exe` with five in-place patches. The lobby host bytes
+// vary by server, so the identity check hashes the file with all five slots zeroed.
 inline constexpr char kSupportedClientNormalisedSha256[] =
     "c8bd8e58bb48de41096e1f31b907e75ffe1ebc60e594bb0a897312ce7b99be65";
 inline constexpr std::array<const wchar_t*, 2> kSupportedClientNames{L"ffxivgame.exe",
@@ -26,7 +26,7 @@ struct PatchSlot
     std::size_t length;
 };
 
-// Launcher patch slots as (file offset, length), ascending. Offsets equal the
+// Launcher patch slots as (file offset, length), sorted by offset. Offsets equal the
 // launcher RVAs because every patched section's raw pointer equals its
 // virtual address in this image.
 inline constexpr std::array<PatchSlot, 5> kLauncherPatchSlots{{
@@ -90,9 +90,9 @@ enum class ResponseCode : std::int32_t
     Unknown = 3,
 };
 
-// This structure is shared by one helper and one injected x86 DLL. It is
-// deliberately made entirely of fixed-width fields: no CRT objects, handles,
-// pointers, or process-local synchronization primitives cross the mapping.
+// One helper and one injected x86 DLL share this structure. Use only fixed-width
+// fields: no CRT objects, handles, pointers, or process-local synchronization
+// primitives may cross the mapping.
 #pragma pack(push, 4)
 struct SharedBlock
 {

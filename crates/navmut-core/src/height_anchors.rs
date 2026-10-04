@@ -78,9 +78,9 @@ fn records(records: Option<&[Value]>) -> &[Value] {
 
 /// Resolve a destination Y from nearby trusted records.
 ///
-/// Distances are horizontal X/Z distances.  Observations, locations, and
-/// explicit POI anchors only affect equal distance ties in that order. A nearer
-/// location therefore beats a farther observation.
+/// Distances are measured in the horizontal X/Z plane. For equal distances,
+/// prefer observations, then locations, then explicit POI anchors. A nearer
+/// location still takes precedence over a farther observation.
 #[allow(clippy::too_many_arguments)]
 pub fn resolve_height_anchor(
     current_position: &Value,

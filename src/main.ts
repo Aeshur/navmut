@@ -58,7 +58,7 @@ export function errorMessage(error: unknown, fallback: string): string {
   if (error instanceof UiError) return message;
   const detail = message.toLowerCase();
   if (detail.includes("outcome is unknown") || detail.includes("outcome was uncertain") || detail.includes("outcome is uncertain")) {
-    return "The position outcome is unknown. Check the game before trying again.";
+    return "Could not confirm the position change. Check the game before trying again.";
   }
   if (detail.includes("authentication failed")) return "Could not authenticate with the bridge. Check its connection file.";
   if (detail.includes("connection file")) return "Could not read the bridge connection file.";
@@ -83,14 +83,14 @@ export function compactStatusMessage(message: string): string {
 
 export function gameStateFailure(error: unknown): { message: string; isError: boolean; persistent: boolean } {
   if (rawErrorMessage(error).toLowerCase().includes(PLAYER_STATE_NOT_READY.toLowerCase())) {
-    return { message: "Waiting for a logged in character...", isError: false, persistent: false };
+    return { message: "Waiting for a character to log in...", isError: false, persistent: false };
   }
   return { message: errorMessage(error, "Could not read game state."), isError: true, persistent: true };
 }
 
 export function gameConnectionStatus(game: Pick<GameState, "connected" | "pid">): string {
   if (game.connected) return "Ready";
-  return game.pid === null ? "Waiting for a game..." : "Waiting for a logged in character...";
+  return game.pid === null ? "Waiting for a game..." : "Waiting for a character to log in...";
 }
 
 export function observationPayload(name: string, type: ObservationForm["type"], notes: string): ObservationForm {
@@ -517,7 +517,7 @@ function renderJournal(entries: JournalEntry[]): void {
   if (entries.length === 0) {
     const empty = document.createElement("li");
     empty.className = "empty-state";
-    empty.textContent = "No observations captured.";
+    empty.textContent = "No saved observations.";
     list.append(empty);
     return;
   }
@@ -959,7 +959,7 @@ async function setup(): Promise<void> {
       setStatus("Observation saved.");
       render(state);
     } catch (error) {
-      reportFailure(error, "Could not capture observation.");
+      reportFailure(error, "Could not save observation.");
     }
   });
   button("export-button", "Export observations", "outline-button").addEventListener("click", async () => {
@@ -1001,7 +1001,7 @@ async function setup(): Promise<void> {
   topmost.addEventListener("change", () => {
     if (!(topmost instanceof HTMLInputElement)) return;
     state.settings.alwaysOnTop = topmost.checked;
-    void bridge.setAlwaysOnTop(topmost.checked).catch((error) => reportFailure(error, "Could not change always on top mode."));
+    void bridge.setAlwaysOnTop(topmost.checked).catch((error) => reportFailure(error, "Could not change the Always on top setting."));
     void persist(state, bridge).catch((error) => reportFailure(error, "Could not save settings."));
   });
   const opacity = byId("opacity-range");
