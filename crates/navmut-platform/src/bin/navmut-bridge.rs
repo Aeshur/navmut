@@ -7,6 +7,7 @@ use navmut_platform::{capabilities, BridgeServer, WindowsBridgeBackend};
 
 // Windows ends the process soon after console close, logoff, or shutdown.
 // The handler waits for connection-file cleanup within this limit.
+#[cfg(windows)]
 const CLEANUP_TIMEOUT: Duration = Duration::from_secs(4);
 
 static SHUTDOWN: Shutdown = Shutdown::new();
@@ -61,6 +62,7 @@ impl Shutdown {
         }
     }
 
+    #[cfg(any(windows, test))]
     fn request_stop(&self, timeout: Duration) -> bool {
         self.set(Stage::Stopping);
         self.wait_until(Stage::Stopped, Some(timeout))
