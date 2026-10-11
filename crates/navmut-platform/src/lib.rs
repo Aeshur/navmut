@@ -13,8 +13,8 @@ mod windows;
 
 pub use bridge::{
     parse_request, BridgeBackend, BridgeBackendError, BridgeClient, BridgeConnection,
-    BridgeEndpoint, BridgeError, BridgeHandle, BridgeRequest, BridgeResponse, BridgeServer,
-    BridgeWindow, WindowsBridgeBackend, BRIDGE_PROTOCOL_VERSION,
+    BridgeEndpoint, BridgeError, BridgeHandle, BridgePlayerState, BridgeRequest, BridgeResponse,
+    BridgeServer, BridgeWindow, WindowsBridgeBackend, BRIDGE_PROTOCOL_VERSION,
 };
 pub use capabilities::{Capability, CapabilitySet, PlatformCapabilities};
 pub use client_identity::{
@@ -25,7 +25,7 @@ pub use client_identity::{
 pub use error::PlatformError;
 pub use helper::{
     format_position_command, parse_helper_response, validate_position, HelperResponse,
-    HelperSession, SubmitStatus, COMMAND_TIMEOUT, STARTUP_TIMEOUT,
+    HelperSession, SubmitStatus, COMMAND_TIMEOUT, HELPER_WINDOW_TIMEOUT, STARTUP_TIMEOUT,
 };
 pub use player_state::{normalise_facing, PlayerState, PlayerStateReader};
 pub use windows::{enumerate_game_windows, GameWindow};

@@ -45,6 +45,7 @@ On macOS, launch the executable inside the installed app bundle, for example:
 The bridge and native app communicate over `127.0.0.1` on the same computer.
 No server IP is needed. The bridge accesses the game client, not the game server.
 
-Stop the bridge with Ctrl+C when finished. If the connection file remains, wait
-for the bridge to stop, then delete the file before reusing that path. The bridge
-refuses to overwrite an existing connection file.
+Stop the bridge with Ctrl+C when finished. It deletes the connection file as it
+exits. If the bridge was killed or crashed instead, delete the leftover file
+before starting the bridge again with that path. The bridge refuses to overwrite
+an existing connection file.

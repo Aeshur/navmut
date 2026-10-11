@@ -1,5 +1,6 @@
-import { describe, expect, it } from "vitest";
-import { autoAttachPid, compactStatusMessage, createMapTransform, enqueueMovement, errorMessage, gameConnectionStatus, gameStateFailure, isBrowserShortcut, isCurrentMovementContext, isDeletablePoint, loadProfileSelection, movementContext, movementDirectionForKey, moveDelta, observationPayload, panelForNavigation, parsePositionFields, poiLabel, profileLabel, profileLabels, selectProfileForLiveZone, settingsForPersistence, UiError } from "./main";
+import { describe, expect, it, vi } from "vitest";
+import { autoAttachPid, compactStatusMessage, createMapTransform, enqueueMovement, errorMessage, gameConnectionStatus, gameStateFailure, isBrowserShortcut, isCurrentMovementContext, isDeletablePoint, loadProfileSelection, movementContext, movementDirectionForKey, moveDelta, observationPayload, panelForNavigation, parsePositionFields, persist, poiLabel, profileLabel, profileLabels, selectProfileForLiveZone, settingsForPersistence, startupStep, UiError } from "./main";
+import { defaultSettings } from "./ipc";
 import type { GameState, JournalEntry, MapProfile, PointSelection, UiSettings } from "./types";
 
 const profile: MapProfile = { id: "test", name: "Test", zone: 128, region: 104, bounds: { minX: -100, maxX: 100, minZ: -50, maxZ: 50 }, pois: [], anchors: [] };
@@ -82,13 +83,9 @@ describe("runtime contracts", () => {
     expect(isBrowserShortcut(key("Tab"), false)).toBe(false);
   });
 
-  it("keeps session-only settings out of persisted fields", () => {
-    const settings: UiSettings = { selectedPid: 123, profileId: "map", overrideZone: true, activePanel: "warp", stepSize: 15, mapVisible: true, alwaysOnTop: true, opacity: 75 };
-    const persisted = settingsForPersistence(settings);
-    expect(persisted).not.toHaveProperty("selectedPid");
-    expect(persisted).not.toHaveProperty("overrideZone");
-    expect(persisted).not.toHaveProperty("stepSize");
-    expect(persisted).toMatchObject({ profileId: "map", mapVisible: true, alwaysOnTop: true, opacity: 75 });
+  it("persists only UI preferences, never session state or file paths", () => {
+    const settings: UiSettings = { selectedPid: 123, profileId: "map", overrideZone: true, activePanel: "warp", stepSize: 15, mapVisible: true, alwaysOnTop: true, opacity: 75, catalogPath: null, bridgePath: "bridge.json" };
+    expect(settingsForPersistence(settings)).toEqual({ profileId: "map", mapVisible: true, activePanel: "warp", alwaysOnTop: true, opacity: 75 });
   });
 
   it("parses finite Set Position coordinates", () => {
@@ -102,6 +99,7 @@ describe("runtime contracts", () => {
     expect(errorMessage({ message: "helper failed" }, "fallback")).toBe("fallback");
     expect(errorMessage({ reason: "unknown" }, "fallback")).toBe("fallback");
     expect(errorMessage("bridge authentication failed", "fallback")).toBe("Could not authenticate with the bridge. Check its connection file.");
+    expect(errorMessage("Invalid observation at C:\\Navmut\\data\\observations.jsonl:3: EOF while parsing", "fallback")).toBe("Invalid observation at C:\\Navmut\\data\\observations.jsonl:3: EOF while parsing");
     expect(errorMessage("selected game window is no longer valid", "fallback")).toBe("The selected game is no longer available.");
     expect(errorMessage("FFXIV executable SHA-256 does not match retail 1.23b", "fallback")).toBe("This game version is not supported.");
     expect(errorMessage("configured bridge lacks silent-position", "fallback")).toBe("The bridge is incompatible with this version of Navmut.");
@@ -235,5 +233,26 @@ describe("runtime contracts", () => {
     const saved: PointSelection = { ...poi, kind: "saved", id: "saved:one", packaged: false };
     expect(isDeletablePoint(poi)).toBe(false);
     expect(isDeletablePoint(saved)).toBe(true);
+  });
+});
+
+describe("startup", () => {
+  it("falls back and records the failure when an optional startup step fails", async () => {
+    const consoleError = vi.spyOn(console, "error").mockImplementation(() => undefined);
+    const failures: string[] = [];
+    await expect(startupStep(failures, "Could not load saved points.", async () => ["kept"], [])).resolves.toEqual(["kept"]);
+    await expect(startupStep(failures, "Could not load the Journal.", () => Promise.reject(new Error("Invalid observation at observations.jsonl:3")), [])).resolves.toEqual([]);
+    await expect(startupStep(failures, "Could not list game processes.", () => Promise.reject("bridge authentication failed"), [])).resolves.toEqual([]);
+    expect(failures).toEqual(["Invalid observation at observations.jsonl:3", "Could not authenticate with the bridge. Check its connection file."]);
+    consoleError.mockRestore();
+  });
+
+  it("does not overwrite settings that failed to load", async () => {
+    const saveSettings = vi.fn(async () => undefined);
+    const settings = { ...defaultSettings(), profileId: "zone-1" };
+    await persist({ settings, settingsWritable: false }, { saveSettings });
+    expect(saveSettings).not.toHaveBeenCalled();
+    await persist({ settings, settingsWritable: true }, { saveSettings });
+    expect(saveSettings).toHaveBeenCalledWith(settingsForPersistence(settings));
   });
 });

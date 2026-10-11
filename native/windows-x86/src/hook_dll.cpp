@@ -1,4 +1,4 @@
-#include "navmut_native/ipc_names.h"
+#include "navmut_native/hook_context.h"
 #include "navmut_native/protocol.h"
 #include "navmut_native/retail_layout.h"
 #include "navmut_native/shared_state.h"
@@ -26,80 +26,19 @@ using namespace navmut::native;
 
 static_assert(sizeof(void*) == sizeof(std::uint32_t), "the hook DLL must be built as a 32-bit target");
 
-struct HookContext
-{
-    HANDLE mapping = nullptr;
-    HANDLE request_event = nullptr;
-    HANDLE response_event = nullptr;
-    HANDLE stop_event = nullptr;
-    SharedBlock* shared = nullptr;
-};
-
 HookContext g_context;
-
-void close_context()
-{
-    if (g_context.shared != nullptr)
-    {
-        UnmapViewOfFile(g_context.shared);
-        g_context.shared = nullptr;
-    }
-    if (g_context.mapping != nullptr)
-    {
-        CloseHandle(g_context.mapping);
-        g_context.mapping = nullptr;
-    }
-    if (g_context.request_event != nullptr)
-    {
-        CloseHandle(g_context.request_event);
-        g_context.request_event = nullptr;
-    }
-    if (g_context.response_event != nullptr)
-    {
-        CloseHandle(g_context.response_event);
-        g_context.response_event = nullptr;
-    }
-    if (g_context.stop_event != nullptr)
-    {
-        CloseHandle(g_context.stop_event);
-        g_context.stop_event = nullptr;
-    }
-}
+bool g_processing = false;
 
 bool open_context(std::uint32_t nonce_low, std::uint32_t nonce_high)
 {
-    if (nonce_low == 0 && nonce_high == 0)
-    {
-        return false;
-    }
     const std::uint32_t process_id = GetCurrentProcessId();
-    if (g_context.shared != nullptr)
+    if (g_processing)
     {
-        return shared_header_valid(*g_context.shared, process_id, nonce_low, nonce_high);
+        // A wake delivered during the retail call must not replace the block
+        // that the running request still uses.
+        return g_context.shared != nullptr && shared_header_valid(*g_context.shared, process_id, nonce_low, nonce_high);
     }
-    g_context.mapping = OpenFileMappingW(FILE_MAP_ALL_ACCESS, FALSE,
-                                         ipc_mapping_name(process_id, nonce_low, nonce_high).c_str());
-    g_context.request_event = OpenEventW(SYNCHRONIZE, FALSE,
-                                         ipc_request_event_name(process_id, nonce_low, nonce_high).c_str());
-    g_context.response_event = OpenEventW(SYNCHRONIZE | EVENT_MODIFY_STATE, FALSE,
-                                          ipc_response_event_name(process_id, nonce_low, nonce_high).c_str());
-    g_context.stop_event = OpenEventW(SYNCHRONIZE, FALSE,
-                                      ipc_stop_event_name(process_id, nonce_low, nonce_high).c_str());
-    if (g_context.mapping == nullptr || g_context.request_event == nullptr || g_context.response_event == nullptr
-        || g_context.stop_event == nullptr)
-    {
-        close_context();
-        return false;
-    }
-    g_context.shared = reinterpret_cast<SharedBlock*>(MapViewOfFile(g_context.mapping, FILE_MAP_ALL_ACCESS, 0, 0,
-                                                                      sizeof(SharedBlock)));
-    if (g_context.shared == nullptr
-        || !shared_header_valid(*g_context.shared, process_id, nonce_low, nonce_high))
-    {
-        close_context();
-        return false;
-    }
-    return true;
+    return open_hook_context(g_context, process_id, nonce_low, nonce_high);
 }
 
 bool valid_local_read(std::uint32_t address, std::size_t size)
@@ -426,6 +365,7 @@ extern "C" LRESULT CALLBACK NavmutCallWndProc(int code, WPARAM wparam, LPARAM lp
             InterlockedExchange(reinterpret_cast<volatile LONG*>(&g_context.shared->hook_ready), 1);
             if (WaitForSingleObject(g_context.request_event, 0) == WAIT_OBJECT_0)
             {
+                g_processing = true;
                 try
                 {
                     process_request();
@@ -434,6 +374,7 @@ extern "C" LRESULT CALLBACK NavmutCallWndProc(int code, WPARAM wparam, LPARAM lp
                 {
                     complete_request(ResponseCode::Unknown, "the hook failed while preparing the request");
                 }
+                g_processing = false;
             }
         }
     }
@@ -450,7 +391,7 @@ BOOL WINAPI DllMain(HINSTANCE instance, DWORD reason, LPVOID reserved)
     }
     else if (reason == DLL_PROCESS_DETACH)
     {
-        close_context();
+        close_hook_context(g_context);
     }
     return TRUE;
 }

@@ -4,13 +4,14 @@ use std::sync::Mutex;
 
 use base64::Engine as _;
 use navmut_core::{
-    append_observation, export_observations_one, load_locations, load_observations,
-    load_observations_for_profile, load_poi_catalog, load_world_profiles, resolve_height_anchor,
-    validate_poi_document, MapProfile as CoreMapProfile,
+    append_observation, atomic_write_json, export_observations_one, load_locations,
+    load_observations, load_observations_for_profile, load_poi_catalog, load_valid_observations,
+    load_world_profiles, resolve_height_anchor, validate_poi_document,
+    MapProfile as CoreMapProfile,
 };
 use navmut_platform::{
-    enumerate_game_windows, BridgeClient, BridgeWindow, Capability, GameWindow, HelperSession,
-    PlayerState, PlayerStateReader, SubmitStatus,
+    enumerate_game_windows, BridgeClient, BridgeError, BridgeWindow, Capability, GameWindow,
+    HelperSession, PlayerState, PlayerStateReader, SubmitStatus,
 };
 use serde::{Deserialize, Serialize};
 use serde_json::{json, Value};
@@ -204,21 +205,32 @@ impl Default for PersistedSettings {
     }
 }
 
-impl From<&UiSettings> for PersistedSettings {
-    fn from(settings: &UiSettings) -> Self {
-        Self {
-            profile_id: settings.profile_id.clone(),
-            map_visible: settings.map_visible,
-            active_panel: settings.active_panel.clone(),
-            catalog_path: settings.catalog_path.clone(),
-            poi_catalog_path: settings.poi_catalog_path.clone(),
-            helper_path: settings.helper_path.clone(),
-            locations_path: settings.locations_path.clone(),
-            observations_path: settings.observations_path.clone(),
-            bridge_path: settings.bridge_path.clone(),
-            always_on_top: settings.always_on_top,
-            opacity: settings.opacity,
-        }
+// Paths in `navmut.json` change only through `select_catalog` or a hand edit.
+#[derive(Clone, Debug, Deserialize)]
+#[serde(rename_all = "camelCase")]
+struct SettingsUpdate {
+    profile_id: String,
+    map_visible: bool,
+    active_panel: String,
+    always_on_top: bool,
+    opacity: u8,
+}
+
+impl SettingsUpdate {
+    fn apply_to_stored(&self, stored: &mut PersistedSettings) {
+        stored.profile_id = self.profile_id.clone();
+        stored.map_visible = self.map_visible;
+        stored.active_panel = self.active_panel.clone();
+        stored.always_on_top = self.always_on_top;
+        stored.opacity = self.opacity.clamp(35, 100);
+    }
+
+    fn apply_to_session(&self, settings: &mut UiSettings) {
+        settings.profile_id = self.profile_id.clone();
+        settings.map_visible = self.map_visible;
+        settings.active_panel = self.active_panel.clone();
+        settings.always_on_top = self.always_on_top;
+        settings.opacity = self.opacity.clamp(35, 100);
     }
 }
 
@@ -294,7 +306,11 @@ impl Default for Runtime {
 
 pub struct AppState {
     runtime: Mutex<Runtime>,
+    // Command-line overrides affect the session, not `stored`.
     settings: Mutex<UiSettings>,
+    // `None` until `navmut.json` loads; defaults must not overwrite
+    // an unreadable file.
+    stored: Mutex<Option<PersistedSettings>>,
     startup: StartupArgs,
 }
 
@@ -309,6 +325,7 @@ impl AppState {
         Self {
             runtime: Mutex::new(Runtime::default()),
             settings: Mutex::new(UiSettings::default()),
+            stored: Mutex::new(None),
             startup,
         }
     }
@@ -462,37 +479,50 @@ fn user_data_dir(_app: &AppHandle) -> Result<PathBuf, String> {
     }
 }
 
-fn read_settings(app: &AppHandle) -> Result<UiSettings, String> {
-    let path = config_path(app)?;
+fn read_settings(path: &Path) -> Result<PersistedSettings, String> {
     if !path.is_file() {
-        return Ok(UiSettings::default());
+        return Ok(PersistedSettings::default());
     }
     let text = fs::read_to_string(path).map_err(state_error)?;
-    let persisted: PersistedSettings = serde_json::from_str(&text).map_err(state_error)?;
-    Ok(UiSettings {
-        profile_id: persisted.profile_id,
-        map_visible: persisted.map_visible,
-        active_panel: persisted.active_panel,
-        catalog_path: persisted.catalog_path,
-        poi_catalog_path: persisted.poi_catalog_path,
-        helper_path: persisted.helper_path,
-        locations_path: persisted.locations_path,
-        observations_path: persisted.observations_path,
-        bridge_path: persisted.bridge_path,
-        always_on_top: persisted.always_on_top,
-        opacity: persisted.opacity.clamp(35, 100),
-        ..UiSettings::default()
-    })
+    serde_json::from_str(&text)
+        .map_err(|error| format!("{} is not valid settings JSON: {error}", path.display()))
 }
 
-fn write_settings(app: &AppHandle, settings: &UiSettings) -> Result<(), String> {
-    let path = config_path(app)?;
-    if let Some(parent) = path.parent() {
-        fs::create_dir_all(parent).map_err(state_error)?;
-    }
-    let encoded =
-        serde_json::to_string_pretty(&PersistedSettings::from(settings)).map_err(state_error)?;
-    fs::write(path, format!("{encoded}\n")).map_err(state_error)
+fn session_settings(stored: &PersistedSettings, startup: &StartupArgs) -> UiSettings {
+    let mut settings = UiSettings {
+        profile_id: stored.profile_id.clone(),
+        map_visible: stored.map_visible,
+        active_panel: stored.active_panel.clone(),
+        catalog_path: stored.catalog_path.clone(),
+        poi_catalog_path: stored.poi_catalog_path.clone(),
+        helper_path: stored.helper_path.clone(),
+        locations_path: stored.locations_path.clone(),
+        observations_path: stored.observations_path.clone(),
+        bridge_path: stored.bridge_path.clone(),
+        always_on_top: stored.always_on_top,
+        opacity: stored.opacity.clamp(35, 100),
+        ..UiSettings::default()
+    };
+    startup_settings(&mut settings, startup);
+    settings
+}
+
+// Update the stored copy only after the write succeeds.
+fn update_stored_settings(
+    stored: &Mutex<Option<PersistedSettings>>,
+    path: &Path,
+    change: impl FnOnce(&mut PersistedSettings),
+) -> Result<(), String> {
+    let mut stored = stored.lock().map_err(state_error)?;
+    let Some(current) = stored.as_mut() else {
+        return Err("settings did not load, so navmut.json was left unchanged".to_string());
+    };
+    let mut next = current.clone();
+    change(&mut next);
+    let document = serde_json::to_value(&next).map_err(state_error)?;
+    atomic_write_json(path, &document).map_err(state_error)?;
+    *current = next;
+    Ok(())
 }
 
 fn resolve_path(value: Option<&str>) -> Option<PathBuf> {
@@ -621,6 +651,19 @@ fn prepare_bridge(runtime: &mut Runtime, settings: &UiSettings) -> Result<(), St
         runtime.bridge_path = None;
     }
     Ok(())
+}
+
+// An unreachable bridge or rejected token requires rereading the connection file
+// on the next `prepare_bridge`. A restarted bridge writes a new port and token
+// to the same file.
+fn bridge_failure(bridge: &mut Option<BridgeClient>, error: BridgeError) -> String {
+    if matches!(
+        error,
+        BridgeError::Transport(_) | BridgeError::Authentication
+    ) {
+        *bridge = None;
+    }
+    state_error(error)
 }
 
 fn strip_png_gamma(bytes: &[u8]) -> Vec<u8> {
@@ -920,7 +963,10 @@ fn snapshot(
     pid: Option<u32>,
 ) -> Result<Option<(PlayerState, GameWindow)>, String> {
     if let Some(client) = runtime.bridge.as_ref() {
-        let bridge_windows = client.windows().map_err(state_error)?;
+        let bridge_windows = match client.windows() {
+            Ok(windows) => windows,
+            Err(error) => return Err(bridge_failure(&mut runtime.bridge, error)),
+        };
         runtime.windows = bridge_windows
             .iter()
             .map(|window| GameWindow::new(window.handle, window.process_id, window.title.clone()))
@@ -943,7 +989,10 @@ fn snapshot(
             process_id: window.process_id,
             title: window.title.clone(),
         };
-        let player = client.player_state(bridge_window).map_err(state_error)?;
+        let player = match client.player_state(bridge_window) {
+            Ok(player) => player,
+            Err(error) => return Err(bridge_failure(&mut runtime.bridge, error)),
+        };
         return Ok(Some((
             PlayerState {
                 process_id: player.process_id,
@@ -1018,9 +1067,11 @@ fn submit_position(
             process_id: window.process_id,
             title: window.title.clone(),
         };
-        return client
-            .silent_position(bridge_window, position.x, position.y, position.z, zone)
-            .map_err(state_error);
+        return match client.silent_position(bridge_window, position.x, position.y, position.z, zone)
+        {
+            Ok(()) => Ok(()),
+            Err(error) => Err(bridge_failure(&mut runtime.bridge, error)),
+        };
     }
     let helper_path = resolve_helper_path(app, settings)?;
     let helper = runtime
@@ -1048,7 +1099,7 @@ fn core_records(
     zone: u16,
 ) -> Result<AnchorRecords, String> {
     let observations_path = resolve_observations_path(app, settings)?;
-    let observations = load_observations(observations_path, zone, Some(&profile.profile_id))
+    let observations = load_valid_observations(observations_path, zone, Some(&profile.profile_id))
         .map_err(state_error)?;
     let locations_path = resolve_locations_path(app, settings)?;
     let locations = load_locations(locations_path).map_err(state_error)?;
@@ -1128,7 +1179,10 @@ fn list_processes_blocking(state: State<'_, AppState>) -> Result<Vec<ProcessInfo
     let mut runtime = state.runtime.lock().map_err(state_error)?;
     prepare_bridge(&mut runtime, &settings)?;
     if let Some(client) = runtime.bridge.as_ref() {
-        let windows = client.windows().map_err(state_error)?;
+        let windows = match client.windows() {
+            Ok(windows) => windows,
+            Err(error) => return Err(bridge_failure(&mut runtime.bridge, error)),
+        };
         return Ok(windows
             .into_iter()
             .map(|window| ProcessInfo {
@@ -1241,14 +1295,17 @@ fn select_catalog_blocking(
     if profiles.is_empty() {
         return Err("the selected catalog has no world coordinate maps".to_string());
     }
+    let catalog_path = manifest.display().to_string();
     let mut settings = state.settings.lock().map_err(state_error)?.clone();
-    settings.catalog_path = Some(manifest.display().to_string());
+    settings.catalog_path = Some(catalog_path.clone());
     let pois = load_pois(&app, &settings, Some(&manifest))?;
     let result = profiles
         .iter()
         .map(|profile| ui_profile(profile, &pois, false))
         .collect::<Vec<_>>();
-    write_settings(&app, &settings)?;
+    update_stored_settings(&state.stored, &config_path(&app)?, |stored| {
+        stored.catalog_path = Some(catalog_path);
+    })?;
     *state.settings.lock().map_err(state_error)? = settings;
     let mut runtime = state.runtime.lock().map_err(state_error)?;
     runtime.profiles = profiles;
@@ -1594,30 +1651,22 @@ fn load_settings_blocking(
     app: AppHandle,
     state: State<'_, AppState>,
 ) -> Result<UiSettings, String> {
-    let mut settings = read_settings(&app)?;
-    startup_settings(&mut settings, &state.startup);
+    let stored = read_settings(&config_path(&app)?)?;
+    let settings = session_settings(&stored, &state.startup);
+    *state.stored.lock().map_err(state_error)? = Some(stored);
     *state.settings.lock().map_err(state_error)? = settings.clone();
     Ok(settings)
 }
 
 fn save_settings_blocking(
-    settings: PersistedSettings,
+    update: SettingsUpdate,
     app: AppHandle,
     state: State<'_, AppState>,
 ) -> Result<(), String> {
-    let mut current = state.settings.lock().map_err(state_error)?;
-    current.profile_id = settings.profile_id;
-    current.map_visible = settings.map_visible;
-    current.active_panel = settings.active_panel;
-    current.catalog_path = settings.catalog_path;
-    current.poi_catalog_path = settings.poi_catalog_path;
-    current.helper_path = settings.helper_path;
-    current.locations_path = settings.locations_path;
-    current.observations_path = settings.observations_path;
-    current.bridge_path = settings.bridge_path;
-    current.always_on_top = settings.always_on_top;
-    current.opacity = settings.opacity.clamp(35, 100);
-    write_settings(&app, &current)
+    update.apply_to_session(&mut *state.settings.lock().map_err(state_error)?);
+    update_stored_settings(&state.stored, &config_path(&app)?, |stored| {
+        update.apply_to_stored(stored);
+    })
 }
 
 #[tauri::command]
@@ -1793,7 +1842,7 @@ async fn load_settings(app: AppHandle) -> Result<UiSettings, String> {
 }
 
 #[tauri::command]
-async fn save_settings(settings: PersistedSettings, app: AppHandle) -> Result<(), String> {
+async fn save_settings(settings: SettingsUpdate, app: AppHandle) -> Result<(), String> {
     run_blocking(app, move |app| {
         let state = app.state::<AppState>();
         save_settings_blocking(settings, app.clone(), state)
@@ -1923,6 +1972,133 @@ pub fn run() {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    struct NoGameBridge;
+
+    impl navmut_platform::BridgeBackend for NoGameBridge {
+        fn windows(&self) -> Result<Vec<BridgeWindow>, navmut_platform::BridgeBackendError> {
+            Ok(Vec::new())
+        }
+
+        fn player_state(
+            &self,
+            _window: &BridgeWindow,
+        ) -> Result<navmut_platform::BridgePlayerState, navmut_platform::BridgeBackendError>
+        {
+            Err(navmut_platform::BridgeBackendError::rejected("no game"))
+        }
+
+        fn silent_position(
+            &self,
+            _window: &BridgeWindow,
+            _x: f64,
+            _y: f64,
+            _z: f64,
+            _zone: u16,
+        ) -> Result<(), navmut_platform::BridgeBackendError> {
+            Err(navmut_platform::BridgeBackendError::rejected("no game"))
+        }
+    }
+
+    fn start_bridge(path: &Path) -> navmut_platform::BridgeHandle {
+        navmut_platform::BridgeServer::bind(
+            path,
+            NoGameBridge,
+            navmut_platform::PlatformCapabilities {
+                windows: true,
+                player_state: true,
+                silent_position: true,
+                bridge_protocol: navmut_platform::BRIDGE_PROTOCOL_VERSION,
+            },
+        )
+        .expect("bridge binds")
+        .start()
+        .expect("bridge starts")
+    }
+
+    fn settings_path() -> (PathBuf, PathBuf) {
+        let directory = std::env::temp_dir().join(format!("navmut-settings-{}", Uuid::new_v4()));
+        fs::create_dir_all(&directory).unwrap();
+        let path = directory.join("navmut.json");
+        (directory, path)
+    }
+
+    #[test]
+    fn webview_saves_keep_stored_paths_and_skip_startup_overrides() {
+        let (directory, path) = settings_path();
+        fs::write(&path, r#"{"catalogPath":"maps/custom.json","opacity":80}"#).unwrap();
+        let stored = read_settings(&path).expect("stored settings");
+        let startup = StartupArgs {
+            bridge: Some(PathBuf::from("bridge.json")),
+            ..StartupArgs::default()
+        };
+        let session = session_settings(&stored, &startup);
+        assert_eq!(session.bridge_path.as_deref(), Some("bridge.json"));
+        assert_eq!(session.catalog_path.as_deref(), Some("maps/custom.json"));
+
+        let update: SettingsUpdate = serde_json::from_value(json!({
+            "profileId": "zone-1",
+            "mapVisible": false,
+            "activePanel": "journal",
+            "catalogPath": null,
+            "helperPath": "other-helper.exe",
+            "bridgePath": null,
+            "alwaysOnTop": true,
+            "opacity": 10
+        }))
+        .unwrap();
+        let stored = Mutex::new(Some(stored));
+        update_stored_settings(&stored, &path, |stored| update.apply_to_stored(stored))
+            .expect("settings saved");
+        let written = read_settings(&path).expect("written settings");
+        assert_eq!(written.catalog_path.as_deref(), Some("maps/custom.json"));
+        assert_eq!(written.helper_path, None);
+        assert_eq!(written.bridge_path, None, "startup override was persisted");
+        assert_eq!(written.profile_id, "zone-1");
+        assert_eq!(written.opacity, 35);
+        fs::remove_dir_all(&directory).unwrap();
+    }
+
+    #[test]
+    fn unreadable_settings_are_never_overwritten() {
+        let (directory, path) = settings_path();
+        fs::write(&path, "{ not json").unwrap();
+        assert!(read_settings(&path).is_err());
+        let stored = Mutex::new(None);
+        assert!(update_stored_settings(&stored, &path, |stored| stored.opacity = 50).is_err());
+        assert_eq!(fs::read_to_string(&path).unwrap(), "{ not json");
+        fs::remove_dir_all(&directory).unwrap();
+    }
+
+    #[test]
+    fn restarted_bridge_is_reconnected_from_its_connection_file() {
+        let directory = std::env::temp_dir().join(format!("navmut-bridge-{}", Uuid::new_v4()));
+        fs::create_dir_all(&directory).unwrap();
+        let path = directory.join("connection.json");
+        let settings = UiSettings {
+            bridge_path: Some(path.display().to_string()),
+            ..UiSettings::default()
+        };
+        let mut runtime = Runtime::default();
+
+        let first = start_bridge(&path);
+        prepare_bridge(&mut runtime, &settings).expect("first bridge connects");
+        assert!(snapshot(&mut runtime, None)
+            .expect("first bridge answers")
+            .is_none());
+
+        first.stop();
+        let second = start_bridge(&path);
+        assert!(snapshot(&mut runtime, None).is_err());
+        assert!(runtime.bridge.is_none(), "stale bridge client was kept");
+        prepare_bridge(&mut runtime, &settings).expect("second bridge connects");
+        assert!(snapshot(&mut runtime, None)
+            .expect("second bridge answers")
+            .is_none());
+
+        second.stop();
+        fs::remove_dir_all(&directory).unwrap();
+    }
 
     #[test]
     fn browser_png_copy_omits_gamma_metadata() {

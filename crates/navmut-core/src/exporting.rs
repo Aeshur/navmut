@@ -1,6 +1,7 @@
 //! Observation ZIP exports with local paths removed.
 
-use crate::{absolute_without_io, ascii_json, observations::validate_observation, Error, Result};
+use crate::observations::{parse_journal_line, read_journal, validate_observation};
+use crate::{absolute_without_io, ascii_json, Error, Result};
 use csv::WriterBuilder;
 use serde_json::{Map, Value};
 use sha2::{Digest, Sha256};
@@ -449,24 +450,11 @@ where
                 path.display()
             )));
         }
-        for (line_number, line) in fs::read_to_string(path)?.lines().enumerate() {
+        for (line_number, line) in read_journal(path)?.lines().enumerate() {
             if line.trim().is_empty() {
                 continue;
             }
-            let value: Value = serde_json::from_str(line).map_err(|error| {
-                Error::invalid(format!(
-                    "Invalid observation at {}:{}: {error}",
-                    path.display(),
-                    line_number + 1
-                ))
-            })?;
-            records.push(validate_observation(&value).map_err(|error| {
-                Error::invalid(format!(
-                    "Invalid observation at {}:{}: {error}",
-                    path.display(),
-                    line_number + 1
-                ))
-            })?);
+            records.push(parse_journal_line(path, line_number, line)?);
         }
     }
     let mut safe_records = records

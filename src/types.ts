@@ -135,7 +135,8 @@ export interface UiSettings {
   opacity: number;
 }
 
-export type PersistedSettings = Omit<UiSettings, "selectedPid" | "overrideZone" | "stepSize">;
+/** File paths are stored by the backend, not saved from the UI. */
+export type PersistedSettings = Pick<UiSettings, "profileId" | "mapVisible" | "activePanel" | "alwaysOnTop" | "opacity">;
 
 export interface ExportedArchive {
   filename: string;

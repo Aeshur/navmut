@@ -370,7 +370,9 @@ impl Drop for OwnedTemporary {
     }
 }
 
-fn atomic_write_json(path: &Path, document: &Value) -> Result<()> {
+/// Sync pretty JSON in a temporary file before atomically replacing `path`.
+/// A crash leaves either the old or the new document.
+pub fn atomic_write_json(path: &Path, document: &Value) -> Result<()> {
     if let Some(parent) = path.parent() {
         fs::create_dir_all(parent)?;
     }

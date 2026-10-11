@@ -12,7 +12,7 @@ use uuid::Uuid;
 
 use crate::{
     Capability, CapabilitySet, GameWindow, HelperSession, PlatformCapabilities, PlatformError,
-    PlayerState, PlayerStateReader, SubmitStatus,
+    PlayerState, PlayerStateReader, SubmitStatus, COMMAND_TIMEOUT, STARTUP_TIMEOUT,
 };
 
 pub const BRIDGE_PROTOCOL_VERSION: u16 = 2;
@@ -23,6 +23,10 @@ const MAX_HEADER_BYTES: usize = 16 * 1024;
 const MAX_RESPONSE_BYTES: usize = 1024 * 1024;
 const IO_TIMEOUT: Duration = Duration::from_secs(5);
 const SHUTDOWN_TIMEOUT: Duration = Duration::from_secs(1);
+// A silent-position reply may follow stale-helper shutdown, startup, the
+// command, and another helper shutdown.
+const SILENT_POSITION_TIMEOUT: Duration =
+    Duration::from_secs(STARTUP_TIMEOUT.as_secs() + COMMAND_TIMEOUT.as_secs() + 5);
 
 /// Bridge operations supported by protocol version 2.
 #[derive(Clone, Copy, Debug, Deserialize, Eq, PartialEq, Serialize)]
@@ -39,6 +43,16 @@ impl BridgeEndpoint {
             Self::Windows => "/windows",
             Self::PlayerState => "/player-state",
             Self::SilentPosition => "/silent-position",
+        }
+    }
+
+    pub const fn response_timeout(self) -> Duration {
+        match self {
+            Self::Windows => IO_TIMEOUT,
+            // Player-state startup hashes the client and may scan memory,
+            // like helper startup.
+            Self::PlayerState => STARTUP_TIMEOUT,
+            Self::SilentPosition => SILENT_POSITION_TIMEOUT,
         }
     }
 
@@ -359,15 +373,19 @@ impl BridgeConnection {
         }
         let bytes = serde_json::to_vec(self).map_err(|_| BridgeError::ConnectionFile)?;
         let temporary = path.with_extension(format!("tmp-{}", Uuid::new_v4().as_simple()));
-        write_private_file(&temporary, &bytes)?;
         // A hard link creates the destination atomically. It also prevents an
         // existing connection file from being overwritten.
-        if fs::hard_link(&temporary, path).is_err() {
-            let _ = fs::remove_file(&temporary);
-            return Err(BridgeError::ConnectionFile);
-        }
+        let result = write_private_file(&temporary, &bytes).and_then(|()| {
+            fs::hard_link(&temporary, path).map_err(|error| {
+                if error.kind() == io::ErrorKind::AlreadyExists {
+                    BridgeError::ConnectionFileExists
+                } else {
+                    BridgeError::ConnectionFile
+                }
+            })
+        });
         let _ = fs::remove_file(&temporary);
-        Ok(())
+        result
     }
 
     pub fn read_from(path: impl AsRef<Path>) -> Result<Self, BridgeError> {
@@ -465,14 +483,48 @@ pub trait BridgeBackend: Send + Sync + 'static {
 
 pub struct WindowsBridgeBackend {
     helper: HelperSession,
+    reader: Mutex<CachedReader>,
 }
 
 impl WindowsBridgeBackend {
     pub fn new(helper_path: impl Into<PathBuf>) -> Self {
         Self {
             helper: HelperSession::new(helper_path),
+            reader: Mutex::new(CachedReader(None)),
         }
     }
+}
+
+// The reader is keyed by window handle and process id and reused across polls.
+// Opening hashes the client; the first snapshot scans memory. Only a new window
+// or a failure requires reopening it.
+struct CachedReader(Option<(u64, u32, PlayerStateReader)>);
+
+// SAFETY: The platform crate's PlayerStateReader owns a non-Send Windows
+// process HANDLE. The backend mutex serializes every access to the reader.
+unsafe impl Send for CachedReader {}
+
+fn snapshot_cached<R, S, E>(
+    cache: &mut Option<(u64, u32, R)>,
+    window: &BridgeWindow,
+    open: impl FnOnce() -> Result<R, E>,
+    snapshot: impl FnOnce(&mut R) -> Result<S, E>,
+) -> Result<S, E> {
+    let cached = cache.as_ref().is_some_and(|(handle, process_id, _)| {
+        *handle == window.handle && *process_id == window.process_id
+    });
+    if !cached {
+        *cache = None;
+        *cache = Some((window.handle, window.process_id, open()?));
+    }
+    let Some((_, _, reader)) = cache.as_mut() else {
+        unreachable!("the reader cache was filled above");
+    };
+    let result = snapshot(reader);
+    if result.is_err() {
+        *cache = None;
+    }
+    result
 }
 
 impl BridgeBackend for WindowsBridgeBackend {
@@ -487,12 +539,18 @@ impl BridgeBackend for WindowsBridgeBackend {
 
     fn player_state(&self, window: &BridgeWindow) -> Result<BridgePlayerState, BridgeBackendError> {
         let game_window = GameWindow::new(window.handle, window.process_id, window.title.clone());
-        let mut reader = PlayerStateReader::open(&game_window)
-            .map_err(|error| BridgeBackendError::rejected(error.to_string()))?;
-        reader
-            .snapshot()
-            .map(BridgePlayerState::from)
-            .map_err(|error| BridgeBackendError::rejected(error.to_string()))
+        let mut cache = self
+            .reader
+            .lock()
+            .map_err(|_| BridgeBackendError::rejected("player-state reader lock was poisoned"))?;
+        snapshot_cached(
+            &mut cache.0,
+            window,
+            || PlayerStateReader::open(&game_window),
+            PlayerStateReader::snapshot,
+        )
+        .map(BridgePlayerState::from)
+        .map_err(|error| BridgeBackendError::rejected(error.to_string()))
     }
 
     fn silent_position(
@@ -798,7 +856,16 @@ impl BridgeClient {
         let write_deadline = Instant::now() + IO_TIMEOUT;
         write_all_with_deadline(&mut stream, header.as_bytes(), write_deadline)?;
         write_all_with_deadline(&mut stream, &body, write_deadline)?;
-        let (status, response) = read_http_response(&mut stream)?;
+        let reply = read_http_response(&mut stream, request.endpoint.response_timeout());
+        let (status, response) = match reply {
+            // The request was delivered, so the bridge may have moved the player.
+            Err(error) if request.endpoint == BridgeEndpoint::SilentPosition => {
+                return Err(BridgeError::Uncertain(format!(
+                    "no reply from the bridge: {error}"
+                )));
+            }
+            reply => reply?,
+        };
         if status == 401 {
             return Err(BridgeError::Authentication);
         }
@@ -1281,8 +1348,11 @@ fn write_http_response(
 
 // Content-Length frames the body. A probe for connection EOF can report a
 // timeout or reset after a complete response on an otherwise valid peer.
-fn read_http_response(stream: &mut TcpStream) -> Result<(u16, BridgeResponse), BridgeError> {
-    let deadline = Instant::now() + IO_TIMEOUT;
+fn read_http_response(
+    stream: &mut TcpStream,
+    timeout: Duration,
+) -> Result<(u16, BridgeResponse), BridgeError> {
+    let deadline = Instant::now() + timeout;
     let mut bytes = Vec::new();
     let header_end = loop {
         let mut chunk = [0u8; 1024];
@@ -1356,8 +1426,10 @@ pub enum BridgeError {
     Invalid(String),
     #[error("bridge request JSON is malformed: {0}")]
     Json(String),
-    #[error("bridge connection file could not be read")]
+    #[error("bridge connection file could not be read or written")]
     ConnectionFile,
+    #[error("bridge connection file already exists; if no bridge is running, delete it")]
+    ConnectionFileExists,
     #[error("bridge listener could not bind")]
     Bind,
     #[error("bridge server thread could not start")]
@@ -1597,7 +1669,8 @@ mod tests {
         stream
             .write_all(request.as_bytes())
             .expect("write delayed request");
-        let (status, response) = read_http_response(&mut stream).expect("delayed response");
+        let (status, response) =
+            read_http_response(&mut stream, IO_TIMEOUT).expect("delayed response");
         assert_eq!(status, 200);
         assert_eq!(response.ok, Some(true));
         server.stop();
@@ -1634,7 +1707,8 @@ mod tests {
         stream
             .shutdown(std::net::Shutdown::Write)
             .expect("finish malformed request");
-        let (status, _) = read_http_response(&mut stream).expect("read malformed response");
+        let (status, _) =
+            read_http_response(&mut stream, IO_TIMEOUT).expect("read malformed response");
         assert_eq!(status, 400);
         let mut oversized = TcpStream::connect(server.address()).expect("connect bridge");
         let request = format!(
@@ -1644,7 +1718,8 @@ mod tests {
         oversized
             .write_all(request.as_bytes())
             .expect("write oversized request");
-        let (status, _) = read_http_response(&mut oversized).expect("read oversized response");
+        let (status, _) =
+            read_http_response(&mut oversized, IO_TIMEOUT).expect("read oversized response");
         assert_eq!(status, 413);
         server.stop();
     }
@@ -1664,7 +1739,7 @@ mod tests {
         peer.write_all(header.as_bytes())
             .expect("write response header");
         peer.write_all(&body).expect("write response body");
-        let actual = read_http_response(&mut stream).expect("read complete response");
+        let actual = read_http_response(&mut stream, IO_TIMEOUT).expect("read complete response");
         assert_eq!(actual, (503, response));
     }
 
@@ -1686,7 +1761,7 @@ mod tests {
         peer.shutdown(Shutdown::Write)
             .expect("finish truncated response");
         drop(peer);
-        let result = read_http_response(&mut stream);
+        let result = read_http_response(&mut stream, IO_TIMEOUT);
         assert!(matches!(result, Err(BridgeError::MalformedResponse)));
     }
 
@@ -1717,6 +1792,65 @@ mod tests {
     }
 
     #[test]
+    fn player_state_reader_is_reused_until_the_window_changes_or_fails() {
+        let opened = AtomicUsize::new(0);
+        let mut cache: Option<(u64, u32, usize)> = None;
+        let mut poll = |window: &BridgeWindow, fail: bool| {
+            snapshot_cached(
+                &mut cache,
+                window,
+                || Ok::<_, ()>(opened.fetch_add(1, Ordering::Relaxed)),
+                |reader| if fail { Err(()) } else { Ok(*reader) },
+            )
+        };
+        let other = BridgeWindow {
+            handle: 102,
+            ..window()
+        };
+        assert_eq!(poll(&window(), false), Ok(0));
+        assert_eq!(poll(&window(), false), Ok(0));
+        assert_eq!(poll(&other, false), Ok(1));
+        assert_eq!(poll(&other, true), Err(()));
+        assert_eq!(poll(&other, false), Ok(2));
+        assert_eq!(opened.load(Ordering::Relaxed), 3);
+    }
+
+    #[test]
+    fn missing_silent_position_reply_is_uncertain() {
+        let listener = TcpListener::bind("127.0.0.1:0").expect("bind silent bridge");
+        let port = listener.local_addr().expect("silent bridge address").port();
+        let peer = std::thread::spawn(move || {
+            for _ in 0..2 {
+                let (mut stream, _) = listener.accept().expect("accept request");
+                let mut buffer = [0u8; 4096];
+                let _ = stream.read(&mut buffer);
+            }
+        });
+        let token = Uuid::new_v4().as_simple().to_string();
+        let client =
+            BridgeClient::from_connection(BridgeConnection::new(port, token, all_capabilities()))
+                .expect("client");
+        let error = client
+            .silent_position(window(), 1.0, 2.0, 3.0, 170)
+            .expect_err("silent-position without a reply");
+        assert!(matches!(error, BridgeError::Uncertain(_)), "{error:?}");
+        let error = client
+            .player_state(window())
+            .expect_err("player-state without a reply");
+        assert!(!matches!(error, BridgeError::Uncertain(_)), "{error:?}");
+        peer.join().expect("silent bridge peer");
+    }
+
+    #[test]
+    fn response_deadlines_outlast_the_server_work() {
+        assert!(BridgeEndpoint::PlayerState.response_timeout() >= STARTUP_TIMEOUT);
+        assert!(
+            BridgeEndpoint::SilentPosition.response_timeout()
+                > STARTUP_TIMEOUT + COMMAND_TIMEOUT + SHUTDOWN_TIMEOUT * 2
+        );
+    }
+
+    #[test]
     fn hostile_host_and_browser_origin_are_rejected_before_authentication() {
         let (directory, server) = start_server(all_capabilities(), false);
         let connection = BridgeConnection::read_from(directory.path().join("connection.json"))
@@ -1740,7 +1874,8 @@ mod tests {
             stream
                 .write_all(request.as_bytes())
                 .expect("write hostile request");
-            let (status, _) = read_http_response(&mut stream).expect("read hostile response");
+            let (status, _) =
+                read_http_response(&mut stream, IO_TIMEOUT).expect("read hostile response");
             assert_eq!(status, 400);
         }
         server.stop();
@@ -1754,8 +1889,12 @@ mod tests {
         existing.write_to(&path).expect("write existing connection");
         assert!(matches!(
             BridgeConnection::new(45_002, "n".repeat(32), all_capabilities()).write_to(&path),
-            Err(BridgeError::ConnectionFile)
+            Err(BridgeError::ConnectionFileExists)
         ));
+        let leftovers = fs::read_dir(directory.path())
+            .expect("list bridge directory")
+            .count();
+        assert_eq!(leftovers, 1, "a temporary connection file was left behind");
         assert_eq!(
             BridgeConnection::read_from(&path)
                 .expect("existing file")

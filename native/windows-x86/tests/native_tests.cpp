@@ -3,6 +3,10 @@
 #include "navmut_native/shared_state.h"
 #include "navmut_native/validation.h"
 
+#ifdef _WIN32
+#include "navmut_native/hook_context.h"
+#endif
+
 #ifdef NDEBUG
 #undef NDEBUG
 #endif
@@ -141,6 +145,70 @@ void test_shared_cleanup()
                                                std::string(256, 'x')));
 }
 
+
+#ifdef _WIN32
+struct HelperSessionObjects
+{
+    HANDLE mapping = nullptr;
+    HANDLE request_event = nullptr;
+    HANDLE response_event = nullptr;
+    HANDLE stop_event = nullptr;
+    navmut::native::SharedBlock* shared = nullptr;
+
+    HelperSessionObjects(std::uint32_t process_id, std::uint32_t nonce_low, std::uint32_t nonce_high)
+    {
+        mapping = CreateFileMappingW(INVALID_HANDLE_VALUE, nullptr, PAGE_READWRITE, 0,
+                                     sizeof(navmut::native::SharedBlock),
+                                     navmut::native::ipc_mapping_name(process_id, nonce_low, nonce_high).c_str());
+        request_event = CreateEventW(nullptr, FALSE, FALSE,
+                                     navmut::native::ipc_request_event_name(process_id, nonce_low, nonce_high).c_str());
+        response_event = CreateEventW(nullptr, FALSE, FALSE,
+                                      navmut::native::ipc_response_event_name(process_id, nonce_low, nonce_high).c_str());
+        stop_event = CreateEventW(nullptr, TRUE, FALSE,
+                                  navmut::native::ipc_stop_event_name(process_id, nonce_low, nonce_high).c_str());
+        assert(mapping != nullptr && request_event != nullptr && response_event != nullptr && stop_event != nullptr);
+        shared = static_cast<navmut::native::SharedBlock*>(
+            MapViewOfFile(mapping, FILE_MAP_ALL_ACCESS, 0, 0, sizeof(navmut::native::SharedBlock)));
+        assert(shared != nullptr);
+        navmut::native::initialise_shared_block(*shared, process_id, nonce_low, nonce_high, 1, 9);
+    }
+
+    ~HelperSessionObjects()
+    {
+        UnmapViewOfFile(shared);
+        CloseHandle(stop_event);
+        CloseHandle(response_event);
+        CloseHandle(request_event);
+        CloseHandle(mapping);
+    }
+
+    HelperSessionObjects(const HelperSessionObjects&) = delete;
+    HelperSessionObjects& operator=(const HelperSessionObjects&) = delete;
+};
+
+void test_hook_context_reattach()
+{
+    const std::uint32_t process_id = GetCurrentProcessId();
+    navmut::native::HookContext context;
+    assert(!navmut::native::open_hook_context(context, process_id, 0, 0));
+    assert(!navmut::native::open_hook_context(context, process_id, 11, 12));
+
+    HelperSessionObjects first(process_id, 11, 12);
+    assert(navmut::native::open_hook_context(context, process_id, 11, 12));
+    assert(context.shared->nonce_low == 11);
+
+    HelperSessionObjects second(process_id, 21, 22);
+    assert(navmut::native::open_hook_context(context, process_id, 21, 22));
+    assert(context.shared->nonce_low == 21);
+
+    assert(!navmut::native::open_hook_context(context, process_id, 31, 32));
+    assert(context.shared != nullptr && context.shared->nonce_low == 21);
+
+    navmut::native::close_hook_context(context);
+    assert(context.shared == nullptr && context.mapping == nullptr && context.stop_event == nullptr);
+}
+#endif
+
 } // namespace
 
 int main()
@@ -149,6 +217,9 @@ int main()
     test_validation();
     test_client_identity();
     test_shared_cleanup();
+#ifdef _WIN32
+    test_hook_context_reattach();
+#endif
     std::cout << "native protocol, validation, client identity, and cleanup tests passed\n";
     return 0;
 }

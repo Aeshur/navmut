@@ -7,8 +7,14 @@ use std::time::Duration;
 
 use crate::{GameWindow, PlatformError};
 
-pub const STARTUP_TIMEOUT: Duration = Duration::from_secs(5);
-pub const COMMAND_TIMEOUT: Duration = Duration::from_secs(5);
+/// How long the native helper waits for the game's window thread
+/// (`kCommandTimeoutMs` in `native/windows-x86/src/controller.cpp`).
+pub const HELPER_WINDOW_TIMEOUT: Duration = Duration::from_secs(5);
+/// Startup includes client hashing and memory scans before the window-thread
+/// handshake and needs more time than a single window-thread wait.
+pub const STARTUP_TIMEOUT: Duration = Duration::from_secs(15);
+/// Must exceed the helper's window-thread wait to allow time for its reply.
+pub const COMMAND_TIMEOUT: Duration = Duration::from_secs(7);
 const SHUTDOWN_TIMEOUT: Duration = Duration::from_secs(1);
 const MAX_RESPONSE_BYTES: usize = 256;
 
@@ -275,9 +281,10 @@ impl HelperSession {
         match receiver.recv_timeout(timeout) {
             Ok(Ok(line)) => Ok(line),
             Ok(Err(error)) => Err(PlatformError::Helper(error)),
-            Err(RecvTimeoutError::Timeout) => Err(PlatformError::Helper(
-                "helper did not respond before the five-second deadline".to_owned(),
-            )),
+            Err(RecvTimeoutError::Timeout) => Err(PlatformError::Helper(format!(
+                "helper did not respond within {} seconds",
+                timeout.as_secs()
+            ))),
             Err(RecvTimeoutError::Disconnected) => Err(PlatformError::Unknown(
                 "helper output closed before the command result".to_owned(),
             )),
@@ -398,8 +405,24 @@ mod tests {
     }
 
     #[test]
-    fn timeout_constants_are_five_seconds() {
-        assert_eq!(STARTUP_TIMEOUT, Duration::from_secs(5));
-        assert_eq!(COMMAND_TIMEOUT, Duration::from_secs(5));
+    fn deadlines_outlast_the_helper_window_thread_wait() {
+        let controller = include_str!("../../../native/windows-x86/src/controller.cpp");
+        let helper_wait_ms = controller
+            .lines()
+            .find_map(|line| {
+                line.trim()
+                    .strip_prefix("constexpr DWORD kCommandTimeoutMs = ")
+            })
+            .and_then(|value| {
+                value
+                    .trim_end_matches(';')
+                    .replace('\'', "")
+                    .parse::<u64>()
+                    .ok()
+            })
+            .expect("controller.cpp declares kCommandTimeoutMs");
+        assert_eq!(HELPER_WINDOW_TIMEOUT, Duration::from_millis(helper_wait_ms));
+        assert!(COMMAND_TIMEOUT > HELPER_WINDOW_TIMEOUT);
+        assert!(STARTUP_TIMEOUT > HELPER_WINDOW_TIMEOUT * 2);
     }
 }

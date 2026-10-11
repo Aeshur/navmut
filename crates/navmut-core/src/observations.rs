@@ -151,12 +151,45 @@ pub fn validate_observation(record: &Value) -> Result<Value> {
     Ok(record.clone())
 }
 
+// Editors may prepend a UTF-8 byte order mark.
+pub(crate) fn read_journal(path: &Path) -> Result<String> {
+    let text = fs::read_to_string(path)?;
+    Ok(match text.strip_prefix('\u{feff}') {
+        Some(rest) => rest.to_owned(),
+        None => text,
+    })
+}
+
+pub(crate) fn parse_journal_line(path: &Path, line_number: usize, line: &str) -> Result<Value> {
+    serde_json::from_str::<Value>(line)
+        .map_err(|error| error.to_string())
+        .and_then(|value| validate_observation(&value).map_err(|error| error.to_string()))
+        .map_err(|error| {
+            Error::invalid(format!(
+                "Invalid observation at {}:{}: {error}",
+                display_path(path),
+                line_number + 1
+            ))
+        })
+}
+
 pub fn load_observations(
     path: impl AsRef<Path>,
     zone: u16,
     profile_id: Option<&str>,
 ) -> Result<Vec<Value>> {
-    load_observations_filtered(path, Some(zone), profile_id)
+    load_observations_filtered(path, Some(zone), profile_id, true)
+}
+
+/// Skip lines that fail to parse or validate, unlike [`load_observations`].
+/// Height lookups tolerate damaged records, including lines cut short by a crash,
+/// to keep other records available for warps.
+pub fn load_valid_observations(
+    path: impl AsRef<Path>,
+    zone: u16,
+    profile_id: Option<&str>,
+) -> Result<Vec<Value>> {
+    load_observations_filtered(path, Some(zone), profile_id, false)
 }
 
 /// Load version 2 observations for a profile without filtering by zone.
@@ -165,13 +198,14 @@ pub fn load_observations_for_profile(
     path: impl AsRef<Path>,
     profile_id: &str,
 ) -> Result<Vec<Value>> {
-    load_observations_filtered(path, None, Some(profile_id))
+    load_observations_filtered(path, None, Some(profile_id), true)
 }
 
 fn load_observations_filtered(
     path: impl AsRef<Path>,
     zone: Option<u16>,
     profile_id: Option<&str>,
+    strict: bool,
 ) -> Result<Vec<Value>> {
     let path = absolute_without_io(path.as_ref());
     if zone == Some(0) {
@@ -180,26 +214,17 @@ fn load_observations_filtered(
     if !path.exists() {
         return Ok(Vec::new());
     }
-    let text = fs::read_to_string(&path)?;
+    let text = read_journal(&path)?;
     let mut result = Vec::new();
     for (line_number, line) in text.lines().enumerate() {
         if line.trim().is_empty() {
             continue;
         }
-        let record: Value = serde_json::from_str(line).map_err(|error| {
-            Error::invalid(format!(
-                "Invalid observation at {}:{}: {error}",
-                display_path(&path),
-                line_number + 1
-            ))
-        })?;
-        let record = validate_observation(&record).map_err(|error| {
-            Error::invalid(format!(
-                "Invalid observation at {}:{}: {error}",
-                display_path(&path),
-                line_number + 1
-            ))
-        })?;
+        let record = match parse_journal_line(&path, line_number, line) {
+            Ok(record) => record,
+            Err(error) if strict => return Err(error),
+            Err(_) => continue,
+        };
         let object = record.as_object().expect("validated object");
         let matches = if profile_id.is_some() {
             profile_id.is_some_and(|expected| {
@@ -231,6 +256,7 @@ pub fn append_observation(path: impl AsRef<Path>, point: &Value) -> Result<()> {
         .append(true)
         .read(true)
         .open(&path)?;
+    let mut line = String::new();
     let metadata = file.metadata()?;
     if metadata.len() > 0 {
         use std::io::{Seek, SeekFrom};
@@ -238,11 +264,15 @@ pub fn append_observation(path: impl AsRef<Path>, point: &Value) -> Result<()> {
         let mut last = [0u8; 1];
         std::io::Read::read_exact(&mut file, &mut last)?;
         if last[0] != b'\n' {
-            file.write_all(b"\n")?;
+            // A crash may leave a partial line; the new record needs its own line.
+            line.push('\n');
         }
     }
-    file.write_all(encoded.as_bytes())?;
-    file.write_all(b"\n")?;
+    line.push_str(&encoded);
+    line.push('\n');
+    // Report a capture as saved only after its complete record reaches disk.
+    file.write_all(line.as_bytes())?;
+    file.sync_data()?;
     Ok(())
 }
 
@@ -271,6 +301,29 @@ mod tests {
         );
         assert_eq!(
             load_observations_for_profile(&path, "profile")
+                .unwrap()
+                .len(),
+            2
+        );
+    }
+
+    #[test]
+    fn damaged_lines_are_skipped_only_by_height_lookups() {
+        let root = tempdir().unwrap();
+        let path = root.path().join("obs.jsonl");
+        let record = serde_json::to_string(&compact()).unwrap();
+        fs::write(&path, format!("\u{feff}{record}\n{}", &record[..20])).unwrap();
+        append_observation(&path, &compact()).unwrap();
+        assert!(fs::read_to_string(&path)
+            .unwrap()
+            .ends_with(&format!("\n{record}\n")));
+
+        let error = load_observations(&path, 128, Some("profile"))
+            .unwrap_err()
+            .to_string();
+        assert!(error.contains("obs.jsonl:2"), "{error}");
+        assert_eq!(
+            load_valid_observations(&path, 128, Some("profile"))
                 .unwrap()
                 .len(),
             2

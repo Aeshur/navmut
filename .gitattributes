@@ -1,0 +1,6 @@
+# Packaged data and embedded files must have the same bytes on every OS.
+* text=auto eol=lf
+
+*.icns binary
+*.ico binary
+*.png binary

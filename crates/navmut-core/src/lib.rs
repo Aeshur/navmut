@@ -15,7 +15,8 @@ pub use height_anchors::{
     resolve_height_anchor, resolve_height_anchor_default, DEFAULT_ANCHOR_RADIUS,
 };
 pub use observations::{
-    append_observation, load_observations, load_observations_for_profile, validate_observation,
+    append_observation, load_observations, load_observations_for_profile, load_valid_observations,
+    validate_observation,
 };
 pub use observations::{SCHEMA_VERSION, SUBJECT_TYPES};
 pub use pois::{
@@ -23,8 +24,8 @@ pub use pois::{
     POI_KINDS, POI_SCHEMA_VERSION,
 };
 pub use profiles::{
-    delete_location, load_locations, load_profiles, load_world_profiles, save_location, Location,
-    MapProfile,
+    atomic_write_json, delete_location, load_locations, load_profiles, load_world_profiles,
+    save_location, Location, MapProfile,
 };
 
 use std::path::PathBuf;

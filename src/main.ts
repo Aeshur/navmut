@@ -26,6 +26,8 @@ export interface AppState extends MovementQueueState {
   movementQueue: Promise<void>;
   polling: number | null;
   capabilities: PlatformCapabilities;
+  /** False after settings fail to load; defaults must not overwrite the unreadable file. */
+  settingsWritable: boolean;
 }
 
 function liveActionsAvailable(state: AppState): boolean {
@@ -33,6 +35,18 @@ function liveActionsAvailable(state: AppState): boolean {
 }
 
 const UNSUPPORTED_MESSAGE = "Live game controls are unavailable on this platform. Maps, catalogs, saved data, and Journal exports remain available.";
+const NO_CAPABILITIES: PlatformCapabilities = { windows: false, playerState: false, silentPosition: false, bridgeProtocol: 0 };
+
+/** One failed startup step must not stop the app from starting. */
+export async function startupStep<T>(failures: string[], failureMessage: string, step: () => Promise<T>, fallback: T): Promise<T> {
+  try {
+    return await step();
+  } catch (error) {
+    console.error(failureMessage, error);
+    failures.push(errorMessage(error, failureMessage));
+    return fallback;
+  }
+}
 
 export function enqueueMovement(state: MovementQueueState, movement: () => Promise<void>): Promise<void> {
   state.movementQueue = state.movementQueue.then(movement, movement);
@@ -60,6 +74,8 @@ export function errorMessage(error: unknown, fallback: string): string {
   if (detail.includes("outcome is unknown") || detail.includes("outcome was uncertain") || detail.includes("outcome is uncertain")) {
     return "Could not confirm the position change. Check the game before trying again.";
   }
+  // Journal errors retain the damaged line's location for manual repair.
+  if (detail.startsWith("invalid observation at ")) return message;
   if (detail.includes("authentication failed")) return "Could not authenticate with the bridge. Check its connection file.";
   if (detail.includes("connection file")) return "Could not read the bridge connection file.";
   if (detail.includes("bridge protocol") || detail.includes("bridge version") || detail.includes("lacks silent-position") || detail.includes("bridge does not support position control")) {
@@ -98,8 +114,8 @@ export function observationPayload(name: string, type: ObservationForm["type"], 
 }
 
 export function settingsForPersistence(settings: UiSettings): PersistedSettings {
-  const { selectedPid: _selectedPid, overrideZone: _overrideZone, stepSize: _stepSize, ...persisted } = settings;
-  return persisted;
+  const { profileId, mapVisible, activePanel, alwaysOnTop, opacity } = settings;
+  return { profileId, mapVisible, activePanel, alwaysOnTop, opacity };
 }
 
 export function autoAttachPid(processes: { pid: number }[]): number | null {
@@ -573,7 +589,8 @@ function render(state: AppState): void {
   document.querySelectorAll<HTMLButtonElement>("[data-direction]").forEach((control) => { control.disabled = !liveAvailable; });
 }
 
-async function persist(state: AppState, bridge: NavmutBridge): Promise<void> {
+export async function persist(state: Pick<AppState, "settings" | "settingsWritable">, bridge: Pick<NavmutBridge, "saveSettings">): Promise<void> {
+  if (!state.settingsWritable) return;
   await bridge.saveSettings(settingsForPersistence(state.settings));
 }
 
@@ -785,19 +802,28 @@ async function setup(): Promise<void> {
   // Keep the window controls available even when optional startup data fails.
   button("title-minimize", "Minimize window").addEventListener("click", () => void bridge.minimizeWindow().catch((error) => reportFailure(error, "Could not minimize Navmut.")));
   button("title-close", "Close Navmut").addEventListener("click", () => void bridge.closeWindow().catch((error) => reportFailure(error, "Could not close Navmut.")));
+  const failures: string[] = [];
   setStatus("Loading settings...");
-  const settings = { ...defaultSettings(), ...(await bridge.loadSettings()) };
-  const capabilities = await bridge.getCapabilities();
+  const loadedSettings = await startupStep<UiSettings | null>(failures, "Could not load settings. Changes will not be saved until Navmut restarts.", () => bridge.loadSettings(), null);
+  const settings = { ...defaultSettings(), ...loadedSettings };
+  const capabilities = await startupStep(failures, "Could not read the platform capabilities.", () => bridge.getCapabilities(), NO_CAPABILITIES);
   const nativeWindowOpacity = isTauriRuntime() && navigator.userAgent.includes("Windows");
-  await bridge.resizeWindow(settings.mapVisible ? WINDOW_WIDTH : RAIL_WIDTH);
-  if (nativeWindowOpacity) await bridge.setWindowOpacity(settings.opacity);
-  else applyWindowOpacity(settings.opacity);
-  await bridge.setAlwaysOnTop(settings.alwaysOnTop);
+  await startupStep(failures, "Could not restore the window layout.", async () => {
+    await bridge.resizeWindow(settings.mapVisible ? WINDOW_WIDTH : RAIL_WIDTH);
+    if (nativeWindowOpacity) await bridge.setWindowOpacity(settings.opacity);
+    else applyWindowOpacity(settings.opacity);
+    await bridge.setAlwaysOnTop(settings.alwaysOnTop);
+  }, undefined);
   setStatus("Loading game connections...");
-  const [processes, savedPoints] = await Promise.all([bridge.listProcesses(), bridge.listSavedPoints()]);
+  const [processes, savedPoints] = await Promise.all([
+    startupStep(failures, "Could not list game processes.", () => bridge.listProcesses(), []),
+    startupStep(failures, "Could not load saved points.", () => bridge.listSavedPoints(), []),
+  ]);
   setStatus("Loading maps...");
-  let unsortedProfiles = await bridge.listProfiles();
-  if (unsortedProfiles.length === 0) unsortedProfiles = await bridge.selectCatalog();
+  const listedProfiles = await startupStep<MapProfile[] | null>(failures, "Could not load maps.", () => bridge.listProfiles(), null);
+  const unsortedProfiles = listedProfiles === null || listedProfiles.length > 0
+    ? listedProfiles ?? []
+    : await startupStep(failures, "Could not load maps.", () => bridge.selectCatalog(), []);
   const profiles = [...unsortedProfiles];
   settings.selectedPid = settings.selectedPid ?? autoAttachPid(processes);
   setStatus("Connecting to game...");
@@ -809,14 +835,15 @@ async function setup(): Promise<void> {
   const profileId = selectProfileForLiveZone(profiles, game, settings.overrideZone, settings.profileId);
   if (profileId) {
     const index = profiles.findIndex((profile) => profile.id === profileId);
-    if (index >= 0) profiles[index] = await bridge.loadProfile(profileId);
+    if (index >= 0) profiles[index] = await startupStep(failures, "Could not load the map.", () => bridge.loadProfile(profileId), profiles[index]);
   }
   stateBridge = bridge;
-  const journal = profileId ? await bridge.listJournal(profileId) : [];
-  const state: AppState = { settings: { ...settings, profileId }, game, profiles, journal, savedPoints, movementQueue: Promise.resolve(), polling: null, capabilities };
+  const journal = profileId ? await startupStep(failures, "Could not load the Journal.", () => bridge.listJournal(profileId), []) : [];
+  const state: AppState = { settings: { ...settings, profileId }, game, profiles, journal, savedPoints, movementQueue: Promise.resolve(), polling: null, capabilities, settingsWritable: loadedSettings !== null };
   renderProcesses(state, processes);
   render(state);
-  if (!liveActionsAvailable(state)) setStatus(UNSUPPORTED_MESSAGE);
+  if (failures.length > 0) setStatus(failures[0], true, true);
+  else if (!liveActionsAvailable(state)) setStatus(UNSUPPORTED_MESSAGE);
   else if (startupGameFailure) setStatus(startupGameFailure.message, startupGameFailure.isError, startupGameFailure.persistent);
   else setStatus(gameConnectionStatus(game));
 
