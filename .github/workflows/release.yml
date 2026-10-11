@@ -103,6 +103,16 @@ jobs:
         with:
           path: release-assets
           merge-multiple: true
+      # The Ubuntu artifact keeps its appimage/ and deb/ folders; publish files only.
+      - name: Flatten release packages
+        working-directory: release-assets
+        run: |
+          find . -mindepth 2 -type f -exec mv -n -t . {} +
+          find . -mindepth 1 -type d -empty -delete
+          if find . -mindepth 1 -type d | grep -q .; then
+            echo "::error::Release packages have conflicting file names."
+            exit 1
+          fi
       - name: Attest build provenance
         uses: actions/attest-build-provenance@4d101475d8b20a2381f78447822ac1eab6504dd8 # v4.2.2
         with:
