@@ -413,9 +413,6 @@ fn path_relative(base: &Path, target: &Path) -> String {
     pathdiff(base, target).to_string_lossy().replace('\\', "/")
 }
 fn pathdiff(base: &Path, target: &Path) -> PathBuf {
-    pathdiff_inner(base, target)
-}
-fn pathdiff_inner(base: &Path, target: &Path) -> PathBuf {
     let base: Vec<_> = base.components().collect();
     let target: Vec<_> = target.components().collect();
     let common = base

@@ -9,8 +9,18 @@ permissions:
   contents: read
 
 jobs:
+  verify:
+    name: Verify release version
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+      - name: Check tag against project versions
+        run: node tools/check-release-version.mjs "$GITHUB_REF_NAME"
+
   build:
     name: ${{ format('Release ({0})', matrix.platform) }}
+    needs: verify
     strategy:
       fail-fast: false
       matrix:
@@ -24,14 +34,14 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
       - name: Set up Node
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
         with:
           node-version-file: .node-version
           cache: npm
       - name: Install Rust toolchain
-        uses: dtolnay/rust-toolchain@master
+        uses: dtolnay/rust-toolchain@e2a55d2ffb04f378e9626c28d38b36d230d1e12f # master
         with:
           toolchain: 1.95.0
           targets: i686-pc-windows-msvc
@@ -40,26 +50,32 @@ jobs:
         run: sudo apt-get update && sudo apt-get install -y build-essential curl wget file libwebkit2gtk-4.1-dev libxdo-dev libssl-dev libayatana-appindicator3-dev librsvg2-dev patchelf
       - name: Install Node dependencies
         run: npm ci
+      - name: Build frontend
+        run: npm run build
+      - name: Run frontend tests
+        run: npm test
+      - name: Test Rust workspace
+        run: cargo test --locked --workspace
       - name: Build Windows ZIP
         if: runner.os == 'Windows'
         shell: pwsh
         run: ./tools/package-windows.ps1
       - name: Build Ubuntu packages
         if: runner.os == 'Linux'
-        run: npm run tauri -- build --bundles appimage,deb
+        run: npm run tauri -- build --bundles appimage,deb -- --locked
       - name: Build macOS package
         if: runner.os == 'macOS'
-        run: npm run tauri -- build --bundles dmg
+        run: npm run tauri -- build --bundles dmg -- --locked
       - name: Upload Windows ZIP
         if: runner.os == 'Windows'
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: Navmut-windows
           path: out/Navmut-windows.zip
           if-no-files-found: error
       - name: Upload Ubuntu packages
         if: runner.os == 'Linux'
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: Navmut-ubuntu
           path: |
@@ -68,7 +84,7 @@ jobs:
           if-no-files-found: error
       - name: Upload macOS package
         if: runner.os == 'macOS'
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: Navmut-macos
           path: target/release/bundle/dmg/*.dmg
@@ -79,25 +95,42 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     permissions:
+      attestations: write
       contents: write
+      id-token: write
     steps:
       - name: Download release packages
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
         with:
           path: release-assets
+          merge-multiple: true
+      - name: Attest build provenance
+        uses: actions/attest-build-provenance@4d101475d8b20a2381f78447822ac1eab6504dd8 # v4.2.2
+        with:
+          subject-path: release-assets/*
+      - name: Write checksums
+        working-directory: release-assets
+        run: sha256sum -- * > SHA256SUMS
       - name: Create release and upload packages
         env:
           GH_TOKEN: ${{ github.token }}
           GH_REPO: ${{ github.repository }}
           TAG_NAME: ${{ github.ref_name }}
         run: |
-          if ! gh release view "$TAG_NAME" >/dev/null 2>&1; then
+          set -euo pipefail
+          # Publish the draft only after all uploads succeed.
+          # Re-runs must not overwrite a published release.
+          if is_draft=$(gh release view "$TAG_NAME" --json isDraft --jq .isDraft 2>/dev/null); then
+            if [ "$is_draft" != "true" ]; then
+              echo "::error::Release $TAG_NAME is already published; refusing to replace its packages."
+              exit 1
+            fi
+          else
             gh release create "$TAG_NAME" \
               --verify-tag \
+              --draft \
               --title "Navmut $TAG_NAME" \
               --generate-notes
           fi
-          find release-assets -type f -print0 |
-            while IFS= read -r -d '' asset; do
-              gh release upload "$TAG_NAME" "$asset" --clobber
-            done
+          gh release upload "$TAG_NAME" release-assets/* --clobber
+          gh release edit "$TAG_NAME" --draft=false

@@ -23,8 +23,6 @@ export interface AppState extends MovementQueueState {
   profiles: MapProfile[];
   journal: JournalEntry[];
   savedPoints: SavedPoint[];
-  movementQueue: Promise<void>;
-  polling: number | null;
   capabilities: PlatformCapabilities;
   /** False after settings fail to load; defaults must not overwrite the unreadable file. */
   settingsWritable: boolean;
@@ -295,7 +293,7 @@ const mapTransforms = new Map<string, MapTransform>();
 const mapImages = new Map<string, HTMLImageElement>();
 const sourceCanvases = new Map<string, HTMLCanvasElement>();
 
-export function createMapTransform(_profile: MapProfile, width: number, height: number, imageWidth: number, imageHeight: number): MapTransform {
+export function createMapTransform(width: number, height: number, imageWidth: number, imageHeight: number): MapTransform {
   const drawableWidth = Math.max(1, width - MAP_INSET);
   const drawableHeight = Math.max(1, height - MAP_INSET);
   const scale = Math.min(drawableWidth / imageWidth, drawableHeight / imageHeight);
@@ -392,7 +390,7 @@ function drawMap(canvas: HTMLCanvasElement, state: AppState): void {
   const image = imageFor(profile);
   const imageWidth = profile.artwork?.width || 1;
   const imageHeight = profile.artwork?.height || 1;
-  const transform = createMapTransform(profile, width, height, imageWidth, imageHeight);
+  const transform = createMapTransform(width, height, imageWidth, imageHeight);
   mapTransforms.set(profile.id, transform);
   if (image && image.complete && image.naturalWidth > 0) {
     context.drawImage(image, transform.offsetX, transform.offsetY, transform.imageWidth * transform.scale, transform.imageHeight * transform.scale);
@@ -783,7 +781,7 @@ function canvasPosition(event: MouseEvent, canvas: HTMLCanvasElement, profile: M
   const y = event.clientY - rect.top;
   const artwork = profile.artwork;
   const image = imageFor(profile);
-  const transform = mapTransforms.get(profile.id) ?? (artwork ? createMapTransform(profile, rect.width, rect.height, artwork.width, artwork.height) : null);
+  const transform = mapTransforms.get(profile.id) ?? (artwork ? createMapTransform(rect.width, rect.height, artwork.width, artwork.height) : null);
   if (!artwork || !image || !transform || !image.complete || image.naturalWidth === 0) return null;
   const sourceX = (x - transform.offsetX) / transform.scale;
   const sourceY = (y - transform.offsetY) / transform.scale;
@@ -837,9 +835,8 @@ async function setup(): Promise<void> {
     const index = profiles.findIndex((profile) => profile.id === profileId);
     if (index >= 0) profiles[index] = await startupStep(failures, "Could not load the map.", () => bridge.loadProfile(profileId), profiles[index]);
   }
-  stateBridge = bridge;
   const journal = profileId ? await startupStep(failures, "Could not load the Journal.", () => bridge.listJournal(profileId), []) : [];
-  const state: AppState = { settings: { ...settings, profileId }, game, profiles, journal, savedPoints, movementQueue: Promise.resolve(), polling: null, capabilities, settingsWritable: loadedSettings !== null };
+  const state: AppState = { settings: { ...settings, profileId }, game, profiles, journal, savedPoints, movementQueue: Promise.resolve(), capabilities, settingsWritable: loadedSettings !== null };
   renderProcesses(state, processes);
   render(state);
   if (failures.length > 0) setStatus(failures[0], true, true);
@@ -1063,7 +1060,7 @@ async function setup(): Promise<void> {
       move(state, moveDelta(direction, state.settings.stepSize));
     }
   });
-  state.polling = window.setInterval(() => void refreshGame(state, bridge, changeProfile), POLL_INTERVAL_MS);
+  window.setInterval(() => void refreshGame(state, bridge, changeProfile), POLL_INTERVAL_MS);
 }
 
 if (typeof document !== "undefined") {

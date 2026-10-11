@@ -1,6 +1,5 @@
 #include "navmut_native/shared_state.h"
 
-#include <algorithm>
 #include <cstring>
 
 namespace navmut::native

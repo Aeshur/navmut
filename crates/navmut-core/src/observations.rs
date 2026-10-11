@@ -105,9 +105,6 @@ fn validate_v2(record: &Map<String, Value>) -> Result<()> {
             missing.join(", ")
         )));
     }
-    if record.get("schema_version").and_then(Value::as_u64) != Some(SCHEMA_VERSION) {
-        return Err(Error::invalid("schema_version must be 2"));
-    }
     non_empty_string(record.get("observation_id"), "observation_id")?;
     non_empty_string(record.get("subject_name"), "subject_name")?;
     let subject_type = record

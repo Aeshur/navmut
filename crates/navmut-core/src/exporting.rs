@@ -91,7 +91,6 @@ fn path_like(value: &str) -> bool {
     file_uri
         || drive
         || normalized.starts_with('/')
-        || normalized.starts_with("//")
         || normalized.split('/').any(|part| {
             [
                 ".dds", ".fbx", ".glb", ".jpg", ".jpeg", ".obj", ".png", ".tga",
@@ -334,13 +333,12 @@ fn hash_field(record: &Map<String, Value>, key: &str) -> String {
 }
 
 fn csv_payload(records: &[Value]) -> Result<Vec<u8>> {
-    let fields: Vec<&str> = CURRENT_CSV_FIELDS.to_vec();
     let mut writer = WriterBuilder::new()
         .has_headers(true)
         .terminator(csv::Terminator::Any(b'\n'))
         .from_writer(Vec::new());
     writer
-        .write_record(&fields)
+        .write_record(CURRENT_CSV_FIELDS)
         .map_err(|error| Error::invalid(format!("CSV export failed: {error}")))?;
     for record in records {
         let object = record

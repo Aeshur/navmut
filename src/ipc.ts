@@ -229,5 +229,3 @@ export function createBridge(): NavmutBridge {
 export function defaultSettings(): UiSettings {
   return { ...DEFAULT_SETTINGS };
 }
-
-export { MOCK_PROFILES };

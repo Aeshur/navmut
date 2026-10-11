@@ -122,8 +122,7 @@ textarea {
 
 .compass { display: grid; grid-template-columns: repeat(3, 1fr); grid-template-rows: repeat(3, 29px); gap: 2px; }
 .move-button,
-.outline-button,
-.primary-button {
+.outline-button {
   min-width: 0;
   min-height: 29px;
   padding: 3px 7px;

@@ -60,13 +60,9 @@ fn finite(value: &Value, label: &str) -> Result<f64> {
 }
 
 fn number_value(value: f64, label: &str) -> Result<Value> {
-    if value.is_finite() {
-        serde_json::Number::from_f64(value)
-            .map(Value::Number)
-            .ok_or_else(|| Error::invalid(format!("{label} must be a finite number")))
-    } else {
-        Err(Error::invalid(format!("{label} must be a finite number")))
-    }
+    serde_json::Number::from_f64(value)
+        .map(Value::Number)
+        .ok_or_else(|| Error::invalid(format!("{label} must be a finite number")))
 }
 
 fn string(value: Option<&Value>, label: &str) -> Result<String> {

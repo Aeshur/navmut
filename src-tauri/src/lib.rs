@@ -258,7 +258,6 @@ impl Default for UiSettings {
 struct Runtime {
     profiles: Vec<CoreMapProfile>,
     manifest: Option<PathBuf>,
-    windows: Vec<GameWindow>,
     selected_window: Option<GameWindow>,
     reader: ReaderCache,
     input: Option<HelperSession>,
@@ -287,14 +286,12 @@ struct StartupArgs {
 struct ReaderCache(Option<PlayerStateReader>);
 
 unsafe impl Send for ReaderCache {}
-unsafe impl Sync for ReaderCache {}
 
 impl Default for Runtime {
     fn default() -> Self {
         Self {
             profiles: Vec::new(),
             manifest: None,
-            windows: Vec::new(),
             selected_window: None,
             reader: ReaderCache(None),
             input: None,
@@ -967,28 +964,22 @@ fn snapshot(
             Ok(windows) => windows,
             Err(error) => return Err(bridge_failure(&mut runtime.bridge, error)),
         };
-        runtime.windows = bridge_windows
-            .iter()
-            .map(|window| GameWindow::new(window.handle, window.process_id, window.title.clone()))
-            .collect();
         let Some(pid) = pid else {
             runtime.selected_window = None;
             return Ok(None);
         };
-        let Some(window) = runtime
-            .windows
-            .iter()
+        let Some(bridge_window) = bridge_windows
+            .into_iter()
             .find(|window| window.process_id == pid)
-            .cloned()
         else {
             runtime.selected_window = None;
             return Ok(None);
         };
-        let bridge_window = BridgeWindow {
-            handle: window.handle,
-            process_id: window.process_id,
-            title: window.title.clone(),
-        };
+        let window = GameWindow::new(
+            bridge_window.handle,
+            bridge_window.process_id,
+            bridge_window.title.clone(),
+        );
         let player = match client.player_state(bridge_window) {
             Ok(player) => player,
             Err(error) => return Err(bridge_failure(&mut runtime.bridge, error)),
@@ -1008,18 +999,12 @@ fn snapshot(
         )));
     }
     let windows = enumerate_game_windows().map_err(state_error)?;
-    runtime.windows = windows;
     let Some(pid) = pid else {
         runtime.selected_window = None;
         runtime.reader.0 = None;
         return Ok(None);
     };
-    let Some(window) = runtime
-        .windows
-        .iter()
-        .find(|window| window.process_id == pid)
-        .cloned()
-    else {
+    let Some(window) = windows.into_iter().find(|window| window.process_id == pid) else {
         runtime.selected_window = None;
         runtime.reader.0 = None;
         return Ok(None);
@@ -1108,10 +1093,7 @@ fn core_records(
         .filter(|location| location.zone == zone)
         .filter_map(|location| serde_json::to_value(location).ok())
         .collect();
-    let pois = match resolve_poi_catalog(app, settings, manifest)? {
-        Some(path) => load_poi_catalog(path).map_err(state_error)?,
-        None => packaged_pois()?,
-    };
+    let pois = load_pois(app, settings, manifest)?;
     Ok((observations, locations, pois))
 }
 
@@ -1193,9 +1175,8 @@ fn list_processes_blocking(state: State<'_, AppState>) -> Result<Vec<ProcessInfo
     if !navmut_platform::capabilities().windows {
         return Ok(Vec::new());
     }
-    runtime.windows = enumerate_game_windows().map_err(state_error)?;
-    Ok(runtime
-        .windows
+    Ok(enumerate_game_windows()
+        .map_err(state_error)?
         .iter()
         .map(|window| ProcessInfo {
             pid: window.process_id,
@@ -1292,9 +1273,6 @@ fn select_catalog_blocking(
     };
     let manifest = chosen.into_path().map_err(state_error)?;
     let profiles = load_world_profiles(&manifest).map_err(state_error)?;
-    if profiles.is_empty() {
-        return Err("the selected catalog has no world coordinate maps".to_string());
-    }
     let catalog_path = manifest.display().to_string();
     let mut settings = state.settings.lock().map_err(state_error)?.clone();
     settings.catalog_path = Some(catalog_path.clone());

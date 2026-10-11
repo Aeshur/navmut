@@ -577,7 +577,7 @@ impl BridgeBackend for WindowsBridgeBackend {
 pub struct BridgeServer<B> {
     listener: TcpListener,
     connection: BridgeConnection,
-    backend: Arc<B>,
+    backend: B,
     shutdown: Arc<AtomicBool>,
     active_stream: Arc<Mutex<Option<TcpStream>>>,
     finished: Arc<AtomicBool>,
@@ -604,7 +604,7 @@ impl<B: BridgeBackend> BridgeServer<B> {
         Ok(Self {
             listener,
             connection,
-            backend: Arc::new(backend),
+            backend,
             shutdown: Arc::new(AtomicBool::new(false)),
             active_stream: Arc::new(Mutex::new(None)),
             finished: Arc::new(AtomicBool::new(false)),
@@ -669,7 +669,7 @@ impl<B: BridgeBackend> BridgeServer<B> {
                         }
                         *active_stream = stream.try_clone().ok();
                     }
-                    let _ = handle_connection(&mut stream, &self.connection, self.backend.as_ref());
+                    let _ = handle_connection(&mut stream, &self.connection, &self.backend);
                     if let Ok(mut active_stream) = self.active_stream.lock() {
                         active_stream.take();
                     }
@@ -786,13 +786,9 @@ impl BridgeClient {
 
     pub fn windows(&self) -> Result<Vec<BridgeWindow>, BridgeError> {
         let response = self.request(BridgeRequest::windows())?;
-        let windows = response
+        response
             .windows
-            .ok_or_else(|| BridgeError::Protocol("windows response was malformed".to_owned()))?;
-        for window in &windows {
-            window.validate()?;
-        }
-        Ok(windows)
+            .ok_or_else(|| BridgeError::Protocol("windows response was malformed".to_owned()))
     }
 
     pub fn player_state(&self, window: BridgeWindow) -> Result<BridgePlayerState, BridgeError> {
@@ -801,7 +797,6 @@ impl BridgeClient {
         let state = response.player_state.ok_or_else(|| {
             BridgeError::Protocol("player-state response was malformed".to_owned())
         })?;
-        state.validate()?;
         if state.process_id != process_id {
             return Err(BridgeError::Protocol(
                 "player-state process id does not match the selected window".to_owned(),
@@ -878,20 +873,17 @@ impl BridgeClient {
             validate_success_response(&request, &response)?;
             return Ok(response);
         }
-        if !(200..300).contains(&status) {
-            if response.uncertain {
-                return Err(BridgeError::Uncertain(response.error.unwrap_or_else(
-                    || "silent-position outcome is unknown".to_owned(),
-                )));
-            }
-            return Err(BridgeError::Http(
-                status,
-                response
-                    .error
-                    .unwrap_or_else(|| "bridge request was rejected".to_owned()),
-            ));
+        if response.uncertain {
+            return Err(BridgeError::Uncertain(response.error.unwrap_or_else(
+                || "silent-position outcome is unknown".to_owned(),
+            )));
         }
-        unreachable!("non-success bridge responses return above")
+        Err(BridgeError::Http(
+            status,
+            response
+                .error
+                .unwrap_or_else(|| "bridge request was rejected".to_owned()),
+        ))
     }
 }
 

@@ -39,11 +39,10 @@ if(WIN32)
     add_library(navmut-helper-hook SHARED src/hook_dll.cpp src/hook_context.cpp src/hook_dll.def)
     target_include_directories(navmut-helper-hook PRIVATE include)
     target_link_libraries(navmut-helper-hook PRIVATE navmut-native-core user32 kernel32)
-    target_compile_definitions(navmut-helper-hook PRIVATE NAVMUT_HELPER_DLL=1)
 
     add_executable(navmut-helper src/controller.cpp src/helper_main.cpp)
     target_include_directories(navmut-helper PRIVATE include)
-    target_link_libraries(navmut-helper PRIVATE navmut-native-core user32 kernel32 advapi32 bcrypt)
+    target_link_libraries(navmut-helper PRIVATE navmut-native-core user32 kernel32 bcrypt)
 
     # The retail client and SetWindowsHookEx target are both 32-bit. A
     # Win32 CMake generator (cmake -A Win32) is required for this target.

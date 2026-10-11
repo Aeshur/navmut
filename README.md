@@ -37,12 +37,12 @@ typing in a text field or using a selector.
 ## Wine bridge
 
 To connect the native Linux or macOS app to a running game, see the
-[Wine bridge setup](docs/bridge.md). The Windows ZIP includes the x86 bridge
-and its native helpers.
+[Wine bridge setup](docs/bridge.md). The Windows ZIP includes the x86 bridge,
+its native helpers, and the same guide as `bridge.md` beside `navmut.exe`.
 
 ## Build
 
-Install Node dependencies:
+Install Node.js and Rust, then install the Node dependencies:
 
 ```text
 npm ci

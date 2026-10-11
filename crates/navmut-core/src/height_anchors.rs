@@ -5,12 +5,9 @@ use serde_json::Value;
 
 pub const DEFAULT_ANCHOR_RADIUS: f64 = 4.0;
 
-fn finite(value: &Value, label: &str) -> Option<f64> {
+fn finite(value: &Value) -> Option<f64> {
     let number = value.as_f64()?;
-    number.is_finite().then_some(number).or_else(|| {
-        let _ = label;
-        None
-    })
+    number.is_finite().then_some(number)
 }
 
 fn position(value: &Value) -> Option<[f64; 3]> {
@@ -20,15 +17,15 @@ fn position(value: &Value) -> Option<[f64; 3]> {
             return None;
         }
         return Some([
-            finite(&values[0], "position[0]")?,
-            finite(&values[1], "position[1]")?,
-            finite(&values[2], "position[2]")?,
+            finite(&values[0])?,
+            finite(&values[1])?,
+            finite(&values[2])?,
         ]);
     }
     Some([
-        finite(value.get("x")?, "position.x")?,
-        finite(value.get("y")?, "position.y")?,
-        finite(value.get("z")?, "position.z")?,
+        finite(value.get("x")?)?,
+        finite(value.get("y")?)?,
+        finite(value.get("z")?)?,
     ])
 }
 
@@ -72,10 +69,6 @@ fn trusted_observation(record: &Value) -> bool {
     }
 }
 
-fn records(records: Option<&[Value]>) -> &[Value] {
-    records.unwrap_or(&[])
-}
-
 /// Resolve a destination Y from nearby trusted records.
 ///
 /// Distances are measured in the horizontal X/Z plane. For equal distances,
@@ -97,14 +90,8 @@ pub fn resolve_height_anchor(
     if !radius.is_finite() || radius < 0.0 {
         return Err(Error::invalid("radius must be finite and not negative"));
     }
-    for (value, label) in [(zone, "zone")] {
-        if let Some(value) = value {
-            if !valid_identifier(value) {
-                return Err(Error::invalid(format!(
-                    "{label} must be a valid identifier"
-                )));
-            }
-        }
+    if zone.is_some_and(|value| !valid_identifier(value)) {
+        return Err(Error::invalid("zone must be a valid identifier"));
     }
     if profile_id.is_some_and(|value| value.trim().is_empty()) {
         return Err(Error::invalid("profile_id must be a valid identifier"));
@@ -120,9 +107,9 @@ pub fn resolve_height_anchor(
     let mut best_distance = radius_squared;
     let mut best_order: Option<(usize, usize)> = None;
     for (source_index, (source, kind)) in [
-        (records(observations), 0u8),
-        (records(locations), 1u8),
-        (records(pois), 2u8),
+        (observations.unwrap_or(&[]), 0u8),
+        (locations.unwrap_or(&[]), 1u8),
+        (pois.unwrap_or(&[]), 2u8),
     ]
     .into_iter()
     .enumerate()

@@ -269,7 +269,7 @@ impl HelperSession {
             .write_all(format!("{command}\n").as_bytes())
             .and_then(|_| stdin.flush())
             .map_err(|error| error.to_string())?;
-        let line = Self::receive(inner, COMMAND_TIMEOUT).map_err(platform_message)?;
+        let line = Self::receive(inner, COMMAND_TIMEOUT).map_err(|error| error.to_string())?;
         Ok(parse_helper_response(&line))
     }
 
@@ -301,7 +301,7 @@ impl HelperSession {
         }
         inner.responses = None;
         if let Some(mut child) = inner.child.take() {
-            match child.wait_timeout(SHUTDOWN_TIMEOUT) {
+            match wait_timeout(&mut child, SHUTDOWN_TIMEOUT) {
                 Ok(Some(_)) => {}
                 Ok(None) | Err(_) => {
                     let _ = child.kill();
@@ -345,32 +345,19 @@ fn read_lines<R: std::io::Read>(stream: R, sender: Sender<Result<String, String>
     }
 }
 
-fn platform_message(error: PlatformError) -> String {
-    error.to_string()
-}
-
-trait ChildWaitTimeout {
-    fn wait_timeout(
-        &mut self,
-        timeout: Duration,
-    ) -> std::io::Result<Option<std::process::ExitStatus>>;
-}
-
-impl ChildWaitTimeout for Child {
-    fn wait_timeout(
-        &mut self,
-        timeout: Duration,
-    ) -> std::io::Result<Option<std::process::ExitStatus>> {
-        let deadline = std::time::Instant::now() + timeout;
-        loop {
-            if let Some(status) = self.try_wait()? {
-                return Ok(Some(status));
-            }
-            if std::time::Instant::now() >= deadline {
-                return Ok(None);
-            }
-            std::thread::sleep(Duration::from_millis(10));
+fn wait_timeout(
+    child: &mut Child,
+    timeout: Duration,
+) -> std::io::Result<Option<std::process::ExitStatus>> {
+    let deadline = std::time::Instant::now() + timeout;
+    loop {
+        if let Some(status) = child.try_wait()? {
+            return Ok(Some(status));
         }
+        if std::time::Instant::now() >= deadline {
+            return Ok(None);
+        }
+        std::thread::sleep(Duration::from_millis(10));
     }
 }
 

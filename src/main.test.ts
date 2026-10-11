@@ -19,7 +19,7 @@ describe("movement semantics", () => {
   });
 
   it("fits the complete map with aspect-ratio-preserving offsets", () => {
-    const transform = createMapTransform(profile, 800, 600, 400, 200);
+    const transform = createMapTransform(800, 600, 400, 200);
     expect(transform.scale).toBe(1.96);
     expect(transform.offsetX).toBe(8);
     expect(transform.offsetY).toBe(104);

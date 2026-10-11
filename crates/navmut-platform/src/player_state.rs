@@ -385,7 +385,7 @@ mod live {
                 ));
             }
             let inherited = self.world_facing(parent, depth + 1)? + local;
-            Ok(normalise_facing(inherited))
+            Ok(super::normalise_facing(inherited))
         }
 
         fn snapshot_at(&self, scene: u32) -> Result<PlayerState, PlatformError> {
@@ -500,22 +500,6 @@ mod live {
         }
     }
 
-    pub fn open(window: &GameWindow) -> Result<Reader, PlatformError> {
-        Reader::open(window)
-    }
-
-    pub fn normalise_facing(value: f64) -> f64 {
-        if !value.is_finite() {
-            return value;
-        }
-        let adjusted = if value < 0.0 {
-            value - std::f64::consts::PI
-        } else {
-            value + std::f64::consts::PI
-        };
-        value - (adjusted / (2.0 * std::f64::consts::PI)).trunc() * (2.0 * std::f64::consts::PI)
-    }
-
     #[cfg(test)]
     mod tests {
         use super::*;
@@ -548,7 +532,7 @@ pub struct PlayerStateReader {
 impl PlayerStateReader {
     pub fn open(window: &GameWindow) -> Result<Self, PlatformError> {
         Ok(Self {
-            inner: live::open(window)?,
+            inner: live::Reader::open(window)?,
         })
     }
 
@@ -558,22 +542,15 @@ impl PlayerStateReader {
 }
 
 pub fn normalise_facing(value: f64) -> f64 {
-    #[cfg(windows)]
-    {
-        live::normalise_facing(value)
+    if !value.is_finite() {
+        return value;
     }
-    #[cfg(not(windows))]
-    {
-        if !value.is_finite() {
-            return value;
-        }
-        let adjusted = if value < 0.0 {
-            value - std::f64::consts::PI
-        } else {
-            value + std::f64::consts::PI
-        };
-        value - (adjusted / (2.0 * std::f64::consts::PI)).trunc() * (2.0 * std::f64::consts::PI)
-    }
+    let adjusted = if value < 0.0 {
+        value - std::f64::consts::PI
+    } else {
+        value + std::f64::consts::PI
+    };
+    value - (adjusted / (2.0 * std::f64::consts::PI)).trunc() * (2.0 * std::f64::consts::PI)
 }
 
 #[cfg(test)]

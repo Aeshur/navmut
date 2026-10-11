@@ -179,7 +179,7 @@ try {
         $bridgeExecutable = Join-Path $tauriTarget "i686-pc-windows-msvc\release\navmut-bridge.exe"
         Assert-RequiredFile -Path $bridgeExecutable
         Invoke-RequiredCommand -Name "Tauri build" -Command {
-            & npm run tauri -- build --no-bundle
+            & npm run tauri -- build --no-bundle -- --locked
         }
 
         $tauriExecutable = Join-Path $tauriTarget "release\navmut.exe"

@@ -33,7 +33,7 @@ impl PlatformCapabilities {
             windows: cfg!(windows),
             player_state: cfg!(windows),
             silent_position: cfg!(windows),
-            bridge_protocol: 2,
+            bridge_protocol: crate::BRIDGE_PROTOCOL_VERSION,
         }
     }
 

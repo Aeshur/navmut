@@ -2,7 +2,7 @@ use serde::{Deserialize, Serialize};
 
 use crate::PlatformError;
 
-/// A visible retail game window and its owning process.
+/// A visible game window and its owning process.
 #[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
 pub struct GameWindow {
     pub handle: u64,
