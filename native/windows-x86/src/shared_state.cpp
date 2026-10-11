@@ -28,6 +28,18 @@ bool shared_header_valid(const SharedBlock& block, std::uint32_t process_id, std
         && block.target_thread != 0 && block.target_window != 0;
 }
 
+bool set_shared_command(SharedBlock& block, std::string_view command)
+{
+    if (command.size() >= sizeof(block.command))
+    {
+        return false;
+    }
+    std::memset(block.command, 0, sizeof(block.command));
+    std::memcpy(block.command, command.data(), command.size());
+    block.command_length = static_cast<std::uint32_t>(command.size());
+    return true;
+}
+
 bool set_shared_response(SharedBlock& block, std::uint32_t sequence, ResponseCode code,
                          std::string_view message)
 {

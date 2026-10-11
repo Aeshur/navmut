@@ -119,11 +119,17 @@ ParseResult error_result(std::string reason)
 
 std::string format_retail_position(double x, double y, double z, std::uint16_t zone)
 {
+    const auto coordinate = [](double value) {
+        std::ostringstream stream;
+        stream.imbue(std::locale::classic());
+        stream << std::fixed << std::setprecision(3) << value;
+        const std::string formatted = stream.str();
+        return formatted == "-0.000" ? std::string("0.000") : formatted;
+    };
     std::ostringstream stream;
     stream.imbue(std::locale::classic());
-    stream << "!pos " << std::fixed << std::setprecision(3)
-           << (x == 0.0 ? 0.0 : x) << ' ' << (y == 0.0 ? 0.0 : y) << ' '
-           << (z == 0.0 ? 0.0 : z) << ' ' << zone;
+    stream << "!pos " << coordinate(x) << ' ' << coordinate(y) << ' '
+           << coordinate(z) << ' ' << zone;
     return stream.str();
 }
 

@@ -1,4 +1,5 @@
 #include "navmut_native/protocol.h"
+#include "navmut_native/pe_image.h"
 #include "navmut_native/ipc_names.h"
 #include "navmut_native/shared_state.h"
 #include "navmut_native/validation.h"
@@ -38,6 +39,16 @@ void test_protocol()
     assert(navmut::native::validate_retail_position(valid.position.retail_command));
     assert(!navmut::native::validate_retail_position("!pos 1 -2 0 42"));
     assert(!navmut::native::validate_retail_position("POS 1.250 -2.000 0.000 42"));
+    for (const auto line : {"POS -0.0004 -0.0 0.0004 42", "POS -0.000 -0 -0.00049 42"})
+    {
+        const auto near_zero = navmut::native::parse_protocol_line(line);
+        assert(near_zero.kind == navmut::native::ParseKind::Position);
+        assert(near_zero.position.retail_command == "!pos 0.000 0.000 0.000 42");
+        assert(navmut::native::validate_retail_position(near_zero.position.retail_command));
+    }
+    const auto negative = navmut::native::parse_protocol_line("POS -0.0006 0 0 42");
+    assert(negative.position.retail_command == "!pos -0.001 0.000 0.000 42");
+    assert(navmut::native::validate_retail_position(negative.position.retail_command));
 
     assert(navmut::native::parse_protocol_line("QUIT").kind == navmut::native::ParseKind::Quit);
     expect_error("", "expected");
@@ -136,6 +147,14 @@ void test_shared_cleanup()
            != navmut::native::ipc_request_event_name(1235, 5678, 9012));
     assert(block.request_state == static_cast<std::int32_t>(navmut::native::RequestState::Idle));
     assert(block.hook_ready == 0);
+    const std::string longest(navmut::native::kSharedCommandBytes - 1, 'x');
+    assert(navmut::native::set_shared_command(block, longest));
+    assert(block.command_length == longest.size());
+    assert(std::string(block.command) == longest);
+    assert(!navmut::native::set_shared_command(block, std::string(navmut::native::kSharedCommandBytes, 'y')));
+    assert(!navmut::native::set_shared_command(block, std::string(navmut::native::kSharedCommandBytes + 1, 'z')));
+    assert(block.command_length == longest.size());
+    assert(std::string(block.command) == longest);
     assert(navmut::native::set_shared_response(block, 7, navmut::native::ResponseCode::Ok, "ok"));
     assert(block.response_sequence == 7);
     assert(block.response_code == static_cast<std::int32_t>(navmut::native::ResponseCode::Ok));
@@ -145,6 +164,57 @@ void test_shared_cleanup()
                                                std::string(256, 'x')));
 }
 
+
+void test_pe_image()
+{
+    std::vector<std::uint8_t> bytes(512);
+    const auto write_u16 = [&](std::size_t offset, std::uint16_t value) {
+        bytes[offset] = static_cast<std::uint8_t>(value);
+        bytes[offset + 1] = static_cast<std::uint8_t>(value >> 8);
+    };
+    const auto write_u32 = [&](std::size_t offset, std::uint32_t value) {
+        for (std::size_t index = 0; index < 4; ++index)
+        {
+            bytes[offset + index] = static_cast<std::uint8_t>(value >> (index * 8));
+        }
+    };
+    write_u16(0, 0x5A4D);
+    write_u32(0x3C, 0x80);
+    write_u32(0x80, 0x00004550);
+    write_u16(0x86, 1);
+    write_u16(0x94, 64);
+    write_u16(0x98, 0x10B);
+    write_u32(0xB4, navmut::native::kImageBase);
+    write_u32(0xD4, 0x100);
+    write_u32(0xE4, 0x1000);
+    write_u32(0xE8, 16);
+    write_u32(0xEC, 0x100);
+    bytes[0x100] = 0x55;
+    navmut::native::PeImage image;
+    std::string reason;
+    assert(image.load(bytes, reason));
+    bytes[0x100] = 0x90;
+    std::array<std::uint8_t, 1> prologue{};
+    assert(image.bytes_at_rva(0x1000, prologue));
+    assert(prologue[0] == 0x55);
+
+    for (const std::uint32_t offset : {0xFFFFFFF0U, 0xFFFFFFFFU, 500U})
+    {
+        write_u32(0x3C, offset);
+        assert(!image.load(bytes, reason));
+    }
+    write_u32(0x3C, 0x80);
+    write_u16(0x94, 0xFFFF);
+    assert(!image.load(bytes, reason));
+    write_u16(0x94, 2);
+    assert(!image.load(bytes, reason));
+    write_u16(0x94, 64);
+    write_u16(0x86, 0xFFFF);
+    assert(!image.load(bytes, reason));
+    write_u16(0x86, 1);
+    write_u32(0xEC, 0xFFFFFFF8);
+    assert(!image.load(bytes, reason));
+}
 
 #ifdef _WIN32
 struct HelperSessionObjects
@@ -217,6 +287,7 @@ int main()
     test_validation();
     test_client_identity();
     test_shared_cleanup();
+    test_pe_image();
 #ifdef _WIN32
     test_hook_context_reattach();
 #endif

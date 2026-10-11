@@ -5,6 +5,7 @@
 #endif
 
 #include "navmut_native/ipc_names.h"
+#include "navmut_native/pe_image.h"
 #include "navmut_native/retail_layout.h"
 #include "navmut_native/shared_state.h"
 #include "navmut_native/validation.h"
@@ -55,30 +56,6 @@ bool safe_add(std::uint32_t left, std::uint32_t right, std::uint32_t& result)
         return false;
     }
     result = static_cast<std::uint32_t>(sum);
-    return true;
-}
-
-bool read_u16(const std::vector<std::uint8_t>& bytes, std::size_t offset, std::uint16_t& value)
-{
-    if (offset + sizeof(value) > bytes.size())
-    {
-        return false;
-    }
-    value = static_cast<std::uint16_t>(bytes[offset])
-        | (static_cast<std::uint16_t>(bytes[offset + 1]) << 8);
-    return true;
-}
-
-bool read_u32(const std::vector<std::uint8_t>& bytes, std::size_t offset, std::uint32_t& value)
-{
-    if (offset + sizeof(value) > bytes.size())
-    {
-        return false;
-    }
-    value = static_cast<std::uint32_t>(bytes[offset])
-        | (static_cast<std::uint32_t>(bytes[offset + 1]) << 8)
-        | (static_cast<std::uint32_t>(bytes[offset + 2]) << 16)
-        | (static_cast<std::uint32_t>(bytes[offset + 3]) << 24);
     return true;
 }
 
@@ -195,127 +172,6 @@ std::string hex_digest(const std::array<std::uint8_t, 32>& digest)
     }
     return result;
 }
-
-class PeImage
-{
-public:
-    bool load(const std::wstring& path, std::string& reason)
-    {
-        if (!read_file(path, bytes_, reason))
-        {
-            return false;
-        }
-        std::uint16_t dos_magic = 0;
-        std::uint32_t pe_offset = 0;
-        if (!read_u16(bytes_, 0, dos_magic) || dos_magic != 0x5A4DU || !read_u32(bytes_, 0x3CU, pe_offset)
-            || pe_offset + 24 > bytes_.size())
-        {
-            reason = "the FFXIV executable has an invalid PE header";
-            return false;
-        }
-        std::uint32_t signature = 0;
-        if (!read_u32(bytes_, pe_offset, signature) || signature != 0x00004550U)
-        {
-            reason = "the FFXIV executable has an invalid PE signature";
-            return false;
-        }
-        const std::size_t file_header = pe_offset + 4;
-        std::uint16_t sections = 0;
-        std::uint16_t optional_size = 0;
-        if (!read_u16(bytes_, file_header + 2, sections) || !read_u16(bytes_, file_header + 16, optional_size))
-        {
-            reason = "the FFXIV executable has an invalid PE file header";
-            return false;
-        }
-        const std::size_t optional = file_header + 20;
-        if (optional + optional_size > bytes_.size())
-        {
-            reason = "the FFXIV executable has an invalid PE optional header";
-            return false;
-        }
-        std::uint16_t optional_magic = 0;
-        if (!read_u16(bytes_, optional, optional_magic) || optional_magic != 0x10BU
-            || !read_u32(bytes_, optional + 28, image_base_) || !read_u32(bytes_, optional + 60, headers_size_))
-        {
-            reason = "the FFXIV executable is not the supported 32-bit image";
-            return false;
-        }
-        const std::size_t section_table = optional + optional_size;
-        if (section_table + static_cast<std::size_t>(sections) * 40 > bytes_.size())
-        {
-            reason = "the FFXIV executable has an invalid PE section table";
-            return false;
-        }
-        sections_.clear();
-        for (std::size_t index = 0; index < sections; ++index)
-        {
-            const std::size_t section = section_table + index * 40;
-            Section value;
-            if (!read_u32(bytes_, section + 12, value.virtual_address)
-                || !read_u32(bytes_, section + 16, value.raw_size)
-                || !read_u32(bytes_, section + 20, value.raw_address))
-            {
-                reason = "the FFXIV executable has an invalid PE section";
-                return false;
-            }
-            if (value.raw_address > bytes_.size() || value.raw_size > bytes_.size() - value.raw_address)
-            {
-                reason = "the FFXIV executable has an invalid PE section range";
-                return false;
-            }
-            sections_.push_back(value);
-        }
-        if (image_base_ != kImageBase)
-        {
-            reason = "the FFXIV executable image base does not match the supported client";
-            return false;
-        }
-        return true;
-    }
-
-    [[nodiscard]] std::uint32_t image_base() const
-    {
-        return image_base_;
-    }
-
-    bool bytes_at_rva(std::uint32_t rva, std::span<std::uint8_t> destination) const
-    {
-        const std::uint64_t end = static_cast<std::uint64_t>(rva) + destination.size();
-        if (rva < headers_size_ && end <= bytes_.size())
-        {
-            std::memcpy(destination.data(), bytes_.data() + rva, destination.size());
-            return true;
-        }
-        for (const Section& section : sections_)
-        {
-            const std::uint64_t section_end = static_cast<std::uint64_t>(section.virtual_address) + section.raw_size;
-            if (rva >= section.virtual_address && end <= section_end)
-            {
-                const std::uint64_t offset = static_cast<std::uint64_t>(section.raw_address)
-                    + rva - section.virtual_address;
-                if (offset + destination.size() <= bytes_.size())
-                {
-                    std::memcpy(destination.data(), bytes_.data() + offset, destination.size());
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-
-private:
-    struct Section
-    {
-        std::uint32_t virtual_address = 0;
-        std::uint32_t raw_size = 0;
-        std::uint32_t raw_address = 0;
-    };
-
-    std::vector<std::uint8_t> bytes_;
-    std::vector<Section> sections_;
-    std::uint32_t image_base_ = 0;
-    std::uint32_t headers_size_ = 0;
-};
 
 class ProcessReader
 {
@@ -478,7 +334,7 @@ bool target_is_32_bit(HANDLE process, std::string& reason)
     return true;
 }
 
-bool find_module_base(DWORD process_id, const std::wstring& image_path, std::uint32_t& base, std::string& reason)
+bool find_module_base(DWORD process_id, std::wstring_view filename, std::uint32_t& base, std::string& reason)
 {
     HANDLE snapshot = CreateToolhelp32Snapshot(TH32CS_SNAPMODULE | TH32CS_SNAPMODULE32, process_id);
     if (snapshot == INVALID_HANDLE_VALUE)
@@ -493,7 +349,10 @@ bool find_module_base(DWORD process_id, const std::wstring& image_path, std::uin
     {
         do
         {
-            if (_wcsicmp(module.szExePath, image_path.c_str()) == 0)
+            // szExePath truncates long paths and may use another prefix. The image
+            // name was validated earlier, so the module name is enough.
+            if (std::wstring_view(module.szModule).size() == filename.size()
+                && _wcsnicmp(module.szModule, filename.data(), filename.size()) == 0)
             {
                 base = static_cast<std::uint32_t>(reinterpret_cast<std::uintptr_t>(module.modBaseAddr));
                 found = true;
@@ -570,10 +429,11 @@ bool inspect_target(std::uint32_t process_id, std::uint32_t window_handle, Targe
         reason = "the FFXIV executable size does not match retail 1.23b";
         return fail();
     }
-    // image_bytes is only used for identity; PeImage reloads from disk.
-    mask_launcher_patch_slots(image_bytes);
+    // Hash a masked copy; prologue reads use the bytes as loaded.
+    std::vector<std::uint8_t> normalised = image_bytes;
+    mask_launcher_patch_slots(normalised);
     std::array<std::uint8_t, 32> digest{};
-    if (!hash_bytes(image_bytes, digest, reason))
+    if (!hash_bytes(normalised, digest, reason))
     {
         return fail();
     }
@@ -583,12 +443,12 @@ bool inspect_target(std::uint32_t process_id, std::uint32_t window_handle, Targe
         return fail();
     }
     PeImage image;
-    if (!image.load(image_path, reason))
+    if (!image.load(std::move(image_bytes), reason))
     {
         return fail();
     }
     std::uint32_t module_base = 0;
-    if (!find_module_base(process_id, image_path, module_base, reason) || module_base != kImageBase)
+    if (!find_module_base(process_id, filename, module_base, reason) || module_base != kImageBase)
     {
         if (reason.empty())
         {
@@ -871,6 +731,11 @@ bool HelperController::start(std::uint32_t process_id, std::uint32_t window_hand
     return true;
 }
 
+bool HelperController::attached() const noexcept
+{
+    return impl_->active;
+}
+
 SubmitResult HelperController::submit(const Position& position)
 {
     try
@@ -905,9 +770,11 @@ SubmitResult HelperController::submit(const Position& position)
         {
             ++impl_->sequence;
         }
-        std::memset(impl_->shared->command, 0, sizeof(impl_->shared->command));
-        std::memcpy(impl_->shared->command, position.retail_command.data(), position.retail_command.size());
-        impl_->shared->command_length = static_cast<std::uint32_t>(position.retail_command.size());
+        if (!set_shared_command(*impl_->shared, position.retail_command))
+        {
+            InterlockedExchange(state, static_cast<LONG>(RequestState::Idle));
+            return {SubmitStatus::Error, "the position command does not fit the shared buffer"};
+        }
         impl_->shared->request_sequence = impl_->sequence;
         impl_->shared->response_sequence = 0;
         impl_->shared->response_code = static_cast<LONG>(ResponseCode::None);

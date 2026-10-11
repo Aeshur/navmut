@@ -171,6 +171,12 @@ int wmain(int argc, wchar_t* argv[])
         {
             write_line(std::string("ERROR ") + result.reason);
         }
+        // A detached controller cannot recover; exiting tells the host to start a new helper.
+        if (!controller.attached())
+        {
+            controller.stop();
+            return 1;
+        }
     }
     controller.stop();
     return 0;

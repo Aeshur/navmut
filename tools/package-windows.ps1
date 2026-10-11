@@ -173,6 +173,9 @@ try {
         Assert-RequiredFile -Path $nativeHook
 
         $env:CARGO_TARGET_DIR = $tauriTarget
+        Invoke-RequiredCommand -Name "Rust x86 target install" -Command {
+            & rustup target add i686-pc-windows-msvc
+        }
         Invoke-RequiredCommand -Name "Windows x86 bridge build" -Command {
             & cargo build --locked --release -p navmut-platform --bin navmut-bridge --target i686-pc-windows-msvc
         }

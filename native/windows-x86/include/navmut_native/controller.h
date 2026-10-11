@@ -33,6 +33,7 @@ public:
     bool start(std::uint32_t process_id, std::uint32_t window_handle, std::string& reason);
     SubmitResult submit(const Position& position);
     void stop() noexcept;
+    [[nodiscard]] bool attached() const noexcept;
 
 private:
     struct Impl;

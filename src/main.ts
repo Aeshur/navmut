@@ -26,6 +26,7 @@ export interface AppState extends MovementQueueState {
   capabilities: PlatformCapabilities;
   /** False after settings fail to load; defaults must not overwrite the unreadable file. */
   settingsWritable: boolean;
+  capturePending: boolean;
 }
 
 function liveActionsAvailable(state: AppState): boolean {
@@ -495,6 +496,9 @@ function pointSelections(profile: MapProfile | undefined, savedPoints: SavedPoin
   return [...packaged, ...saved].sort((left, right) => left.name.localeCompare(right.name));
 }
 
+const renderedPoints = new WeakMap<HTMLSelectElement, string>();
+const renderedJournals = new WeakMap<HTMLElement, string>();
+
 function renderPointManager(profile: MapProfile | undefined, savedPoints: SavedPoint[], zone: number | null = null): void {
   const select = byId("point-select");
   const coords = byId("point-coords");
@@ -502,15 +506,21 @@ function renderPointManager(profile: MapProfile | undefined, savedPoints: SavedP
   if (!(select instanceof HTMLSelectElement) || !(remove instanceof HTMLButtonElement)) return;
   const points = pointSelections(profile, savedPoints, zone);
   const selectedId = select.value;
-  select.innerHTML = "";
-  points.forEach((point) => {
-    const option = document.createElement("option");
-    option.value = point.id;
-    option.textContent = point.name;
-    select.append(option);
-  });
   const selected = points.find((point) => point.id === selectedId) ?? points[0];
-  if (selected) select.value = selected.id;
+  const data = JSON.stringify(points);
+  if (renderedPoints.get(select) !== data) {
+    const scrollTop = select.scrollTop;
+    select.innerHTML = "";
+    points.forEach((point) => {
+      const option = document.createElement("option");
+      option.value = point.id;
+      option.textContent = point.name;
+      select.append(option);
+    });
+    if (selected) select.value = selected.id;
+    select.scrollTop = scrollTop;
+    renderedPoints.set(select, data);
+  }
   coords.textContent = selected ? `(${formatPosition({ x: selected.x, y: selected.y, z: selected.z })})` : "(0.00, 0.00, 0.00)";
   remove.disabled = !selected || selected.packaged;
 }
@@ -527,12 +537,17 @@ export function isDeletablePoint(point: PointSelection | undefined): boolean {
 
 function renderJournal(entries: JournalEntry[]): void {
   const list = byId("journal-list");
+  const data = JSON.stringify(entries);
+  if (renderedJournals.get(list) === data) return;
+  const scrollTop = list.scrollTop;
   list.innerHTML = "";
   if (entries.length === 0) {
     const empty = document.createElement("li");
     empty.className = "empty-state";
     empty.textContent = "No saved observations.";
     list.append(empty);
+    renderedJournals.set(list, data);
+    list.scrollTop = scrollTop;
     return;
   }
   entries.forEach((entry) => {
@@ -549,9 +564,11 @@ function renderJournal(entries: JournalEntry[]): void {
     item.append(name, identity, details, notes);
     list.append(item);
   });
+  renderedJournals.set(list, data);
+  list.scrollTop = scrollTop;
 }
 
-function render(state: AppState): void {
+export function render(state: AppState): void {
   const profile = getProfile(state);
   document.querySelector(".app-window")?.classList.toggle("is-map-collapsed", !state.settings.mapVisible);
   byId("map-shell").classList.toggle("is-hidden", !state.settings.mapVisible);
@@ -572,7 +589,7 @@ function render(state: AppState): void {
   const canvas = byId("map-canvas");
   if (canvas instanceof HTMLCanvasElement) drawMap(canvas, state);
   renderPointManager(profile, state.savedPoints, effectiveZoneId(state));
-  renderJournal(state.journal);
+  if (state.settings.activePanel === "journal") renderJournal(state.journal);
   const opacity = byId("opacity-range");
   const opacityValue = byId("opacity-value");
   if (opacity instanceof HTMLInputElement) opacity.value = String(state.settings.opacity);
@@ -582,7 +599,7 @@ function render(state: AppState): void {
   const liveAvailable = liveActionsAvailable(state);
   ["pid-select", "refresh-pid", "refresh-zone", "add-point", "warp-point", "to-position", "capture-button"].forEach((id) => {
     const control = document.getElementById(id);
-    if (control instanceof HTMLButtonElement || control instanceof HTMLSelectElement || control instanceof HTMLInputElement) control.disabled = !liveAvailable;
+    if (control instanceof HTMLButtonElement || control instanceof HTMLSelectElement || control instanceof HTMLInputElement) control.disabled = !liveAvailable || (id === "capture-button" && state.capturePending);
   });
   document.querySelectorAll<HTMLButtonElement>("[data-direction]").forEach((control) => { control.disabled = !liveAvailable; });
 }
@@ -739,6 +756,58 @@ export function movementDirectionForKey(key: string): string | null {
   } as Record<string, string>)[key] ?? null;
 }
 
+export function handleMovementKey(event: KeyboardEvent, sendMove: (direction: string) => void): void {
+  if (isEditableTarget(event.target)) return;
+  if (event.target instanceof HTMLElement && event.target.getAttribute("role") === "tab") return;
+  const direction = movementDirectionForKey(event.key);
+  if (!direction) return;
+  event.preventDefault();
+  if (event.repeat) return;
+  if (event.target instanceof HTMLElement && !event.target.classList.contains("compass-section")) event.target.blur();
+  sendMove(direction);
+}
+
+export function setupCapture(state: AppState, bridge: NavmutBridge): void {
+  button("capture-button", "Save observation", "outline-button").addEventListener("click", async () => {
+    state.capturePending = true;
+    render(state);
+    try {
+      const nameInput = byId("observation-name-id") as HTMLInputElement;
+      const notesInput = byId("observation-notes") as HTMLTextAreaElement;
+      const form = observationPayload(
+        nameInput.value,
+        (byId("observation-type") as HTMLSelectElement).value as ObservationForm["type"],
+        notesInput.value,
+      );
+      if (!form.name) {
+        setStatus("Observation name is required.", true);
+        return;
+      }
+      const profile = getProfile(state);
+      if (!profile) throw new UiError("Load a map catalog before saving an observation.");
+      const pid = state.settings.selectedPid;
+      if (pid === null || !state.game.connected) throw new UiError("Select a live game before saving an observation.");
+      const entry = await bridge.captureObservation(profile.id, form, pid);
+      state.journal = [entry, ...state.journal];
+      state.settings.activePanel = "journal";
+      nameInput.value = "";
+      notesInput.value = "";
+      render(state);
+      try {
+        await persist(state, bridge);
+        setStatus("Observation saved.");
+      } catch (error) {
+        reportFailure(error, "Observation saved, but could not save settings.");
+      }
+    } catch (error) {
+      reportFailure(error, "Could not save observation.");
+    } finally {
+      state.capturePending = false;
+      render(state);
+    }
+  });
+}
+
 function move(state: AppState, delta: Position): void {
   const context = movementContext(state);
   if (!stateBridge || !context) {
@@ -836,7 +905,7 @@ async function setup(): Promise<void> {
     if (index >= 0) profiles[index] = await startupStep(failures, "Could not load the map.", () => bridge.loadProfile(profileId), profiles[index]);
   }
   const journal = profileId ? await startupStep(failures, "Could not load the Journal.", () => bridge.listJournal(profileId), []) : [];
-  const state: AppState = { settings: { ...settings, profileId }, game, profiles, journal, savedPoints, movementQueue: Promise.resolve(), capabilities, settingsWritable: loadedSettings !== null };
+  const state: AppState = { settings: { ...settings, profileId }, game, profiles, journal, savedPoints, movementQueue: Promise.resolve(), capabilities, settingsWritable: loadedSettings !== null, capturePending: false };
   renderProcesses(state, processes);
   render(state);
   if (failures.length > 0) setStatus(failures[0], true, true);
@@ -958,34 +1027,7 @@ async function setup(): Promise<void> {
     const direction = control.dataset.direction;
     if (direction) move(state, moveDelta(direction, state.settings.stepSize));
   }));
-  button("capture-button", "Save observation", "outline-button").addEventListener("click", async () => {
-    try {
-      const nameInput = byId("observation-name-id") as HTMLInputElement;
-      const notesInput = byId("observation-notes") as HTMLTextAreaElement;
-      const form = observationPayload(
-        nameInput.value,
-        (byId("observation-type") as HTMLSelectElement).value as ObservationForm["type"],
-        notesInput.value,
-      );
-      if (!form.name) {
-        setStatus("Observation name is required.", true);
-        return;
-      }
-      const profile = getProfile(state);
-      if (!profile) throw new UiError("Load a map catalog before saving an observation.");
-      const pid = state.settings.selectedPid;
-      if (pid === null || !state.game.connected) throw new UiError("Select a live game before saving an observation.");
-      state.journal = [await bridge.captureObservation(profile.id, form, pid), ...state.journal];
-      state.settings.activePanel = "journal";
-      nameInput.value = "";
-      notesInput.value = "";
-      await persist(state, bridge);
-      setStatus("Observation saved.");
-      render(state);
-    } catch (error) {
-      reportFailure(error, "Could not save observation.");
-    }
-  });
+  setupCapture(state, bridge);
   button("export-button", "Export observations", "outline-button").addEventListener("click", async () => {
     try {
       const profile = getProfile(state);
@@ -1051,14 +1093,7 @@ async function setup(): Promise<void> {
     event.stopImmediatePropagation();
   }, { capture: true });
   window.addEventListener("keydown", (event) => {
-    if (isEditableTarget(event.target)) return;
-    if (event.target instanceof HTMLElement && event.target.getAttribute("role") === "tab") return;
-    const direction = movementDirectionForKey(event.key);
-    if (direction) {
-      event.preventDefault();
-      if (event.target instanceof HTMLElement && !event.target.classList.contains("compass-section")) event.target.blur();
-      move(state, moveDelta(direction, state.settings.stepSize));
-    }
+    handleMovementKey(event, (direction) => move(state, moveDelta(direction, state.settings.stepSize)));
   });
   window.setInterval(() => void refreshGame(state, bridge, changeProfile), POLL_INTERVAL_MS);
 }

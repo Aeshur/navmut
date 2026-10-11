@@ -1,5 +1,7 @@
 use std::fmt;
-use std::fs::{self, OpenOptions};
+use std::fs;
+#[cfg(unix)]
+use std::fs::OpenOptions;
 use std::io::{self, Read, Write};
 use std::net::{Shutdown, TcpListener, TcpStream};
 use std::path::{Path, PathBuf};
@@ -22,6 +24,7 @@ const MAX_REQUEST_BODY_BYTES: usize = 4 * 1024;
 const MAX_HEADER_BYTES: usize = 16 * 1024;
 const MAX_RESPONSE_BYTES: usize = 1024 * 1024;
 const IO_TIMEOUT: Duration = Duration::from_secs(5);
+const PRE_AUTH_TIMEOUT: Duration = Duration::from_secs(1);
 const SHUTDOWN_TIMEOUT: Duration = Duration::from_secs(1);
 // A silent-position reply may follow stale-helper shutdown, startup, the
 // command, and another helper shutdown.
@@ -426,15 +429,100 @@ fn write_private_file(path: &Path, bytes: &[u8]) -> Result<(), BridgeError> {
         .map_err(|_| BridgeError::ConnectionFile)
 }
 
-#[cfg(not(unix))]
+#[cfg(windows)]
 fn write_private_file(path: &Path, bytes: &[u8]) -> Result<(), BridgeError> {
-    // Windows connection files inherit the user's profile ACL. The bearer
-    // token is never printed or included in error text.
-    let mut file = OpenOptions::new()
-        .create_new(true)
-        .write(true)
-        .open(path)
+    use std::os::windows::ffi::OsStrExt;
+    use std::os::windows::io::{AsRawHandle, FromRawHandle, OwnedHandle};
+    use windows::core::{PCWSTR, PWSTR};
+    use windows::Win32::Foundation::{LocalFree, GENERIC_WRITE, HANDLE, HLOCAL};
+    use windows::Win32::Security::Authorization::{
+        ConvertSidToStringSidW, ConvertStringSecurityDescriptorToSecurityDescriptorW,
+        SDDL_REVISION_1,
+    };
+    use windows::Win32::Security::{
+        GetTokenInformation, TokenUser, PSECURITY_DESCRIPTOR, SECURITY_ATTRIBUTES, TOKEN_QUERY,
+        TOKEN_USER,
+    };
+    use windows::Win32::Storage::FileSystem::{
+        CreateFileW, CREATE_NEW, FILE_ATTRIBUTE_NORMAL, FILE_SHARE_MODE,
+    };
+    use windows::Win32::System::Threading::{GetCurrentProcess, OpenProcessToken};
+
+    struct LocalAllocation(*mut core::ffi::c_void);
+    impl Drop for LocalAllocation {
+        fn drop(&mut self) {
+            unsafe { LocalFree(Some(HLOCAL(self.0))) };
+        }
+    }
+
+    let mut token = HANDLE::default();
+    unsafe { OpenProcessToken(GetCurrentProcess(), TOKEN_QUERY, &mut token) }
         .map_err(|_| BridgeError::ConnectionFile)?;
+    let token = unsafe { OwnedHandle::from_raw_handle(token.0) };
+    let mut length = 0;
+    let _ = unsafe {
+        GetTokenInformation(
+            HANDLE(token.as_raw_handle()),
+            TokenUser,
+            None,
+            0,
+            &mut length,
+        )
+    };
+    if length == 0 {
+        return Err(BridgeError::ConnectionFile);
+    }
+    // TOKEN_USER contains pointers, so its backing storage must be aligned.
+    let mut user = vec![0usize; (length as usize).div_ceil(size_of::<usize>())];
+    unsafe {
+        GetTokenInformation(
+            HANDLE(token.as_raw_handle()),
+            TokenUser,
+            Some(user.as_mut_ptr().cast()),
+            length,
+            &mut length,
+        )
+    }
+    .map_err(|_| BridgeError::ConnectionFile)?;
+    let user = unsafe { &*user.as_ptr().cast::<TOKEN_USER>() };
+    let mut sid = PWSTR::null();
+    unsafe { ConvertSidToStringSidW(user.User.Sid, &mut sid) }
+        .map_err(|_| BridgeError::ConnectionFile)?;
+    let _sid_allocation = LocalAllocation(sid.0.cast());
+    let sid = unsafe { sid.to_string() }.map_err(|_| BridgeError::ConnectionFile)?;
+    let sddl: Vec<u16> = format!("D:P(A;;FA;;;{sid})\0").encode_utf16().collect();
+    let mut descriptor = PSECURITY_DESCRIPTOR::default();
+    unsafe {
+        ConvertStringSecurityDescriptorToSecurityDescriptorW(
+            PCWSTR(sddl.as_ptr()),
+            SDDL_REVISION_1,
+            &mut descriptor,
+            None,
+        )
+    }
+    .map_err(|_| BridgeError::ConnectionFile)?;
+    let _descriptor_allocation = LocalAllocation(descriptor.0);
+    let attributes = SECURITY_ATTRIBUTES {
+        nLength: size_of::<SECURITY_ATTRIBUTES>() as u32,
+        lpSecurityDescriptor: descriptor.0,
+        bInheritHandle: false.into(),
+    };
+    let path: Vec<u16> = path.as_os_str().encode_wide().chain(Some(0)).collect();
+    // Create the file exclusively, with a protected DACL that grants access
+    // only to the current user's SID.
+    let handle = unsafe {
+        CreateFileW(
+            PCWSTR(path.as_ptr()),
+            GENERIC_WRITE.0,
+            FILE_SHARE_MODE(0),
+            Some(&attributes),
+            CREATE_NEW,
+            FILE_ATTRIBUTE_NORMAL,
+            None,
+        )
+    }
+    .map_err(|_| BridgeError::ConnectionFile)?;
+    let mut file = unsafe { fs::File::from_raw_handle(handle.0) };
     file.write_all(bytes)
         .map_err(|_| BridgeError::ConnectionFile)
 }
@@ -1182,7 +1270,7 @@ fn read_http_request(
     stream: &mut TcpStream,
     expected_port: u16,
 ) -> Result<HttpRequest, BridgeError> {
-    read_http_request_with_deadline(stream, expected_port, Instant::now() + IO_TIMEOUT)
+    read_http_request_with_deadline(stream, expected_port, Instant::now() + PRE_AUTH_TIMEOUT)
 }
 
 fn read_http_request_with_deadline(
@@ -1669,6 +1757,178 @@ mod tests {
     }
 
     #[test]
+    fn idle_connection_only_delays_a_valid_client_until_the_pre_auth_deadline() {
+        let (_directory, server) = start_server(all_capabilities(), false);
+        let _idle = TcpStream::connect(server.address()).expect("connect idle client");
+        // Wait for acceptance so the valid request must queue behind this peer.
+        let deadline = Instant::now() + IO_TIMEOUT;
+        loop {
+            if server
+                .active_stream
+                .lock()
+                .expect("active stream")
+                .is_some()
+            {
+                break;
+            }
+            assert!(Instant::now() < deadline, "idle client was not accepted");
+            std::thread::sleep(Duration::from_millis(10));
+        }
+        let started = Instant::now();
+        let client = BridgeClient::from_connection(server.connection().clone()).expect("client");
+        assert_eq!(
+            client.windows().expect("queued valid request"),
+            vec![window()]
+        );
+        assert!(
+            started.elapsed() < PRE_AUTH_TIMEOUT + Duration::from_millis(750),
+            "idle client blocked the bridge for {:?}",
+            started.elapsed()
+        );
+        server.stop();
+    }
+
+    #[test]
+    fn trickling_request_body_is_cut_off_at_the_absolute_pre_auth_deadline() {
+        let (_directory, server) = start_server(all_capabilities(), false);
+        // The server's deadline starts at accept, which cannot precede connect.
+        let started = Instant::now();
+        let mut stream = TcpStream::connect(server.address()).expect("connect trickling client");
+        let mut writer = stream.try_clone().expect("writer stream");
+        let port = server.connection().port;
+        let stopped = Arc::new(AtomicBool::new(false));
+        let writer_stopped = Arc::clone(&stopped);
+        let peer = std::thread::spawn(move || {
+            writer
+                .write_all(b"POST /windows HTTP/1.1\r\n")
+                .expect("start headers");
+            // Header and body reads must share the same deadline.
+            std::thread::sleep(Duration::from_millis(600));
+            let header = format!("Host: 127.0.0.1:{port}\r\nContent-Length: 100\r\n\r\n");
+            writer.write_all(header.as_bytes()).expect("finish headers");
+            for _ in 0..30 {
+                if writer_stopped.load(Ordering::Acquire) || writer.write_all(b" ").is_err() {
+                    break;
+                }
+                std::thread::sleep(Duration::from_millis(100));
+            }
+        });
+        let result = read_http_response(&mut stream, IO_TIMEOUT);
+        let elapsed = started.elapsed();
+        stopped.store(true, Ordering::Release);
+        peer.join().expect("trickling peer");
+        assert_eq!(result.expect("deadline rejection").0, 400);
+        assert!(
+            elapsed >= PRE_AUTH_TIMEOUT,
+            "deadline expired early: {elapsed:?}"
+        );
+        assert!(
+            elapsed < PRE_AUTH_TIMEOUT + Duration::from_millis(400),
+            "trickling bytes extended the deadline: {elapsed:?}"
+        );
+        let client = BridgeClient::from_connection(server.connection().clone()).expect("client");
+        assert_eq!(
+            client.windows().expect("bridge remains available"),
+            vec![window()]
+        );
+        server.stop();
+    }
+
+    #[cfg(windows)]
+    #[test]
+    fn connection_file_dacl_is_protected_and_grants_only_the_current_user() {
+        use std::os::windows::ffi::OsStrExt;
+        use std::os::windows::io::{AsRawHandle, FromRawHandle, OwnedHandle};
+        use windows::core::{BOOL, PCWSTR};
+        use windows::Win32::Foundation::HANDLE;
+        use windows::Win32::Security::{
+            EqualSid, GetAce, GetFileSecurityW, GetSecurityDescriptorControl,
+            GetSecurityDescriptorDacl, GetTokenInformation, TokenUser, ACCESS_ALLOWED_ACE, ACL,
+            DACL_SECURITY_INFORMATION, INHERITED_ACE, PSECURITY_DESCRIPTOR, PSID,
+            SE_DACL_PROTECTED, TOKEN_QUERY, TOKEN_USER,
+        };
+        use windows::Win32::System::Threading::{GetCurrentProcess, OpenProcessToken};
+
+        let directory = tempdir().expect("connection directory");
+        let path = directory.path().join("connection.json");
+        BridgeConnection::new(45_001, "s".repeat(32), all_capabilities())
+            .write_to(&path)
+            .expect("write private connection");
+        let path: Vec<u16> = path.as_os_str().encode_wide().chain(Some(0)).collect();
+        let mut length = 0;
+        let _ = unsafe {
+            GetFileSecurityW(
+                PCWSTR(path.as_ptr()),
+                DACL_SECURITY_INFORMATION.0,
+                None,
+                0,
+                &mut length,
+            )
+        };
+        assert!(length > 0);
+        let mut storage = vec![0usize; (length as usize).div_ceil(size_of::<usize>())];
+        let descriptor = PSECURITY_DESCRIPTOR(storage.as_mut_ptr().cast());
+        assert!(unsafe {
+            GetFileSecurityW(
+                PCWSTR(path.as_ptr()),
+                DACL_SECURITY_INFORMATION.0,
+                Some(descriptor),
+                length,
+                &mut length,
+            )
+        }
+        .as_bool());
+        let mut control = 0;
+        let mut revision = 0;
+        unsafe { GetSecurityDescriptorControl(descriptor, &mut control, &mut revision) }
+            .expect("descriptor control");
+        assert_ne!(control & SE_DACL_PROTECTED.0, 0);
+        let mut present = BOOL::default();
+        let mut defaulted = BOOL::default();
+        let mut dacl: *mut ACL = core::ptr::null_mut();
+        unsafe { GetSecurityDescriptorDacl(descriptor, &mut present, &mut dacl, &mut defaulted) }
+            .expect("descriptor DACL");
+        assert!(present.as_bool() && !dacl.is_null());
+        assert_eq!(unsafe { (*dacl).AceCount }, 1);
+        let mut ace = core::ptr::null_mut();
+        unsafe { GetAce(dacl, 0, &mut ace) }.expect("only ACE");
+        let ace = unsafe { &*ace.cast::<ACCESS_ALLOWED_ACE>() };
+        assert_eq!(ace.Header.AceType, 0); // ACCESS_ALLOWED_ACE_TYPE
+        assert_eq!(u32::from(ace.Header.AceFlags) & INHERITED_ACE.0, 0);
+
+        let mut token = HANDLE::default();
+        unsafe { OpenProcessToken(GetCurrentProcess(), TOKEN_QUERY, &mut token) }
+            .expect("process token");
+        let token = unsafe { OwnedHandle::from_raw_handle(token.0) };
+        let mut length = 0;
+        let _ = unsafe {
+            GetTokenInformation(
+                HANDLE(token.as_raw_handle()),
+                TokenUser,
+                None,
+                0,
+                &mut length,
+            )
+        };
+        assert!(length > 0);
+        let mut storage = vec![0usize; (length as usize).div_ceil(size_of::<usize>())];
+        unsafe {
+            GetTokenInformation(
+                HANDLE(token.as_raw_handle()),
+                TokenUser,
+                Some(storage.as_mut_ptr().cast()),
+                length,
+                &mut length,
+            )
+        }
+        .expect("token user");
+        let user = unsafe { &*storage.as_ptr().cast::<TOKEN_USER>() };
+        let allowed_sid = PSID(core::ptr::addr_of!(ace.SidStart).cast_mut().cast());
+        unsafe { EqualSid(allowed_sid, user.User.Sid) }
+            .expect("only the current user's SID has access");
+    }
+
+    #[test]
     fn wrong_token_is_rejected_without_echoing_secret() {
         let (directory, server) = start_server(all_capabilities(), false);
         let mut connection = BridgeConnection::read_from(directory.path().join("connection.json"))
@@ -1680,6 +1940,10 @@ mod tests {
         let error = client.windows().expect_err("wrong token rejected");
         assert_eq!(error, BridgeError::Authentication);
         assert!(!error.to_string().contains(&secret));
+        assert_eq!(
+            client.silent_position(window(), 1.0, 2.0, 3.0, 170),
+            Err(BridgeError::Authentication)
+        );
         server.stop();
     }
 

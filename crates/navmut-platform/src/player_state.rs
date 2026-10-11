@@ -13,6 +13,34 @@ pub const IMAGE_BASE: u32 = 0x00400000;
 #[cfg(windows)]
 pub const IMAGE_SIZE: u32 = 0x00F99000;
 
+#[cfg(any(windows, test))]
+const INVALID_POINTERS: [u32; 4] = [0, 0xFFFF_FFFF, 0xC000_0000, 0xCDCD_CDCD];
+
+#[cfg(any(windows, test))]
+fn world_facing_from(
+    actor: u32,
+    depth: u8,
+    read_actor: &impl Fn(u32) -> Result<(u32, f64), PlatformError>,
+) -> Result<f64, PlatformError> {
+    if INVALID_POINTERS.contains(&actor) || depth >= 32 {
+        return Err(PlatformError::Windows(
+            "invalid player facing chain".to_owned(),
+        ));
+    }
+    let (parent, local) = read_actor(actor)?;
+    let inherited = if parent == 0 {
+        0.0
+    } else {
+        if INVALID_POINTERS.contains(&parent) {
+            return Err(PlatformError::Windows(
+                "invalid player facing parent".to_owned(),
+            ));
+        }
+        world_facing_from(parent, depth + 1, read_actor)?
+    };
+    Ok(normalise_facing(inherited + local))
+}
+
 #[derive(Clone, Debug, Deserialize, PartialEq, Serialize)]
 pub struct PlayerState {
     pub process_id: u32,
@@ -96,7 +124,6 @@ mod live {
         ) -> i32;
     }
 
-    const INVALID_POINTERS: [u32; 4] = [0, 0xFFFF_FFFF, 0xC000_0000, 0xCDCD_CDCD];
     const SCAN_LIMIT: u32 = 0x8000_0000;
     const SCAN_CHUNK: usize = 1024 * 1024;
     const PROCESS_VM_READ: u32 = 0x0010;
@@ -365,27 +392,15 @@ mod live {
         }
 
         fn world_facing(&self, actor: u32, depth: u8) -> Result<f64, PlatformError> {
-            if INVALID_POINTERS.contains(&actor) || depth >= 32 {
-                return Err(PlatformError::Windows(
-                    "invalid player facing chain".to_owned(),
-                ));
-            }
-            let parent = self.process.read_u32(actor + 0x98).ok_or_else(|| {
-                PlatformError::Windows("could not read player facing parent".to_owned())
-            })?;
-            let local = self.process.read_f32(actor + 0xac).ok_or_else(|| {
-                PlatformError::Windows("could not read player rotation".to_owned())
-            })? as f64;
-            if parent == 0 {
-                return Ok(local);
-            }
-            if INVALID_POINTERS.contains(&parent) {
-                return Err(PlatformError::Windows(
-                    "invalid player facing parent".to_owned(),
-                ));
-            }
-            let inherited = self.world_facing(parent, depth + 1)? + local;
-            Ok(super::normalise_facing(inherited))
+            super::world_facing_from(actor, depth, &|actor| {
+                let parent = self.process.read_u32(actor + 0x98).ok_or_else(|| {
+                    PlatformError::Windows("could not read player facing parent".to_owned())
+                })?;
+                let local = self.process.read_f32(actor + 0xac).ok_or_else(|| {
+                    PlatformError::Windows("could not read player rotation".to_owned())
+                })? as f64;
+                Ok((parent, local))
+            })
         }
 
         fn snapshot_at(&self, scene: u32) -> Result<PlayerState, PlatformError> {
@@ -578,5 +593,21 @@ mod tests {
         let negative = normalise_facing(-4.0);
         assert!((positive - (4.0 - 2.0 * std::f64::consts::PI)).abs() < 1e-12);
         assert!((negative - (-4.0 + 2.0 * std::f64::consts::PI)).abs() < 1e-12);
+    }
+
+    #[test]
+    fn inherited_facing_crossing_the_boundary_uses_the_same_range() {
+        let read_actor = |actor| {
+            Ok(match actor {
+                1 => (2, 1.0),
+                2 => (0, 2.5),
+                3 => (0, 3.5),
+                _ => panic!("unexpected actor"),
+            })
+        };
+        let combined = world_facing_from(1, 0, &read_actor).expect("inherited rotation");
+        let standalone = world_facing_from(3, 0, &read_actor).expect("standalone rotation");
+        assert!((combined - (3.5 - 2.0 * std::f64::consts::PI)).abs() < 1e-12);
+        assert_eq!(combined, standalone);
     }
 }

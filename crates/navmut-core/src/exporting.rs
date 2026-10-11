@@ -305,9 +305,20 @@ fn sort_key(record: &Value) -> (String, String, String, String, String) {
 }
 
 fn value_text(value: &Value) -> String {
-    value
-        .as_str()
-        .map_or_else(|| value.to_string(), ToString::to_string)
+    match value {
+        Value::Null => String::new(),
+        Value::String(text) => text.clone(),
+        _ => value.to_string(),
+    }
+}
+
+// Spreadsheet apps run cells that start with these characters as formulas.
+fn csv_text(text: String) -> String {
+    if text.starts_with(['=', '+', '-', '@', '\t', '\r']) {
+        format!("'{text}")
+    } else {
+        text
+    }
 }
 
 fn position_component(record: &Map<String, Value>, index: usize) -> String {
@@ -346,18 +357,18 @@ fn csv_payload(records: &[Value]) -> Result<Vec<u8>> {
             .ok_or_else(|| Error::invalid("Observation record must be an object"))?;
         let row = vec![
             field(object, "schema_version"),
-            field(object, "observation_id"),
-            field(object, "subject_name"),
+            csv_text(field(object, "observation_id")),
+            csv_text(field(object, "subject_name")),
             field(object, "subject_type"),
             field(object, "zone"),
             position_component(object, 0),
             position_component(object, 1),
             position_component(object, 2),
             field(object, "rotation"),
-            field(object, "notes"),
-            field(object, "profile_id"),
+            csv_text(field(object, "notes")),
+            csv_text(field(object, "profile_id")),
             field(object, "created_at"),
-            hash_field(object, "map_sha256"),
+            csv_text(hash_field(object, "map_sha256")),
         ];
         writer
             .write_record(row)
@@ -411,7 +422,7 @@ fn markdown_report(records: &[Value]) -> Vec<u8> {
             lines.push(format!(
                 "| {} |",
                 row.into_iter()
-                    .map(|item| item.replace('|', "\\|").replace('\n', " "))
+                    .map(|item| item.replace('|', "\\|").replace(['\r', '\n'], " "))
                     .collect::<Vec<_>>()
                     .join(" | ")
             ));
@@ -510,6 +521,80 @@ mod tests {
     use super::*;
     use std::io::Read;
     use tempfile::tempdir;
+
+    fn export_record() -> Value {
+        serde_json::json!({
+            "schema_version": 2, "observation_id": "obs", "subject_name": "Ant",
+            "subject_type": "monster", "zone": 128, "position": [-1, 2, -3],
+            "notes": "", "profile_id": "profile", "created_at": "2026-01-02T03:04:05Z",
+            "provenance": {"map_sha256": "hash"}
+        })
+    }
+
+    #[test]
+    fn missing_and_null_rotation_export_as_empty_cells() {
+        for rotation in [None, Some(Value::Null)] {
+            let mut record = export_record();
+            if let Some(rotation) = rotation {
+                record["rotation"] = rotation;
+            }
+            let payload = csv_payload(&[record.clone()]).unwrap();
+            let row = csv::Reader::from_reader(payload.as_slice())
+                .records()
+                .next()
+                .unwrap()
+                .unwrap();
+            assert_eq!(&row[8], "");
+            let report = String::from_utf8(markdown_report(&[record])).unwrap();
+            assert!(report.contains("| Ant | monster | -1 | 2 | -3 |  |  |"));
+        }
+    }
+
+    #[test]
+    fn csv_guards_text_formulas_without_quoting_negative_numbers() {
+        for prefix in ['=', '+', '-', '@', '\t', '\r'] {
+            let text = format!("{prefix}123");
+            let mut record = export_record();
+            for key in ["observation_id", "subject_name", "notes", "profile_id"] {
+                record[key] = Value::String(text.clone());
+            }
+            record["provenance"]["map_sha256"] = Value::String(text.clone());
+            record["rotation"] = serde_json::json!(-4);
+            let payload = csv_payload(&[record]).unwrap();
+            let row = csv::Reader::from_reader(payload.as_slice())
+                .records()
+                .next()
+                .unwrap()
+                .unwrap();
+            for index in [1, 2, 9, 10, 12] {
+                assert_eq!(&row[index], format!("'{text}"));
+            }
+            for (index, expected) in [
+                (0, "2"),
+                (4, "128"),
+                (5, "-1"),
+                (6, "2"),
+                (7, "-3"),
+                (8, "-4"),
+            ] {
+                assert_eq!(&row[index], expected);
+            }
+        }
+    }
+
+    #[test]
+    fn markdown_escapes_pipes_and_both_line_endings() {
+        let mut record = export_record();
+        record["subject_name"] = serde_json::json!("Ant\rQueen");
+        record["notes"] = serde_json::json!("one|two\nthree\rfour");
+        let report = String::from_utf8(markdown_report(&[record])).unwrap();
+        assert!(!report.contains('\r'));
+        assert!(report.contains("| Ant Queen | monster | -1 | 2 | -3 |  | one\\|two three four |"));
+        assert_eq!(
+            report.lines().filter(|line| line.starts_with("| ")).count(),
+            3
+        );
+    }
 
     #[test]
     fn export_has_fixed_members_and_compact_columns() {

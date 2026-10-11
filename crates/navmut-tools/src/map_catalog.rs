@@ -223,7 +223,7 @@ pub fn build_catalog(
             }
         }
     }
-    fs::create_dir_all(&image_output)?;
+    let mut copies = Vec::new();
     for source in sources
         .iter()
         .filter(|(piece, _)| world_pieces.contains(piece))
@@ -246,7 +246,7 @@ pub fn build_catalog(
                 )));
             }
         } else {
-            fs::copy(source, &target)?;
+            copies.push((source, target));
         }
     }
     let mut result = Vec::new();
@@ -395,8 +395,7 @@ pub fn build_catalog(
         .filter(|row| row.get("zone").is_some_and(|zone| !zone.is_null()))
         .count();
     let document = serde_json::json!({"maps":result,"coverage":{"images":sources.len(),"profiles":world_count,"world_profiles":world_count,"excluded_image_profiles":excluded,"zone_bound_profiles":zone_bound_profiles},"sources":source_evidence});
-    // Validate before replacing an existing catalog so incomplete crosswalks do
-    // not destroy the last valid document.
+    // Finish catalog and artwork validation before writing any artwork.
     if let Some(parent) = output.parent() {
         fs::create_dir_all(parent)?;
     }
@@ -405,6 +404,10 @@ pub fn build_catalog(
     serde_json::to_writer_pretty(temporary.as_file(), &document)?;
     navmut_core::load_profiles(temporary.path())?;
     drop(temporary);
+    fs::create_dir_all(&image_output)?;
+    for (source, target) in copies {
+        fs::copy(source, target)?;
+    }
     atomic_json(output, &document)?;
     Ok(document)
 }
@@ -438,6 +441,62 @@ fn pathdiff(base: &Path, target: &Path) -> PathBuf {
 mod tests {
     use super::*;
     use tempfile::tempdir;
+
+    #[test]
+    fn validation_failures_leave_artwork_and_catalog_untouched() {
+        for failure in ["bounds", "region", "png", "existing-artwork"] {
+            let root = tempdir().unwrap();
+            let images = root.path().join("images");
+            fs::create_dir(&images).unwrap();
+            for piece in 1..=2 {
+                image::RgbaImage::from_pixel(2, 2, image::Rgba([255, 255, 255, 255]))
+                    .save(images.join(format!("map{piece:05}.png")))
+                    .unwrap();
+            }
+            let mut profiles = serde_json::json!([
+                {"name":"World A","zone":128,"piece":1,"coordinate_space":"world","bounds":[0,0,10,10]},
+                {"name":"World B","zone":129,"piece":2,"coordinate_space":"world","bounds":[0,0,10,10]}
+            ]);
+            let art = root.path().join("art");
+            match failure {
+                "bounds" => profiles[1]["bounds"] = serde_json::json!([0, 0, 0, 10]),
+                "region" => profiles[1]["region"] = serde_json::json!("invalid"),
+                "png" => fs::write(images.join("map00002.png"), b"invalid png").unwrap(),
+                "existing-artwork" => {
+                    fs::create_dir(&art).unwrap();
+                    fs::write(art.join("map00002.png"), b"keep existing artwork").unwrap();
+                }
+                _ => unreachable!(),
+            }
+            let crosswalk = root.path().join("crosswalk.json");
+            fs::write(
+                &crosswalk,
+                serde_json::json!({"profiles":profiles}).to_string(),
+            )
+            .unwrap();
+            let output = root.path().join("maps.json");
+            fs::write(&output, b"keep existing catalog").unwrap();
+            assert!(
+                build_catalog(&crosswalk, &images, &art, &output, None).is_err(),
+                "{failure}"
+            );
+            assert_eq!(
+                fs::read(&output).unwrap(),
+                b"keep existing catalog",
+                "{failure}"
+            );
+            assert!(!art.join("map00001.png").exists(), "{failure}");
+            if failure == "existing-artwork" {
+                assert_eq!(
+                    fs::read(art.join("map00002.png")).unwrap(),
+                    b"keep existing artwork"
+                );
+                assert_eq!(fs::read_dir(&art).unwrap().count(), 1);
+            } else {
+                assert!(!art.exists(), "{failure}");
+            }
+        }
+    }
 
     #[test]
     fn builds_world_only_catalog_and_copies_valid_artwork() {

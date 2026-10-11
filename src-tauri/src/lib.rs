@@ -2079,6 +2079,39 @@ mod tests {
     }
 
     #[test]
+    fn stale_token_is_reset_and_prepare_bridge_rereads_the_connection_file() {
+        let directory = std::env::temp_dir().join(format!("navmut-bridge-{}", Uuid::new_v4()));
+        fs::create_dir_all(&directory).unwrap();
+        let path = directory.join("connection.json");
+        let settings = UiSettings {
+            bridge_path: Some(path.display().to_string()),
+            ..UiSettings::default()
+        };
+        let mut runtime = Runtime::default();
+        let first = start_bridge(&path);
+        let stale_token = first.connection().token.clone();
+        first.stop();
+        let second = start_bridge(&path);
+        prepare_bridge(&mut runtime, &settings).expect("current connection file");
+        // Reproduce a restart that reuses the cached port but changes the token.
+        let mut stale_connection = second.connection().clone();
+        stale_connection.token = stale_token;
+        runtime.bridge = Some(BridgeClient::from_connection(stale_connection).unwrap());
+        let error = runtime.bridge.as_ref().unwrap().windows().unwrap_err();
+        assert_eq!(error, BridgeError::Authentication);
+        bridge_failure(&mut runtime.bridge, error);
+        assert!(runtime.bridge.is_none(), "stale token client was kept");
+        prepare_bridge(&mut runtime, &settings).expect("reread current connection file");
+        assert_eq!(
+            runtime.bridge.as_ref().unwrap().connection(),
+            second.connection()
+        );
+        assert!(snapshot(&mut runtime, None).unwrap().is_none());
+        second.stop();
+        fs::remove_dir_all(&directory).unwrap();
+    }
+
+    #[test]
     fn browser_png_copy_omits_gamma_metadata() {
         let mut png = b"\x89PNG\r\n\x1a\n".to_vec();
         png.extend_from_slice(&4u32.to_be_bytes());

@@ -385,11 +385,7 @@ BOOL WINAPI DllMain(HINSTANCE instance, DWORD reason, LPVOID reserved)
 {
     (void)instance;
     (void)reserved;
-    if (reason == DLL_PROCESS_ATTACH)
-    {
-        DisableThreadLibraryCalls(instance);
-    }
-    else if (reason == DLL_PROCESS_DETACH)
+    if (reason == DLL_PROCESS_DETACH)
     {
         close_hook_context(g_context);
     }

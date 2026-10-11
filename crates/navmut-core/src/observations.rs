@@ -223,15 +223,11 @@ fn load_observations_filtered(
             Err(_) => continue,
         };
         let object = record.as_object().expect("validated object");
-        let matches = if profile_id.is_some() {
-            profile_id.is_some_and(|expected| {
-                object.get("profile_id").and_then(Value::as_str) == Some(expected)
-            })
-        } else {
-            zone.is_some_and(|expected| {
-                object.get("zone").and_then(Value::as_u64) == Some(u64::from(expected))
-            })
-        };
+        let matches = profile_id.is_none_or(|expected| {
+            object.get("profile_id").and_then(Value::as_str) == Some(expected)
+        }) && zone.is_none_or(|expected| {
+            object.get("zone").and_then(Value::as_u64) == Some(u64::from(expected))
+        });
         if matches {
             result.push(record);
         }
@@ -280,6 +276,36 @@ mod tests {
 
     fn compact() -> Value {
         serde_json::json!({"schema_version":2,"observation_id":"obs","subject_name":"Goblin","subject_type":"monster","zone":128,"position":[1.0,2.0,3.0],"notes":"","profile_id":"profile","created_at":"2026-01-02T03:04:05Z","provenance":{"map_sha256":"hash"}})
+    }
+
+    #[test]
+    fn zone_and_profile_filters_must_both_match() {
+        let root = tempdir().unwrap();
+        let path = root.path().join("obs.jsonl");
+        let matching = compact();
+        let mut other_zone = compact();
+        other_zone["zone"] = serde_json::json!(129);
+        let mut other_profile = compact();
+        other_profile["profile_id"] = serde_json::json!("other");
+        for record in [&matching, &other_zone, &other_profile] {
+            append_observation(&path, record).unwrap();
+        }
+        assert_eq!(
+            load_observations(&path, 128, Some("profile")).unwrap(),
+            vec![matching.clone()]
+        );
+        assert_eq!(
+            load_valid_observations(&path, 128, Some("profile")).unwrap(),
+            vec![matching.clone()]
+        );
+        assert_eq!(
+            load_observations(&path, 128, None).unwrap(),
+            vec![matching.clone(), other_profile]
+        );
+        assert_eq!(
+            load_observations_for_profile(&path, "profile").unwrap(),
+            vec![matching, other_zone]
+        );
     }
 
     #[test]

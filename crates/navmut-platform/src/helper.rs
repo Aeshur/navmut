@@ -85,13 +85,8 @@ pub fn validate_position(x: f64, y: f64, z: f64, zone: u16) -> Result<(), Platfo
 
 pub fn format_position_command(x: f64, y: f64, z: f64, zone: u16) -> Result<String, PlatformError> {
     validate_position(x, y, z, zone)?;
-    Ok(format!(
-        "POS {:.3} {:.3} {:.3} {}",
-        if x == 0.0 { 0.0 } else { x },
-        if y == 0.0 { 0.0 } else { y },
-        if z == 0.0 { 0.0 } else { z },
-        zone
-    ))
+    // The helper canonicalizes -0.000 when it builds the retail command.
+    Ok(format!("POS {x:.3} {y:.3} {z:.3} {zone}"))
 }
 
 struct HelperInner {
@@ -161,19 +156,29 @@ impl HelperSession {
             .lock()
             .map_err(|_| PlatformError::Helper("helper session lock was poisoned".to_owned()))?;
         Self::ensure_not_closed(&inner)?;
-        if inner.process_id != Some(window.process_id) || inner.handle != Some(window.handle) {
+        if inner.process_id != Some(window.process_id)
+            || inner.handle != Some(window.handle)
+            || Self::child_exited(&mut inner)
+        {
             Self::close_inner(&mut inner, true);
             Self::spawn_inner(&mut inner, window)?;
         }
         let result = Self::write_and_wait(&mut inner, &command);
+        Self::finish_submission(&mut inner, result)
+    }
+
+    fn finish_submission(
+        inner: &mut HelperInner,
+        result: Result<HelperResponse, String>,
+    ) -> Result<HelperResponse, PlatformError> {
         match result {
             Ok(response) if response.status == SubmitStatus::Unknown => {
-                Self::close_inner(&mut inner, false);
+                Self::close_inner(inner, false);
                 Ok(response)
             }
             Ok(response) => Ok(response),
             Err(error) => {
-                Self::close_inner(&mut inner, false);
+                Self::close_inner(inner, false);
                 Err(PlatformError::Unknown(error))
             }
         }
@@ -258,6 +263,15 @@ impl HelperSession {
                 Err(error)
             }
         }
+    }
+
+    // The helper exits after its controller detaches, so a later command needs
+    // a new helper.
+    fn child_exited(inner: &mut HelperInner) -> bool {
+        inner
+            .child
+            .as_mut()
+            .is_some_and(|child| !matches!(child.try_wait(), Ok(None)))
     }
 
     fn write_and_wait(inner: &mut HelperInner, command: &str) -> Result<HelperResponse, String> {
@@ -389,6 +403,33 @@ mod tests {
             parse_helper_response("UNKNOWN access violation").status,
             SubmitStatus::Unknown
         );
+    }
+
+    #[test]
+    fn error_reply_keeps_the_session() {
+        let session = HelperSession::new("unused-helper");
+        let mut inner = session.inner.lock().unwrap();
+        inner.process_id = Some(123);
+        inner.handle = Some(456);
+        let response = parse_helper_response("ERROR zone must be positive");
+        let result = HelperSession::finish_submission(&mut inner, Ok(response.clone())).unwrap();
+        assert_eq!(result, response);
+        assert_eq!(inner.process_id, Some(123));
+    }
+
+    #[cfg(windows)]
+    #[test]
+    fn exited_helper_is_detected() {
+        let session = HelperSession::new("unused-helper");
+        let mut inner = session.inner.lock().unwrap();
+        assert!(!HelperSession::child_exited(&mut inner));
+        let mut child = std::process::Command::new("cmd")
+            .args(["/C", "exit 1"])
+            .spawn()
+            .unwrap();
+        child.wait().unwrap();
+        inner.child = Some(child);
+        assert!(HelperSession::child_exited(&mut inner));
     }
 
     #[test]

@@ -25,7 +25,9 @@ For a managed Wine prefix, use its executable runner and pass
 Windows x86 game and bridge binaries.
 
 Leave the bridge running. It writes the selected local port and an
-authentication token to the connection file. Do not share that file.
+authentication token to the connection file. The bridge creates the file with
+a Windows access list that allows only the current user. Do not share that
+file.
 
 ## Connect Navmut
 
@@ -33,7 +35,7 @@ Start the native Navmut app with `--bridge` and the Linux or macOS path to that
 connection file. On Linux, use the filename of your downloaded AppImage:
 
 ```sh
-./Navmut_1.1.0_amd64.AppImage --bridge "$WINEPREFIX/drive_c/navmut-connection.json"
+./Navmut_<version>_amd64.AppImage --bridge "$WINEPREFIX/drive_c/navmut-connection.json"
 ```
 
 On macOS, launch the executable inside the installed app bundle, for example:
@@ -44,6 +46,10 @@ On macOS, launch the executable inside the installed app bundle, for example:
 
 The bridge and native app communicate over `127.0.0.1` on the same computer.
 No server IP is needed. The bridge accesses the game client, not the game server.
+
+Each request must arrive in full within one second of connecting. The
+single-threaded server handles queued connections one at a time, so each idle
+connection ahead of a valid client can delay it by up to one second.
 
 Stop the bridge with Ctrl+C when finished. It deletes the connection file as it
 exits. If the bridge was killed or crashed instead, delete the leftover file

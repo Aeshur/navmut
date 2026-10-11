@@ -27,8 +27,9 @@ jobs:
         include:
           - platform: windows
             os: windows-latest
+          # Pinned because the AppImage requires the build runner's glibc or newer.
           - platform: ubuntu
-            os: ubuntu-latest
+            os: ubuntu-24.04
           - platform: macos
             os: macos-latest
     runs-on: ${{ matrix.os }}
@@ -40,11 +41,9 @@ jobs:
         with:
           node-version-file: .node-version
           cache: npm
+      # rustup reads the version and components from rust-toolchain.toml.
       - name: Install Rust toolchain
-        uses: dtolnay/rust-toolchain@e2a55d2ffb04f378e9626c28d38b36d230d1e12f # master
-        with:
-          toolchain: 1.95.0
-          targets: i686-pc-windows-msvc
+        run: rustup toolchain install
       - name: Install Linux dependencies
         if: runner.os == 'Linux'
         run: sudo apt-get update && sudo apt-get install -y build-essential curl wget file libwebkit2gtk-4.1-dev libxdo-dev libssl-dev libayatana-appindicator3-dev librsvg2-dev patchelf
