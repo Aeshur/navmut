@@ -14,6 +14,7 @@
     "windows": [
       {
         "title": "Navmut",
+        "create": false,
         "width": 972,
         "height": 710,
         "resizable": false,

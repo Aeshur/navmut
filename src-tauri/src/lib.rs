@@ -1890,15 +1890,26 @@ pub fn run() {
     tauri::Builder::default()
         .manage(AppState::new(startup))
         .plugin(tauri_plugin_dialog::init())
-        .setup(|_app| {
+        .setup(|app| {
+            let window_config = app
+                .config()
+                .app
+                .windows
+                .first()
+                .ok_or_else(|| "main window config is missing".to_string())?
+                .clone();
+            let builder = tauri::WebviewWindowBuilder::from_config(app.handle(), &window_config)?;
+            // Keep the WebView2 profile beside the executable instead of under %LOCALAPPDATA%.
+            #[cfg(windows)]
+            let builder = builder.data_directory(user_data_dir(app.handle())?.join("webview"));
+            let _main_webview = builder.build()?;
+
             #[cfg(windows)]
             {
                 use webview2_com::Microsoft::Web::WebView2::Win32::ICoreWebView2Settings3;
                 use windows_core::Interface;
 
-                let main_webview = _app
-                    .get_webview_window("main")
-                    .ok_or_else(|| "main webview is unavailable".to_string())?;
+                let main_webview = _main_webview;
                 main_webview.with_webview(|webview| unsafe {
                     let configure = || -> Result<(), windows_core::Error> {
                         let core = webview.controller().CoreWebView2()?;
